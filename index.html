@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rafinhadr | Desenvolvedor Full-Stack & Criador</title>
+<meta name="description" content="Portfólio de Rafinhadr — desenvolvimento web, sistemas, bots para Discord e soluções digitais.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d12;--panel:#11141b;--panel2:#171b24;--line:#252a36;
+  --text:#f1f2f4;--muted:#8d94a6;--faint:#555d70;
+  --accent:#8bb8ff;--accent2:#a978ff;--green:#7fd6a0;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+  --radius:8px;--max:1120px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 75%);z-index:-1}
+a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{cursor:pointer}
+.wrap{max-width:var(--max);margin:auto;padding:0 28px}
+section{padding:110px 0}
+header{position:sticky;top:0;z-index:100;background:rgba(11,13,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+nav{height:72px;max-width:var(--max);margin:auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
+.logo{font:700 15px var(--mono);letter-spacing:-.04em}.logo b{color:var(--accent)}
+.nav-links{display:flex;gap:28px;list-style:none}.nav-links a{font-size:13px;color:var(--muted);transition:.2s}.nav-links a:hover{color:var(--text)}
+.nav-toggle{display:none;background:none;border:0;color:var(--text)}
+.eyebrow{font:500 12px var(--mono);color:var(--faint);margin-bottom:13px;letter-spacing:.02em}.eyebrow span{color:var(--accent)}
+h1,h2,h3{letter-spacing:-.035em}h2{font-size:clamp(27px,4vw,40px);line-height:1.15}p{color:var(--muted)}
+.hero{min-height:calc(100vh - 72px);display:flex;align-items:center;padding:90px 0}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center}
+.kicker{font:500 14px var(--mono);color:var(--accent);margin-bottom:18px}
+.hero h1{font-size:clamp(44px,7vw,76px);line-height:1.02;margin-bottom:22px;max-width:760px}
+.hero h1 em{font-style:normal;color:var(--muted)}
+.hero-copy>p{font-size:17px;max-width:610px;margin-bottom:32px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:12px 18px;border-radius:6px;font-size:13px;font-weight:700;transition:.2s}.primary{background:var(--text);color:#0b0d12;border-color:var(--text)}.primary:hover{transform:translateY(-2px)}.ghost:hover{border-color:#5e687c;background:var(--panel)}
+.code-card{border:1px solid var(--line);background:rgba(17,20,27,.88);border-radius:10px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.code-head{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--panel2)}.dot{width:9px;height:9px;border-radius:50%}.dot:nth-child(1){background:#ef7167}.dot:nth-child(2){background:#e6c15e}.dot:nth-child(3){background:#70c98d}.filename{font:12px var(--mono);color:var(--faint);margin-left:7px}
+.code{padding:25px 22px;font:13px/2 var(--mono);overflow:auto}.ln{display:inline-block;width:25px;color:#41495b;user-select:none}.kw{color:#d487e8}.key{color:#80b4ff}.str{color:#e8b35e}.bool{color:#7fd6a0}.comment{color:#667084}
+.stats{display:flex;gap:10px;margin-top:34px;flex-wrap:wrap}.stat{border:1px solid var(--line);background:var(--panel);padding:12px 15px;border-radius:6px}.stat strong{display:block;font:700 16px var(--mono)}.stat span{font-size:10px;color:var(--faint)}
+.section-head{margin-bottom:45px}.section-head p{margin-top:12px;max-width:650px}
+.about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:65px;align-items:start}.terminal-about{border:1px solid var(--line);background:var(--panel);padding:25px;border-radius:8px;font:13px/2 var(--mono);color:var(--muted)}.terminal-about .v{color:var(--text)}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}.tag{border:1px solid var(--line);background:var(--panel);padding:6px 10px;border-radius:5px;font:11px var(--mono);color:var(--muted)}
+.about-text p{font-size:15px;margin-bottom:17px}.about-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:25px}.about-item{border-left:2px solid var(--line);padding-left:13px}.about-item small{display:block;color:var(--faint);font:10px var(--mono)}.about-item strong{font-size:13px}
+.company-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.company{border:1px solid var(--line);background:var(--panel);padding:24px;border-radius:8px;transition:.2s}.company:hover{border-color:#4a5262;transform:translateY(-2px)}.company-top{display:flex;justify-content:space-between;gap:15px}.company h3{font-size:17px}.company .type{font:10px var(--mono);color:var(--accent)}.company p{font-size:13px;margin-top:10px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.filter{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:8px 13px;border-radius:5px;font:11px var(--mono)}.filter.active,.filter:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.project{border:1px solid var(--line);background:var(--panel);border-radius:8px;overflow:hidden;transition:.2s}.project:hover{border-color:#4b5568;transform:translateY(-2px)}.project-visual{height:155px;background:linear-gradient(135deg,#182238,#10151e);display:flex;align-items:center;justify-content:center;font:700 28px var(--mono);color:rgba(255,255,255,.16);border-bottom:1px solid var(--line)}.project:nth-child(2) .project-visual{background:linear-gradient(135deg,#281c30,#14121b)}.project:nth-child(3) .project-visual{background:linear-gradient(135deg,#2a2418,#15130e)}.project:nth-child(4) .project-visual{background:linear-gradient(135deg,#172920,#101713)}.project-body{padding:20px}.project-cat{font:10px var(--mono);color:var(--accent)}.project h3{font-size:17px;margin:8px 0}.project p{font-size:13px}.tech{display:flex;gap:6px;flex-wrap:wrap;margin:15px 0}.tech span{font:10px var(--mono);padding:4px 7px;border:1px solid var(--line);color:var(--muted);border-radius:4px}.project a{font-size:12px;font-weight:700;color:var(--text)}
+.skill-list{display:grid;grid-template-columns:1fr 1fr;gap:17px}.skill{border:1px solid var(--line);background:var(--panel);padding:15px;border-radius:7px}.skill-top{display:flex;justify-content:space-between;margin-bottom:10px}.skill-name{font:12px var(--mono)}.skill-pct{font:11px var(--mono);color:var(--faint)}.bar{height:5px;background:var(--panel2);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;width:var(--w);background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px}
+.timeline{position:relative;max-width:760px}.timeline:before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:1px;background:var(--line)}.event{position:relative;padding-left:40px;margin-bottom:42px}.event:last-child{margin-bottom:0}.node{position:absolute;left:0;top:5px;width:15px;height:15px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}.year{font:12px var(--mono);color:var(--accent);margin-bottom:6px}.event h3{font-size:17px}.event p{font-size:13px;margin-top:5px}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}.service{background:var(--panel);padding:25px}.service .icon{font:20px var(--mono);color:var(--accent);margin-bottom:14px}.service h3{font-size:15px;margin-bottom:7px}.service p{font-size:12px}
+.contact-box{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:45px}.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:45px;margin-top:32px}.form{display:flex;flex-direction:column;gap:10px}.form label{font:10px var(--mono);color:var(--faint);margin-top:5px}.form input,.form textarea{background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:5px;outline:none}.form input:focus,.form textarea:focus{border-color:var(--accent)}.form textarea{min-height:125px;resize:vertical}.channels{display:flex;flex-direction:column;gap:10px}.channel{border:1px solid var(--line);background:var(--panel2);padding:15px;border-radius:6px}.channel small{display:block;font:10px var(--mono);color:var(--faint)}.channel strong{font-size:13px}
+footer{border-top:1px solid var(--line);padding:28px 0}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.foot p,.foot a{font:11px var(--mono);color:var(--faint)}.foot-links{display:flex;gap:18px}
+.hidden{display:none!important}
+@media(max-width:850px){.hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr}.hero{padding-top:65px}.hero-grid{gap:45px}.nav-links{position:absolute;left:0;right:0;top:72px;display:none;flex-direction:column;gap:0;background:var(--panel);border-bottom:1px solid var(--line)}.nav-links.open{display:flex}.nav-links li a{display:block;padding:14px 28px;border-top:1px solid var(--line)}.nav-toggle{display:block}.company-grid,.projects{grid-template-columns:1fr}.services{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:851px){.nav-toggle{display:none}}
+@media(max-width:620px){section{padding:78px 0}.wrap{padding:0 18px}.hero h1{font-size:43px}.skill-list,.services{grid-template-columns:1fr}.contact-box{padding:28px 20px}.about-list{grid-template-columns:1fr}.stats{display:grid;grid-template-columns:1fr 1fr}.stat{min-width:0}}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a class="logo" href="#top">&lt;<b>R</b>/&gt; rafinhadr</a>
+<ul class="nav-links" id="navLinks">
+<li><a href="#sobre">01 — Sobre</a></li>
+<li><a href="#empresas">02 — Empresas</a></li>
+<li><a href="#projetos">03 — Projetos</a></li>
+<li><a href="#skills">04 — Skills</a></li>
+<li><a href="#trajetoria">05 — Jornada</a></li>
+<li><a href="#contato">06 — Contato</a></li>
+</ul>
+<button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+</nav>
+</header>
+
+<main id="top">
+<section class="hero">
+<div class="wrap hero-grid">
+<div class="hero-copy">
+<div class="kicker">&lt; Desenvolvedor &amp; Criador /&gt;</div>
+<h1>Arquiteto de soluções,<br><em>criador de experiências digitais.</em></h1>
+<p>Transformo ideias em sites, sistemas, automações e bots que funcionam de verdade — unindo desenvolvimento, tecnologia e design.</p>
+<div class="btns"><a class="btn primary" href="#projetos">Ver Projetos →</a><a class="btn ghost" href="#contato">Falar Comigo</a></div>
+<div class="stats"><div class="stat"><strong>Web</strong><span>DESENVOLVIMENTO</span></div><div class="stat"><strong>Bots</strong><span>DISCORD &amp; AUTOMAÇÃO</span></div><div class="stat"><strong>UI/UX</strong><span>DESIGN</span></div></div>
+</div>
+<div class="code-card">
+<div class="code-head"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="filename">rafinhadr.ts</span></div>
+<pre class="code"><span class="ln">01</span><span class="kw">const</span> <span class="key">rafinhadr</span> = {
+<span class="ln">02</span>  <span class="key">role</span>: <span class="str">"Developer &amp; Creator"</span>,
+<span class="ln">03</span>  <span class="key">location</span>: <span class="str">"Brasil 🇧🇷"</span>,
+<span class="ln">04</span>  <span class="key">stack</span>: [<span class="str">"JS"</span>, <span class="str">"Node"</span>, <span class="str">"React"</span>],
+<span class="ln">05</span>  <span class="key">focus</span>: [<span class="str">"Web"</span>, <span class="str">"Bots"</span>, <span class="str">"Sistemas"</span>],
+<span class="ln">06</span>  <span class="key">available</span>: <span class="bool">true</span>,
+<span class="ln">07</span>  <span class="key">passion</span>: <span class="str">"criar soluções"</span>
+<span class="ln">08</span>};</pre>
+</div>
+</div>
+</section>
+
+<section id="sobre">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow"><span>01</span> — Sobre</div><h2>Quem sou eu</h2></div>
+<div class="about-grid">
+<div class="terminal-about">
+<div><span class="v">const</span> perfil = {</div>
+<div>&nbsp;&nbsp;nome: <span class="v">"Rafinhadr"</span>,</div>
+<div>&nbsp;&nbsp;áreas: [<span class="v">"Web", "Bots", "Sistemas"</span>],</div>
+<div>&nbsp;&nbsp;design: <span class="v">true</span>,</div>
+<div>&nbsp;&nbsp;aprendizado: <span class="v">"contínuo"</span></div>
+<div>};</div>
+</div>
+<div class="about-text">
+<p>Sou desenvolvedor e criador de soluções digitais. Gosto de pegar uma ideia ou problema e transformar isso em uma experiência simples, funcional e bem construída.</p>
+<p>Trabalho com desenvolvimento web, sistemas personalizados, bots para Discord, automações e interfaces. Também me preocupo com a parte visual para que o resultado final seja bonito e fácil de usar.</p>
+<div class="tags"><span class="tag">Web Development</span><span class="tag">Discord Bots</span><span class="tag">Sistemas</span><span class="tag">Automações</span><span class="tag">UI/UX</span><span class="tag">Banco de Dados</span></div>
+<div class="about-list"><div class="about-item"><small>BASE</small><strong>Brasil 🇧🇷</strong></div><div class="about-item"><small>STATUS</small><strong>Disponível para projetos</strong></div><div class="about-item"><small>FOCO</small><strong>Performance &amp; experiência</strong></div><div class="about-item"><small>ESTILO</small><strong>Código limpo e funcional</strong></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="empresas">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow"><span>02</span> — Empresas</div><h2>Projetos &amp; marcas</h2><p>Espaço reservado para apresentar empresas, marcas, equipes ou projetos dos quais você participa.</p></div>
+<div class="company-grid">
+<div class="company"><div class="company-top"><h3>Rafinhadr</h3><span class="type">DEV / DESIGN</span></div><p>Desenvolvimento de soluções digitais, sites, sistemas, bots e experiências personalizadas.</p></div>
+<div class="company"><div class="company-top"><h3>Projetos independentes</h3><span class="type">PROJETOS</span></div><p>Projetos próprios e trabalhos desenvolvidos para comunidades, eventos e clientes.</p></div>
+</div>
+</div>
+</section>
+
+<section id="projetos">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow"><span>03</span> — Projetos</div><h2>O que construí</h2></div>
+<div class="filters" id="filters">
+<button class="filter active" data-filter="todos">Todos</button><button class="filter" data-filter="web">Web</button><button class="filter" data-filter="bot">Bot</button><button class="filter" data-filter="sistema">Sistema</button><button class="filter" data-filter="ecommerce">E-commerce</button><button class="filter" data-filter="outro">Outro</button>
+</div>
+<div class="projects" id="projects">
+<article class="project" data-cat="web"><div class="project-visual">&lt;/&gt;</div><div class="project-body"><span class="project-cat">WEB</span><h3>Portfólio &amp; Sites</h3><p>Sites modernos, responsivos e personalizados para apresentar projetos, serviços e marcas.</p><div class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span></div><a href="#contato">Ver projeto →</a></div></article>
+<article class="project" data-cat="bot"><div class="project-visual">{ }</div><div class="project-body"><span class="project-cat">BOT</span><h3>Bot para Discord</h3><p>Automação de comunidades, moderação, sistemas de cargos, verificações e ferramentas personalizadas.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>SQLite</span></div><a href="#contato">Ver projeto →</a></div></article>
+<article class="project" data-cat="sistema"><div class="project-visual">SYS</div><div class="project-body"><span class="project-cat">SISTEMA</span><h3>Sistemas personalizados</h3><p>Painéis e ferramentas desenvolvidos para organizar processos e facilitar o gerenciamento.</p><div class="tech"><span>JavaScript</span><span>Node.js</span><span>SQL</span></div><a href="#contato">Ver projeto →</a></div></article>
+<article class="project" data-cat="outro"><div class="project-visual">✦</div><div class="project-body"><span class="project-cat">OUTRO</span><h3>Automação &amp; Design</h3><p>Projetos que combinam automação, identidade visual, edição e soluções digitais.</p><div class="tech"><span>Design</span><span>Automação</span><span>UI/UX</span></div><a href="#contato">Ver projeto →</a></div></article>
+</div>
+</div>
+</section>
+
+<section id="skills">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow"><span>04</span> — Skills</div><h2>Linguagens &amp; Tecnologias</h2></div>
+<div class="skill-list">
+<div class="skill"><div class="skill-top"><span class="skill-name">JavaScript</span><span class="skill-pct">90%</span></div><div class="bar"><i style="--w:90%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">HTML / CSS</span><span class="skill-pct">95%</span></div><div class="bar"><i style="--w:95%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">Node.js</span><span class="skill-pct">88%</span></div><div class="bar"><i style="--w:88%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">React</span><span class="skill-pct">80%</span></div><div class="bar"><i style="--w:80%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">Discord.js</span><span class="skill-pct">92%</span></div><div class="bar"><i style="--w:92%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">SQL / SQLite</span><span class="skill-pct">78%</span></div><div class="bar"><i style="--w:78%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">Git</span><span class="skill-pct">82%</span></div><div class="bar"><i style="--w:82%"></i></div></div>
+<div class="skill"><div class="skill-top"><span class="skill-name">UI / UX</span><span class="skill-pct">85%</span></div><div class="bar"><i style="--w:85%"></i></div></div>
+</div>
+</div>
+</section>
+
+<section id="trajetoria">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow"><span>05</span> — Jornada</div><h2>Minha Trajetória</h2></div>
+<div class="timeline">
+<div class="event"><span class="node"></span><div class="year">INÍCIO</div><h3>Primeiros passos na programação</h3><p>Começo dos estudos de lógica, desenvolvimento web e criação de projetos próprios.</p></div>
+<div class="event"><span class="node"></span><div class="year">EVOLUÇÃO</div><h3>JavaScript, Node.js &amp; Bots</h3><p>Aprofundamento em JavaScript e Node.js, com criação de bots e sistemas para Discord.</p></div>
+<div class="event"><span class="node"></span><div class="year">PROJETOS</div><h3>Sistemas &amp; automações</h3><p>Desenvolvimento de soluções mais completas, bancos de dados, automações e ferramentas personalizadas.</p></div>
+<div class="event"><span class="node"></span><div class="year">ATUALMENTE</div><h3>Desenvolvimento &amp; Design</h3><p>Unindo programação, design e experiência do usuário para criar projetos cada vez mais completos.</p></div>
+</div>
+</div>
+</section>
+
+<section id="servicos">
+<div class="wrap">
+<div class="section-head"><div class="eyebrow">SERVIÇOS</div><h2>Como posso ajudar</h2></div>
+<div class="services">
+<div class="service"><div class="icon">&lt;/&gt;</div><h3>Desenvolvimento Web</h3><p>Sites, landing pages e portfólios modernos e responsivos.</p></div>
+<div class="service"><div class="icon">▣</div><h3>Sistemas</h3><p>Painéis, ferramentas internas e sistemas sob medida.</p></div>
+<div class="service"><div class="icon">{}</div><h3>Bots para Discord</h3><p>Comandos, automações, moderação e sistemas personalizados.</p></div>
+<div class="service"><div class="icon">⚙</div><h3>Automação</h3><p>Processos repetitivos transformados em fluxos automáticos.</p></div>
+<div class="service"><div class="icon">✦</div><h3>UI / UX</h3><p>Interfaces limpas, funcionais e pensadas para o usuário.</p></div>
+<div class="service"><div class="icon">◈</div><h3>Integrações</h3><p>APIs, bancos de dados, serviços externos e ferramentas conectadas.</p></div>
+</div>
+</div>
+</section>
+
+<section id="contato">
+<div class="wrap">
+<div class="contact-box">
+<div class="section-head"><div class="eyebrow"><span>06</span> — Contato</div><h2>Vamos conversar</h2><p>Tem um projeto? Me manda uma mensagem.</p></div>
+<div class="contact-grid">
+<form class="form" id="contactForm">
+<label for="nome">NOME</label><input id="nome" required placeholder="Como posso te chamar?">
+<label for="email">EMAIL</label><input id="email" type="email" required placeholder="seu@email.com">
+<label for="assunto">ASSUNTO</label><input id="assunto" required placeholder="Sobre o que vamos conversar?">
+<label for="mensagem">MENSAGEM</label><textarea id="mensagem" required placeholder="Conte um pouco sobre o projeto..."></textarea>
+<button class="btn primary" type="submit">Enviar Mensagem →</button>
+</form>
+<div class="channels">
+<a class="channel" href="#" data-placeholder="whatsapp"><small>WhatsApp</small><strong>Adicionar número</strong></a>
+<a class="channel" href="#" data-placeholder="instagram"><small>Instagram</small><strong>@rafinhadr_</strong></a>
+<a class="channel" href="#" data-placeholder="github"><small>GitHub</small><strong>github.com/rafinhadr</strong></a>
+<a class="channel" href="#" data-placeholder="email"><small>Email</small><strong>Adicionar email</strong></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap foot"><p>© 2026 Rafinhadr. Todos os direitos reservados.</p><div class="foot-links"><a href="#top">Topo</a><a href="#projetos">Projetos</a><a href="#contato">Contato</a></div></div></footer>
+
+<script>
+const navToggle=document.getElementById('navToggle'),navLinks=document.getElementById('navLinks');
+navToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',open?'true':'false')});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+const filters=document.querySelectorAll('.filter'),projects=document.querySelectorAll('.project');
+filters.forEach(btn=>btn.addEventListener('click',()=>{
+  filters.forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  const f=btn.dataset.filter;
+  projects.forEach(p=>p.classList.toggle('hidden',f!=='todos'&&p.dataset.cat!==f));
+}));
+
+document.getElementById('contactForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const nome=document.getElementById('nome').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const assunto=document.getElementById('assunto').value.trim();
+  const msg=document.getElementById('mensagem').value.trim();
+  if(!nome||!email||!assunto||!msg)return;
+  const destination='SEU_EMAIL_AQUI@EXEMPLO.COM';
+  const subject=encodeURIComponent(assunto+' — contato de '+nome);
+  const body=encodeURIComponent(msg+'\n\nEmail: '+email);
+  window.location.href='mailto:'+destination+'?subject='+subject+'&body='+body;
+});
+</script>
+</body>
+</html>
