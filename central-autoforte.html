@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central Autoforte</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6f5;--surface:#ffffff;--surface-2:#eef1f0;--border:#d8dedb;
+  --text:#14201d;--muted:#55635e;--faint:#8b968f;
+  --accent:#1f8f82;--accent-soft:rgba(31,143,130,.10);--accent-text:#0e6c62;
+  --warn:#a5710a;--warn-soft:rgba(165,113,10,.10);
+  --danger:#b5402a;--danger-soft:rgba(181,64,42,.10);
+  --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --radius:10px;--max:800px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1213;--surface:#161b1d;--surface-2:#1b2123;--border:#2a3235;
+    --text:#eef2f1;--muted:#9aa8a4;--faint:#657069;
+    --accent:#5fd0c0;--accent-soft:rgba(95,208,192,.13);--accent-text:#7fe0d2;
+    --warn:#e8ab5a;--warn-soft:rgba(232,171,90,.13);
+    --danger:#e2735c;--danger-soft:rgba(226,115,92,.13);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1213;--surface:#161b1d;--surface-2:#1b2123;--border:#2a3235;
+  --text:#eef2f1;--muted:#9aa8a4;--faint:#657069;
+  --accent:#5fd0c0;--accent-soft:rgba(95,208,192,.13);--accent-text:#7fe0d2;
+  --warn:#e8ab5a;--warn-soft:rgba(232,171,90,.13);
+  --danger:#e2735c;--danger-soft:rgba(226,115,92,.13);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;padding:0 20px}
+h1,h2,h3{font-family:var(--sans);text-wrap:balance;margin:0}
+::selection{background:var(--accent-soft)}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text)}
+.shell{max-width:var(--max);margin:0 auto;padding-block:28px 60px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:6px 22px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font:700 15px var(--mono)}
+.brand-name{font:700 17px var(--sans);letter-spacing:-.01em}
+.brand-sub{font:12px var(--mono);color:var(--faint)}
+.tabs{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);padding:4px;border-radius:999px}
+.tab-btn{border:0;background:none;color:var(--muted);font:600 13px var(--sans);padding:9px 16px;border-radius:999px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.tab-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:none}
+.panel.active{display:block;animation:fade .25s ease}
+@media(prefers-reduced-motion:reduce){.panel.active{animation:none}}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---- Guia tab ---- */
+.intro{font-size:14.5px;color:var(--muted);max-width:62ch;margin-bottom:26px}
+.flow{border:1px solid var(--border);background:var(--surface);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
+.flow-head{display:flex;align-items:baseline;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border)}
+.flow-num{font:700 12px var(--mono);color:var(--accent-text);background:var(--accent-soft);border-radius:6px;padding:2px 7px}
+.flow-title{font:700 16px var(--sans)}
+.flow-body{padding:16px 18px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.steps li{display:flex;gap:11px;font-size:14px}
+.steps .dot{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);color:var(--muted);font:600 11px var(--mono);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.steps b{font-weight:600}
+.sub-steps{list-style:none;margin:8px 0 0;padding-left:14px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:7px}
+.sub-steps li{font-size:13.5px;color:var(--muted)}
+.sub-steps b{color:var(--text);font-weight:600}
+.callout{display:flex;gap:9px;font-size:13px;border-radius:8px;padding:11px 13px;margin-top:4px}
+.callout.warn{background:var(--warn-soft);color:var(--warn)}
+.callout svg{flex:none;margin-top:2px}
+.path{background:var(--surface-2);border-radius:8px;padding:10px 12px;font:13px var(--mono);color:var(--muted);margin:2px 0 10px}
+.path b{color:var(--text)}
+.field-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.field-list li{display:grid;grid-template-columns:170px 1fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.field-list li:last-child{border-bottom:0}
+.field-list .k{font:600 12px var(--mono);color:var(--faint);letter-spacing:.02em}
+.field-list .v{color:var(--text)}
+.field-list .v code{font:12.5px var(--mono);background:var(--surface-2);padding:1px 6px;border-radius:5px;color:var(--accent-text)}
+.checklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.checklist li{display:flex;gap:10px;font-size:14px;align-items:flex-start}
+.checklist li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;border-radius:5px;border:1.5px solid var(--border);background:var(--surface-2)}
+
+/* ---- Cofre tab ---- */
+.lock-wrap{max-width:380px;margin:40px auto 0;text-align:center}
+.lock-icon{width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent-text);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.lock-wrap h2{font-size:19px;margin-bottom:6px}
+.lock-wrap p.sub{color:var(--muted);font-size:13.5px;margin-bottom:22px}
+.field{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:12px}
+.field label{font:600 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+.pw-row{position:relative}
+input[type="text"],input[type="password"],textarea{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font:14px var(--sans);outline:none}
+.pw-row input{padding-right:64px}
+textarea{resize:vertical;min-height:56px;font-family:var(--sans)}
+input:focus,textarea:focus{border-color:var(--accent)}
+.mini-btn{position:absolute;right:5px;top:5px;bottom:5px;border:0;background:var(--surface-2);color:var(--muted);font:600 11px var(--mono);padding:0 10px;border-radius:6px;cursor:pointer}
+.mini-btn:hover{color:var(--text)}
+button{font-family:var(--sans);cursor:pointer}
+button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-primary{width:100%;background:var(--accent);border:0;color:#04211d;font:700 14px var(--sans);padding:11px;border-radius:8px;transition:.15s}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-primary:disabled{opacity:.55;cursor:default}
+.err-msg{color:var(--danger);font-size:12.5px;margin-top:2px;min-height:16px;text-align:left}
+.hint{font-size:12px;color:var(--faint);text-align:left;margin-top:-4px;margin-bottom:14px}
+.warn-box{display:flex;gap:9px;background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:11px 13px;font-size:12.5px;text-align:left;margin-bottom:18px}
+.warn-box svg{flex:none;margin-top:1px}
+
+.vault-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.vault-head h2{font-size:17px}
+.vault-actions{display:flex;gap:8px}
+.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--text);font:600 12.5px var(--sans);padding:8px 13px;border-radius:7px;display:flex;align-items:center;gap:6px}
+.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger-ghost{background:var(--surface);border:1px solid var(--border);color:var(--danger);font:600 12.5px var(--sans);padding:6px 11px;border-radius:7px}
+.btn-danger-ghost:hover{border-color:var(--danger)}
+
+.add-card{border:1px solid var(--border);background:var(--surface);border-radius:var(--radius);padding:16px 18px;margin-bottom:18px}
+.add-card h3{font-size:14px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+.btn-small{background:var(--accent);border:0;color:#04211d;font:700 12.5px var(--sans);padding:9px 15px;border-radius:7px}
+.btn-small:hover{filter:brightness(1.06)}
+
+.entries{display:flex;flex-direction:column;gap:10px}
+.entry{border:1px solid var(--border);background:var(--surface);border-radius:9px;overflow:hidden}
+.entry-row{display:flex;align-items:center;gap:12px;padding:13px 15px}
+.entry-icon{flex:none;width:34px;height:34px;border-radius:8px;background:var(--surface-2);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono)}
+.entry-label{font-weight:600;font-size:14px}
+.entry-mask{font:12px var(--mono);color:var(--faint)}
+.entry-actions{margin-left:auto;display:flex;gap:6px}
+.icon-btn{border:1px solid var(--border);background:var(--surface);color:var(--muted);width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{color:var(--text);border-color:var(--accent)}
+.entry-detail{border-top:1px solid var(--border);padding:13px 15px;background:var(--surface-2);display:flex;flex-direction:column;gap:9px}
+.kv{display:flex;align-items:center;gap:10px}
+.kv .k{font:600 11px var(--mono);color:var(--faint);width:76px;flex:none;text-transform:uppercase;letter-spacing:.03em}
+.kv .v{font:13.5px var(--mono);color:var(--text);word-break:break-all;flex:1}
+.kv .v.notes{font-family:var(--sans);word-break:normal}
+.copy-btn{flex:none;border:0;background:none;color:var(--accent-text);font:600 11.5px var(--sans);cursor:pointer;padding:2px 4px}
+.copy-btn:hover{text-decoration:underline}
+.empty{color:var(--faint);font-size:13.5px;text-align:center;padding:34px 0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);font:600 12.5px var(--sans);padding:9px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.settings-line{text-align:center;margin-top:22px}
+.settings-line button{background:none;border:0;color:var(--faint);font:12px var(--mono);text-decoration:underline;cursor:pointer}
+.change-pw{max-width:340px;margin:0 auto;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">A/</div>
+      <div>
+        <div class="brand-name">Central Autoforte</div>
+        <div class="brand-sub">guia interno &amp; cofre</div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" id="tabBtnGuia" role="tab" aria-selected="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Guia de trabalho
+      </button>
+      <button class="tab-btn" id="tabBtnCofre" role="tab" aria-selected="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cofre de senhas
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===================== GUIA ===================== -->
+  <section class="panel active" id="panelGuia">
+    <p class="intro">Passo a passo de venda, compra e documentação de veículos na Autoforte — CRV, emissão de nota fiscal no Altimus e cadastro no CarrosStock.</p>
+
+    <div class="flow">
+      <div class="flow-head"><span class="flow-num">01</span><span class="flow-title">Recebimento de envelopes — carros vendidos</span></div>
+      <div class="flow-body">
+        <ol class="steps">
+          <li><span class="dot">1</span><div>Separe os envelopes em <b>CRV liberado</b> e <b>CRV bloqueado</b>. Comece sempre pelos <b>liberados</b>.
+            <div class="callout warn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              <span>Observe se o carro está em nome de <b>terceiro</b> ou da <b>Autoforte</b> — o caminho muda a partir daqui.</span>
+            </div>
+          </li>
+          <li><span class="dot">2</span><div><b>Em nome de terceiro:</b> preencha os dados no Notepad e envie para o despachante pelo WhatsApp.</div></li>
+          <li><span class="dot">3</span><div><b>Em nome da Autoforte:</b> preencha os dados no CarrosStock.
+            <ul class="sub-steps">
+              <li>Antes, emita a <b>Nota Fiscal de venda</b> no Altimus — veja o fluxo <b>02</b> abaixo.</li>
+              <li>Depois de emitida a NF, vá para o CarrosStock preencher os dados do comprador.</li>
+            </ul>
+          </li>
+          <li><span class="dot">4</span><div>No CarrosStock:
+            <div class="path"><b>Veículo</b> → Buscar a placa → aba <b>Saída</b></div>
+            <ul class="sub-steps">
+              <li>1. Preencher</li>
+              <li>2. Solicitar saída</li>
+              <li>3. Imprimir ATPV</li>
+              <li>4. Salvar a chave da NF em <b>Nota de Saída</b></li>
+            </ul>
+          </div></li>
+          <li><span class="dot">5</span><div>Imprima e separe o <b>ATPV</b> para o Michel assinar.</div></li>
+          <li><span class="dot">6</span><div>Emita o <b>Termo de Saída</b>.
+            <div class="callout warn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              <span>Se no envelope da venda tiver <b>veículo na troca</b>: monte o envelope da troca (fluxo <b>04</b>) e consulte os débitos para recolher na planilha do despachante.</span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-head"><span class="flow-num">02</span><span class="flow-title">Emitir Nota Fiscal de Venda</span></div>
+      <div class="flow-body">
+        <div class="path"><b>Altimus</b> → Emissão de NF</div>
+        <ul class="field-list">
+          <li><span class="k">Revenda</span><span class="v">Autoforte</span></li>
+          <li><span class="k">Natureza da operação</span><span class="v"><code>5.102</code> — Venda</span></li>
+          <li><span class="k">Destinatário</span><span class="v">Nome do cliente</span></li>
+          <li><span class="k">Item da nota fiscal</span><span class="v">Placa do veículo</span></li>
+          <li><span class="k">Valor</span><span class="v">Já vem preenchido com o valor da venda</span></li>
+          <li><span class="k">Botão Pagamento</span><span class="v">Crédito Loja, valor igual ao da venda</span></li>
+          <li><span class="k">Informações adicionais</span><span class="v">Preencher o banco que financiou</span></li>
+          <li><span class="k">Finalizar</span><span class="v"><code>Salvar</code> → <code>Transmitir</code></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-head"><span class="flow-num">03</span><span class="flow-title">Emitir Nota Fiscal de Compra</span></div>
+      <div class="flow-body">
+        <div class="path"><b>Altimus</b> → Emissão de NF</div>
+        <ul class="field-list">
+          <li><span class="k">Revenda</span><span class="v">Autoforte</span></li>
+          <li><span class="k">Natureza da operação</span><span class="v"><code>1.102</code> — Compra</span></li>
+          <li><span class="k">Destinatário</span><span class="v">Nome de quem emitiu o recibo do carro <span style="color:var(--faint)">(ex.: Ágria, LM Transportes)</span></span></li>
+          <li><span class="k">Item da nota fiscal</span><span class="v">Placa do veículo</span></li>
+          <li><span class="k">Valor</span><span class="v">Valor do recibo + 4 mil / 5 mil</span></li>
+          <li><span class="k">Botão Pagamento</span><span class="v">Crédito Loja, valor igual</span></li>
+          <li><span class="k">Informações adicionais</span><span class="v">Não precisa preencher nada</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-head"><span class="flow-num">04</span><span class="flow-title">Envelope de troca ou compra — documentos</span></div>
+      <div class="flow-body">
+        <ul class="checklist">
+          <li>2 cópias do CRLV do carro</li>
+          <li>1 cópia da procuração</li>
+          <li>Consulta dos débitos de IPVA (Fazenda)</li>
+          <li>Consulta do Detran</li>
+          <li>Laudo cautelar original</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COFRE ===================== -->
+  <section class="panel" id="panelCofre">
+    <div id="cofreUnavailable" style="display:none" class="lock-wrap">
+      <div class="lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h2>Não consegui conectar</h2>
+      <p class="sub" id="unavailableMsg">Não deu para falar com o banco de dados agora. Verifique sua internet e recarregue a página.</p>
+    </div>
+
+    <div id="cofreSetup" style="display:none" class="lock-wrap">
+      <div class="lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h2>Criar seu cofre</h2>
+      <p class="sub">Escolha uma senha mestra. Ela nunca sai do seu navegador — é usada só para embaralhar e destravar suas senhas aqui.</p>
+      <div class="warn-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+        <span>Guarde essa senha num lugar seguro. Se você esquecê-la, ninguém — nem eu — consegue recuperar o que estiver salvo aqui.</span>
+      </div>
+      <div class="field">
+        <label for="setupPw1">Senha mestra</label>
+        <div class="pw-row"><input type="password" id="setupPw1" autocomplete="new-password"><button type="button" class="mini-btn" data-toggle="setupPw1">mostrar</button></div>
+      </div>
+      <div class="field">
+        <label for="setupPw2">Confirmar senha</label>
+        <div class="pw-row"><input type="password" id="setupPw2" autocomplete="new-password"><button type="button" class="mini-btn" data-toggle="setupPw2">mostrar</button></div>
+      </div>
+      <div class="err-msg" id="setupErr"></div>
+      <button class="btn-primary" id="btnSetup">Criar cofre</button>
+    </div>
+
+    <div id="cofreUnlock" style="display:none" class="lock-wrap">
+      <div class="lock-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <h2>Cofre bloqueado</h2>
+      <p class="sub">Digite sua senha mestra para ver as credenciais salvas.</p>
+      <div class="field">
+        <label for="unlockPw">Senha mestra</label>
+        <div class="pw-row"><input type="password" id="unlockPw" autocomplete="current-password"><button type="button" class="mini-btn" data-toggle="unlockPw">mostrar</button></div>
+      </div>
+      <div class="err-msg" id="unlockErr"></div>
+      <button class="btn-primary" id="btnUnlock">Desbloquear</button>
+    </div>
+
+    <div id="cofreMain" style="display:none">
+      <div class="vault-head">
+        <h2>Suas credenciais</h2>
+        <div class="vault-actions">
+          <button class="btn-ghost" id="btnShowAdd">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Nova entrada
+          </button>
+          <button class="btn-ghost" id="btnLock">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Bloquear
+          </button>
+        </div>
+      </div>
+
+      <div class="add-card" id="addCard" style="display:none">
+        <h3>Nova entrada</h3>
+        <div class="grid2">
+          <div class="field"><label for="newLabel">Site / sistema</label><input type="text" id="newLabel" placeholder="ex.: Altimus"></div>
+          <div class="field"><label for="newUser">Usuário</label><input type="text" id="newUser" placeholder="ex.: rhayne.autoforte"></div>
+        </div>
+        <div class="field">
+          <label for="newPass">Senha</label>
+          <div class="pw-row"><input type="password" id="newPass"><button type="button" class="mini-btn" data-toggle="newPass">mostrar</button></div>
+        </div>
+        <div class="field"><label for="newNotes">Observações (opcional)</label><textarea id="newNotes" placeholder="ex.: PIN adicional, e-mail de recuperação..."></textarea></div>
+        <div class="form-actions">
+          <button class="btn-ghost" id="btnGenPass" type="button">Gerar senha forte</button>
+          <button class="btn-ghost" id="btnCancelAdd" type="button">Cancelar</button>
+          <button class="btn-small" id="btnSaveEntry" type="button">Salvar</button>
+        </div>
+      </div>
+
+      <div class="entries" id="entriesList"></div>
+      <div class="empty" id="entriesEmpty" style="display:none">Nenhuma credencial salva ainda. Clique em “Nova entrada”.</div>
+
+      <div class="settings-line">
+        <button id="btnShowChangePw" type="button">trocar senha mestra</button>
+      </div>
+      <div class="change-pw" id="changePwBox" style="display:none">
+        <div class="field"><label for="chgOld">Senha mestra atual</label><input type="password" id="chgOld"></div>
+        <div class="field"><label for="chgNew1">Nova senha mestra</label><input type="password" id="chgNew1"></div>
+        <div class="field"><label for="chgNew2">Confirmar nova senha</label><input type="password" id="chgNew2"></div>
+        <div class="err-msg" id="chgErr"></div>
+        <div class="form-actions" style="justify-content:center">
+          <button class="btn-ghost" id="btnCancelChg" type="button">Cancelar</button>
+          <button class="btn-small" id="btnDoChg" type="button">Trocar senha</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Supabase config ---------- */
+  var SUPABASE_URL = 'https://ezipvzgucioqfrzffwji.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_pMzUGGnpCrbmsgIZh6ZbYA_S01ty-xL';
+
+  async function sbFetch(path, opts){
+    opts = opts || {};
+    var headers = Object.assign({
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json'
+    }, opts.headers || {});
+    var res = await fetch(SUPABASE_URL + '/rest/v1/' + path, Object.assign({}, opts, {headers: headers}));
+    if(!res.ok){
+      var text = '';
+      try{ text = await res.text(); }catch(e){}
+      throw new Error('Supabase ' + res.status + ': ' + text);
+    }
+    if(res.status === 204) return null;
+    var ct = res.headers.get('content-type') || '';
+    if(ct.indexOf('application/json') === -1) return null;
+    return res.json();
+  }
+
+  var metaRef = {
+    get: async function(){
+      var rows = await sbFetch('vault_meta?id=eq.config&select=*');
+      var row = rows && rows[0];
+      return { exists: !!row, data: function(){ return row; } };
+    },
+    set: async function(data){
+      var body = Object.assign({ id: 'config' }, data);
+      await sbFetch('vault_meta?on_conflict=id', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify(body)
+      });
+    }
+  };
+
+  var entriesCol = {
+    orderBy: function(){ return this; },
+    get: async function(){
+      var rows = await sbFetch('vault_entries?select=*&order=created_at.desc');
+      return { docs: (rows || []).map(function(r){ return { id: r.id, data: function(){ return r; } }; }) };
+    },
+    add: async function(data){
+      var rows = await sbFetch('vault_entries', {
+        method: 'POST',
+        headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify(data)
+      });
+      return { id: rows[0].id };
+    },
+    doc: function(id){
+      return {
+        update: async function(data){
+          await sbFetch('vault_entries?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(data) });
+        },
+        delete: async function(){
+          await sbFetch('vault_entries?id=eq.' + id, { method: 'DELETE' });
+        }
+      };
+    }
+  };
+
+  /* ---------- tabs ---------- */
+  var tabGuia = document.getElementById('tabBtnGuia');
+  var tabCofre = document.getElementById('tabBtnCofre');
+  var panelGuia = document.getElementById('panelGuia');
+  var panelCofre = document.getElementById('panelCofre');
+  function selectTab(which){
+    var guia = which === 'guia';
+    tabGuia.classList.toggle('active', guia);
+    tabCofre.classList.toggle('active', !guia);
+    tabGuia.setAttribute('aria-selected', guia ? 'true' : 'false');
+    tabCofre.setAttribute('aria-selected', guia ? 'false' : 'true');
+    panelGuia.classList.toggle('active', guia);
+    panelCofre.classList.toggle('active', !guia);
+  }
+  tabGuia.addEventListener('click', function(){ selectTab('guia'); });
+  tabCofre.addEventListener('click', function(){ selectTab('cofre'); });
+
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 1700);
+  }
+
+  /* ---------- show/hide password toggles ---------- */
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.mini-btn[data-toggle]');
+    if(!btn) return;
+    var input = document.getElementById(btn.getAttribute('data-toggle'));
+    if(!input) return;
+    var showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.textContent = showing ? 'mostrar' : 'ocultar';
+  });
+
+  /* ---------- crypto helpers ---------- */
+  var enc = new TextEncoder();
+  var dec = new TextDecoder();
+
+  function b64encode(buf){
+    var bytes = new Uint8Array(buf), binary = '';
+    for(var i=0;i<bytes.byteLength;i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary);
+  }
+  function b64decode(b64){
+    var binary = atob(b64), bytes = new Uint8Array(binary.length);
+    for(var i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return bytes.buffer;
+  }
+  function randomSaltB64(){ return b64encode(crypto.getRandomValues(new Uint8Array(16)).buffer); }
+
+  function deriveKey(password, saltB64){
+    return crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey'])
+      .then(function(baseKey){
+        return crypto.subtle.deriveKey(
+          { name:'PBKDF2', salt: b64decode(saltB64), iterations:210000, hash:'SHA-256' },
+          baseKey,
+          { name:'AES-GCM', length:256 },
+          false,
+          ['encrypt','decrypt']
+        );
+      });
+  }
+  function encryptJSON(key, obj){
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    var data = enc.encode(JSON.stringify(obj));
+    return crypto.subtle.encrypt({name:'AES-GCM', iv: iv}, key, data).then(function(cipher){
+      return { cipher: b64encode(cipher), iv: b64encode(iv.buffer) };
+    });
+  }
+  function decryptJSON(key, cipherB64, ivB64){
+    var iv = new Uint8Array(b64decode(ivB64));
+    return crypto.subtle.decrypt({name:'AES-GCM', iv: iv}, key, b64decode(cipherB64))
+      .then(function(plainBuf){ return JSON.parse(dec.decode(plainBuf)); });
+  }
+  function genPassword(len){
+    len = len || 18;
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%*-_+=';
+    var arr = crypto.getRandomValues(new Uint32Array(len));
+    var out = '';
+    for(var i=0;i<len;i++) out += chars[arr[i] % chars.length];
+    return out;
+  }
+
+  /* ---------- vault state ---------- */
+  var vaultKey = null; // CryptoKey, in memory only, never persisted
+  var currentEntries = [];
+
+  var elUnavailable = document.getElementById('cofreUnavailable');
+  var elSetup = document.getElementById('cofreSetup');
+  var elUnlock = document.getElementById('cofreUnlock');
+  var elMain = document.getElementById('cofreMain');
+
+  function showOnly(el){
+    [elUnavailable, elSetup, elUnlock, elMain].forEach(function(e){ e.style.display = (e === el) ? '' : 'none'; });
+  }
+
+  async function initVault(){
+    try{
+      var snap = await metaRef.get();
+      if(snap.exists){ showOnly(elUnlock); }
+      else { showOnly(elSetup); }
+    }catch(e){
+      document.getElementById('unavailableMsg').textContent = 'Não deu para falar com o banco de dados agora. Verifique sua internet e recarregue a página.';
+      showOnly(elUnavailable);
+    }
+  }
+
+  /* ---- setup ---- */
+  document.getElementById('btnSetup').addEventListener('click', async function(){
+    var p1 = document.getElementById('setupPw1').value;
+    var p2 = document.getElementById('setupPw2').value;
+    var err = document.getElementById('setupErr');
+    err.textContent = '';
+    if(p1.length < 6){ err.textContent = 'Use pelo menos 6 caracteres.'; return; }
+    if(p1 !== p2){ err.textContent = 'As senhas não coincidem.'; return; }
+    var btn = this; btn.disabled = true;
+    try{
+      var saltB64 = randomSaltB64();
+      var key = await deriveKey(p1, saltB64);
+      var v = await encryptJSON(key, { check: 'vault-ok-v1' });
+      await metaRef.set({ salt: saltB64, verifier_cipher: v.cipher, verifier_iv: v.iv, created_at: Date.now() });
+      vaultKey = key;
+      document.getElementById('setupPw1').value = '';
+      document.getElementById('setupPw2').value = '';
+      await enterMain();
+      toast('Cofre criado');
+    }catch(e){
+      err.textContent = 'Não deu para criar o cofre agora. Tente de novo.';
+    }
+    btn.disabled = false;
+  });
+
+  /* ---- unlock ---- */
+  async function tryUnlock(password){
+    var err = document.getElementById('unlockErr');
+    err.textContent = '';
+    var snap = await metaRef.get();
+    if(!snap.exists){ showOnly(elSetup); return; }
+    var meta = snap.data();
+    try{
+      var key = await deriveKey(password, meta.salt);
+      var check = await decryptJSON(key, meta.verifier_cipher, meta.verifier_iv);
+      if(check && check.check === 'vault-ok-v1'){
+        vaultKey = key;
+        document.getElementById('unlockPw').value = '';
+        await enterMain();
+      } else { err.textContent = 'Senha incorreta.'; }
+    }catch(e){ err.textContent = 'Senha incorreta.'; }
+  }
+  document.getElementById('btnUnlock').addEventListener('click', function(){
+    tryUnlock(document.getElementById('unlockPw').value);
+  });
+  document.getElementById('unlockPw').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') tryUnlock(this.value);
+  });
+
+  /* ---- lock ---- */
+  document.getElementById('btnLock').addEventListener('click', function(){
+    vaultKey = null;
+    currentEntries = [];
+    document.getElementById('addCard').style.display = 'none';
+    document.getElementById('changePwBox').style.display = 'none';
+    showOnly(elUnlock);
+  });
+
+  /* ---- main / list ---- */
+  async function enterMain(){
+    showOnly(elMain);
+    var snap = await entriesCol.orderBy('created_at','desc').get();
+    currentEntries = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+    renderEntries();
+  }
+
+  function initials(label){
+    return (label || '?').trim().slice(0,2).toUpperCase();
+  }
+
+  function renderEntries(){
+    var list = document.getElementById('entriesList');
+    var empty = document.getElementById('entriesEmpty');
+    list.innerHTML = '';
+    empty.style.display = currentEntries.length ? 'none' : '';
+    currentEntries.forEach(function(entry){
+      var wrap = document.createElement('div');
+      wrap.className = 'entry';
+      var row = document.createElement('div');
+      row.className = 'entry-row';
+      row.innerHTML =
+        '<div class="entry-icon">' + initials(entry.label) + '</div>' +
+        '<div><div class="entry-label"></div><div class="entry-mask">••••••••••</div></div>' +
+        '<div class="entry-actions">' +
+          '<button class="icon-btn" data-act="toggle" title="Mostrar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+          '<button class="icon-btn" data-act="delete" title="Excluir"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>' +
+        '</div>';
+      row.querySelector('.entry-label').textContent = entry.label || '(sem nome)';
+      wrap.appendChild(row);
+      wrap.dataset.id = entry.id;
+      list.appendChild(wrap);
+    });
+  }
+
+  document.getElementById('entriesList').addEventListener('click', async function(e){
+    var actBtn = e.target.closest('.icon-btn');
+    if(!actBtn) return;
+    var wrap = e.target.closest('.entry');
+    var id = wrap.dataset.id;
+    var entry = currentEntries.find(function(x){ return x.id === id; });
+    if(!entry) return;
+
+    if(actBtn.dataset.act === 'toggle'){
+      var existingDetail = wrap.querySelector('.entry-detail');
+      if(existingDetail){ existingDetail.remove(); return; }
+      Array.prototype.forEach.call(document.querySelectorAll('.entry-detail'), function(d){ d.remove(); });
+      try{
+        var data = await decryptJSON(vaultKey, entry.cipher, entry.iv);
+        var detail = document.createElement('div');
+        detail.className = 'entry-detail';
+        detail.innerHTML =
+          '<div class="kv"><span class="k">Usuário</span><span class="v"></span><button class="copy-btn" data-copy="user">copiar</button></div>' +
+          '<div class="kv"><span class="k">Senha</span><span class="v"></span><button class="copy-btn" data-copy="pass">copiar</button></div>' +
+          (data.notes ? '<div class="kv"><span class="k">Notas</span><span class="v notes"></span></div>' : '');
+        var vs = detail.querySelectorAll('.v');
+        vs[0].textContent = data.username || '—';
+        vs[1].textContent = data.password || '—';
+        if(data.notes && vs[2]) vs[2].textContent = data.notes;
+        detail.querySelectorAll('.copy-btn').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            var val = btn.dataset.copy === 'user' ? data.username : data.password;
+            navigator.clipboard.writeText(val || '').then(function(){ toast('Copiado'); });
+          });
+        });
+        wrap.appendChild(detail);
+      }catch(err){ toast('Não deu para abrir esta entrada'); }
+      return;
+    }
+
+    if(actBtn.dataset.act === 'delete'){
+      if(actBtn.dataset.confirm !== '1'){
+        actBtn.dataset.confirm = '1';
+        actBtn.title = 'Clique de novo para confirmar';
+        actBtn.style.color = 'var(--danger)';
+        actBtn.style.borderColor = 'var(--danger)';
+        setTimeout(function(){ actBtn.dataset.confirm = ''; actBtn.title = 'Excluir'; actBtn.style.color=''; actBtn.style.borderColor=''; }, 3000);
+        return;
+      }
+      await entriesCol.doc(id).delete();
+      currentEntries = currentEntries.filter(function(x){ return x.id !== id; });
+      renderEntries();
+      toast('Entrada excluída');
+    }
+  });
+
+  /* ---- add entry ---- */
+  var addCard = document.getElementById('addCard');
+  document.getElementById('btnShowAdd').addEventListener('click', function(){
+    addCard.style.display = addCard.style.display === 'none' ? '' : 'none';
+  });
+  document.getElementById('btnCancelAdd').addEventListener('click', function(){
+    addCard.style.display = 'none';
+  });
+  document.getElementById('btnGenPass').addEventListener('click', function(){
+    var input = document.getElementById('newPass');
+    input.type = 'text';
+    input.value = genPassword(18);
+    document.querySelector('[data-toggle="newPass"]').textContent = 'ocultar';
+  });
+  document.getElementById('btnSaveEntry').addEventListener('click', async function(){
+    var label = document.getElementById('newLabel').value.trim();
+    var username = document.getElementById('newUser').value.trim();
+    var password = document.getElementById('newPass').value;
+    var notes = document.getElementById('newNotes').value.trim();
+    if(!label || !password){ toast('Preencha ao menos o site e a senha'); return; }
+    var btn = this; btn.disabled = true;
+    try{
+      var enc2 = await encryptJSON(vaultKey, { username: username, password: password, notes: notes });
+      var ref = await entriesCol.add({ label: label, cipher: enc2.cipher, iv: enc2.iv, created_at: Date.now() });
+      currentEntries.unshift({ id: ref.id, label: label, cipher: enc2.cipher, iv: enc2.iv, created_at: Date.now() });
+      renderEntries();
+      ['newLabel','newUser','newPass','newNotes'].forEach(function(id){ document.getElementById(id).value = ''; });
+      addCard.style.display = 'none';
+      toast('Entrada salva');
+    }catch(e){ toast('Não deu para salvar agora'); }
+    btn.disabled = false;
+  });
+
+  /* ---- change master password ---- */
+  var changeBox = document.getElementById('changePwBox');
+  document.getElementById('btnShowChangePw').addEventListener('click', function(){
+    changeBox.style.display = changeBox.style.display === 'none' ? '' : 'none';
+  });
+  document.getElementById('btnCancelChg').addEventListener('click', function(){
+    changeBox.style.display = 'none';
+  });
+  document.getElementById('btnDoChg').addEventListener('click', async function(){
+    var err = document.getElementById('chgErr');
+    err.textContent = '';
+    var oldPw = document.getElementById('chgOld').value;
+    var n1 = document.getElementById('chgNew1').value;
+    var n2 = document.getElementById('chgNew2').value;
+    if(n1.length < 6){ err.textContent = 'A nova senha precisa ter pelo menos 6 caracteres.'; return; }
+    if(n1 !== n2){ err.textContent = 'As novas senhas não coincidem.'; return; }
+    var btn = this; btn.disabled = true;
+    try{
+      var snap = await metaRef.get();
+      var meta = snap.data();
+      var oldKey = await deriveKey(oldPw, meta.salt);
+      var check = await decryptJSON(oldKey, meta.verifier_cipher, meta.verifier_iv);
+      if(!check || check.check !== 'vault-ok-v1'){ err.textContent = 'Senha atual incorreta.'; btn.disabled = false; return; }
+
+      var allSnap = await entriesCol.get();
+      var newSaltB64 = randomSaltB64();
+      var newKey = await deriveKey(n1, newSaltB64);
+
+      for(var i=0;i<allSnap.docs.length;i++){
+        var d = allSnap.docs[i];
+        var plain = await decryptJSON(oldKey, d.data().cipher, d.data().iv);
+        var re = await encryptJSON(newKey, plain);
+        await entriesCol.doc(d.id).update({ cipher: re.cipher, iv: re.iv });
+      }
+      var v = await encryptJSON(newKey, { check: 'vault-ok-v1' });
+      await metaRef.set({ salt: newSaltB64, verifier_cipher: v.cipher, verifier_iv: v.iv, created_at: meta.created_at, updated_at: Date.now() });
+
+      vaultKey = newKey;
+      document.getElementById('chgOld').value = '';
+      document.getElementById('chgNew1').value = '';
+      document.getElementById('chgNew2').value = '';
+      changeBox.style.display = 'none';
+      var snap2 = await entriesCol.orderBy('created_at','desc').get();
+      currentEntries = snap2.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderEntries();
+      toast('Senha mestra alterada');
+    }catch(e){ err.textContent = 'Não deu para trocar a senha agora.'; }
+    btn.disabled = false;
+  });
+
+  initVault();
+})();
+</script>
+</body>
+</html>
