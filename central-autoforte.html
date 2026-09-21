@@ -151,6 +151,56 @@ button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px soli
 .settings-line{text-align:center;margin-top:22px}
 .settings-line button{background:none;border:0;color:var(--faint);font:12px var(--mono);text-decoration:underline;cursor:pointer}
 .change-pw{max-width:340px;margin:0 auto;text-align:center}
+
+/* ---- Tarefas tab ---- */
+.tasks-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.tasks-head h2{font-size:17px}
+.img-toggle{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--border);padding:3px;border-radius:8px;width:max-content;margin-bottom:8px}
+.img-toggle button{border:0;background:none;color:var(--muted);font:600 12px var(--sans);padding:6px 12px;border-radius:6px;cursor:pointer}
+.img-toggle button.active{background:var(--surface);color:var(--text)}
+.img-preview{max-width:220px;max-height:160px;border-radius:8px;border:1px solid var(--border);display:none;margin-top:10px;object-fit:cover}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--text);cursor:pointer}
+.checkbox-row input{width:16px;height:16px;flex:none;margin:0}
+.task-list{display:flex;flex-direction:column;gap:10px}
+.task-card{border:1px solid var(--border);background:var(--surface);border-radius:9px;overflow:hidden;display:flex;transition:.2s}
+.task-card.done{opacity:.62}
+.task-thumb{flex:none;width:86px;height:86px;object-fit:cover;background:var(--surface-2)}
+.task-noimg{flex:none;width:86px;height:86px;background:var(--surface-2);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font:700 15px var(--mono)}
+.task-body{flex:1;min-width:0;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.task-top{display:flex;align-items:flex-start;gap:10px}
+.task-title{font-weight:600;font-size:14.5px;flex:1;padding-top:1px}
+.task-title.done{text-decoration:line-through;color:var(--faint)}
+.task-desc{font-size:13px;color:var(--muted);white-space:pre-wrap}
+.task-actions{display:flex;gap:6px;flex:none;margin-left:auto}
+
+/* ---- Fluxos/etapas (dentro da aba Tarefas, reaproveita .flow/.steps do Guia) ---- */
+.flow-head{align-items:center}
+.flow-actions{display:flex;align-items:center;gap:6px;flex:none;margin-left:auto}
+.flow-title.done{text-decoration:line-through;color:var(--faint)}
+.flow.done{opacity:.62}
+.flow-image{display:block;width:100%;max-height:220px;object-fit:cover;border-radius:8px;margin-bottom:14px}
+.flow-empty-note{color:var(--faint);font-size:12.5px;margin:2px 0 12px}
+.flow-preview-wrap{margin-top:16px}
+.flow-preview-wrap .flow{margin-bottom:0}
+
+/* ---- editor estruturado de passos (dentro do form de fluxo) ---- */
+.flow-editor{border:1px solid var(--border);background:var(--surface);border-radius:var(--radius);padding:14px 16px}
+.fe-notes{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.fe-steps{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.fe-step{border:1px solid var(--border);border-radius:9px;padding:12px 14px;background:var(--surface-2)}
+.fe-step-head{display:flex;align-items:center;gap:10px}
+.fe-step-num{flex:none;width:22px;height:22px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font:600 11px var(--mono);color:var(--muted)}
+.fe-step-head input{flex:1;font-weight:600}
+.fe-sub-list,.fe-warn-list{display:flex;flex-direction:column;gap:6px;margin:8px 0 0 32px}
+.fe-row{display:flex;gap:6px;align-items:center}
+.fe-row input{flex:1;font-size:13px;padding:7px 10px}
+.fe-row.warn{background:var(--warn-soft);border-radius:8px;padding:2px 4px 2px 10px}
+.fe-row.warn input{background:transparent;border:0;color:var(--warn)}
+.fe-remove-btn{flex:none;border:0;background:none;color:var(--faint);cursor:pointer;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.fe-remove-btn:hover{color:var(--danger);background:var(--danger-soft)}
+.fe-add-link{border:0;background:none;color:var(--accent-text);font:600 12px var(--sans);cursor:pointer;padding:4px 2px;text-align:left}
+.fe-add-link:hover{text-decoration:underline}
+.fe-step-actions{display:flex;gap:14px;margin-top:8px;margin-left:32px}
 </style>
 </head>
 <body>
@@ -175,6 +225,10 @@ button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px soli
       <button class="tab-btn" id="tabBtnCofre" role="tab" aria-selected="false">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Cofre de senhas
+      </button>
+      <button class="tab-btn" id="tabBtnTarefas" role="tab" aria-selected="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Tarefas
       </button>
     </nav>
   </header>
@@ -359,6 +413,100 @@ button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px soli
       </div>
     </div>
   </section>
+
+  <!-- ===================== TAREFAS ===================== -->
+  <section class="panel" id="panelTarefas">
+    <div class="tasks-head">
+      <h2>Minhas tarefas</h2>
+      <button class="btn-ghost" id="btnShowAddTask">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nova tarefa
+      </button>
+    </div>
+
+    <div class="add-card" id="addTaskCard" style="display:none">
+      <h3 id="addTaskTitle">Nova tarefa</h3>
+      <div class="field"><label for="taskTitle">Título</label><input type="text" id="taskTitle" placeholder="ex.: Ligar para o despachante"></div>
+
+      <div class="field">
+        <label>Imagem (opcional)</label>
+        <div class="img-toggle">
+          <button type="button" class="active" data-imgmode="link" id="taskImgModeLink">Link</button>
+          <button type="button" data-imgmode="upload" id="taskImgModeUpload">Upload</button>
+        </div>
+        <input type="url" id="taskImageUrl" placeholder="https://...">
+        <input type="file" id="taskImageFile" accept="image/*" style="display:none">
+        <img id="taskImagePreview" class="img-preview" alt="Pré-visualização da imagem">
+      </div>
+
+      <div class="field"><label for="taskDesc">Descrição (opcional)</label><textarea id="taskDesc" placeholder="Detalhes da tarefa..."></textarea></div>
+
+      <label class="checkbox-row" for="taskDone"><input type="checkbox" id="taskDone"> Marcar como concluída</label>
+
+      <div class="form-actions">
+        <button class="btn-ghost" id="btnCancelTask" type="button">Cancelar</button>
+        <button class="btn-small" id="btnSaveTask" type="button">Salvar</button>
+      </div>
+    </div>
+
+    <div class="task-list" id="taskList"></div>
+    <div class="empty" id="taskEmpty" style="display:none">Nenhuma tarefa criada ainda. Clique em “Nova tarefa”.</div>
+    <div class="empty" id="taskError" style="display:none">Não deu para carregar as tarefas agora.</div>
+
+    <div class="tasks-head" style="margin-top:36px">
+      <h2>Fluxos / etapas</h2>
+      <button class="btn-ghost" id="btnShowAddFlow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Novo fluxo
+      </button>
+    </div>
+    <p class="flow-empty-note">Crie um passo a passo do seu jeito, igual aos fluxos do Guia de trabalho — com etapas, sub-etapas e avisos.</p>
+
+    <div class="add-card" id="addFlowCard" style="display:none">
+      <h3 id="addFlowTitleLabel">Novo fluxo</h3>
+      <div class="field"><label for="flowTitle">Título do fluxo</label><input type="text" id="flowTitle" placeholder="ex.: Recebimento de envelopes"></div>
+
+      <div class="field">
+        <label>Imagem (opcional)</label>
+        <div class="img-toggle">
+          <button type="button" class="active" data-imgmode="link" id="flowImgModeLink">Link</button>
+          <button type="button" data-imgmode="upload" id="flowImgModeUpload">Upload</button>
+        </div>
+        <input type="url" id="flowImageUrl" placeholder="https://...">
+        <input type="file" id="flowImageFile" accept="image/*" style="display:none">
+        <img id="flowImagePreview" class="img-preview" alt="Pré-visualização da imagem">
+      </div>
+
+      <div class="field">
+        <label for="flowText">Colar texto e organizar automaticamente (opcional)</label>
+        <textarea id="flowText" rows="5" placeholder="Escreva cada passo em uma linha, use &quot;-&quot; para sub-etapa e &quot;Atenção:&quot; para um aviso. Depois clique em Organizar."></textarea>
+        <div class="form-actions" style="justify-content:flex-start;margin-top:8px">
+          <button class="btn-ghost" id="btnOrganizeFlow" type="button">Organizar automaticamente</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Passos do fluxo — edite à vontade</label>
+        <div class="flow-editor" id="flowEditor"></div>
+      </div>
+
+      <label class="checkbox-row" for="flowDone"><input type="checkbox" id="flowDone"> Marcar como concluído</label>
+
+      <div class="form-actions">
+        <button class="btn-ghost" id="btnCancelFlow" type="button">Cancelar</button>
+        <button class="btn-small" id="btnSaveFlow" type="button">Salvar</button>
+      </div>
+
+      <div class="flow-preview-wrap" id="flowPreviewWrap" style="display:none">
+        <label>Como vai ficar</label>
+        <div id="flowPreviewBox"></div>
+      </div>
+    </div>
+
+    <div class="task-list" id="flowList"></div>
+    <div class="empty" id="flowEmpty" style="display:none">Nenhum fluxo criado ainda. Clique em “Novo fluxo”.</div>
+    <div class="empty" id="flowError" style="display:none">Não deu para carregar os fluxos agora.</div>
+  </section>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -432,22 +580,44 @@ button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px soli
     }
   };
 
+  var tasksCol = {
+    get: async function(){
+      var rows = await sbFetch('tasks?select=*&order=created_at.desc');
+      return rows || [];
+    },
+    add: async function(data){
+      var rows = await sbFetch('tasks', {
+        method: 'POST',
+        headers: { 'Prefer': 'return=representation' },
+        body: JSON.stringify(data)
+      });
+      return rows[0];
+    },
+    update: async function(id, data){
+      await sbFetch('tasks?id=eq.' + id, { method: 'PATCH', body: JSON.stringify(data) });
+    },
+    remove: async function(id){
+      await sbFetch('tasks?id=eq.' + id, { method: 'DELETE' });
+    }
+  };
+
   /* ---------- tabs ---------- */
-  var tabGuia = document.getElementById('tabBtnGuia');
-  var tabCofre = document.getElementById('tabBtnCofre');
-  var panelGuia = document.getElementById('panelGuia');
-  var panelCofre = document.getElementById('panelCofre');
+  var tabs = {
+    guia: { btn: document.getElementById('tabBtnGuia'), panel: document.getElementById('panelGuia') },
+    cofre: { btn: document.getElementById('tabBtnCofre'), panel: document.getElementById('panelCofre') },
+    tarefas: { btn: document.getElementById('tabBtnTarefas'), panel: document.getElementById('panelTarefas') }
+  };
   function selectTab(which){
-    var guia = which === 'guia';
-    tabGuia.classList.toggle('active', guia);
-    tabCofre.classList.toggle('active', !guia);
-    tabGuia.setAttribute('aria-selected', guia ? 'true' : 'false');
-    tabCofre.setAttribute('aria-selected', guia ? 'false' : 'true');
-    panelGuia.classList.toggle('active', guia);
-    panelCofre.classList.toggle('active', !guia);
+    Object.keys(tabs).forEach(function(key){
+      var active = key === which;
+      tabs[key].btn.classList.toggle('active', active);
+      tabs[key].btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      tabs[key].panel.classList.toggle('active', active);
+    });
   }
-  tabGuia.addEventListener('click', function(){ selectTab('guia'); });
-  tabCofre.addEventListener('click', function(){ selectTab('cofre'); });
+  Object.keys(tabs).forEach(function(key){
+    tabs[key].btn.addEventListener('click', function(){ selectTab(key); });
+  });
 
   /* ---------- toast ---------- */
   var toastEl = document.getElementById('toast');
@@ -782,7 +952,698 @@ button:focus-visible,.tab-btn:focus-visible,input:focus-visible{outline:2px soli
     btn.disabled = false;
   });
 
+  /* ---------- image picker genérico (link ou upload, com compressão) ---------- */
+  function resizeImageFile(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(){
+        var img = new Image();
+        img.onload = function(){
+          var maxDim = 1280;
+          var w = img.width, h = img.height;
+          if(w > maxDim || h > maxDim){
+            if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', 0.82));
+        };
+        img.onerror = function(){ reject(new Error('Imagem inválida')); };
+        img.src = reader.result;
+      };
+      reader.onerror = function(){ reject(new Error('Não deu para ler o arquivo')); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function makeImagePicker(prefix, onChange){
+    var mode = 'link';
+    var current = '';
+    var urlEl = document.getElementById(prefix + 'ImageUrl');
+    var fileEl = document.getElementById(prefix + 'ImageFile');
+    var previewEl = document.getElementById(prefix + 'ImagePreview');
+    var btnLink = document.getElementById(prefix + 'ImgModeLink');
+    var btnUpload = document.getElementById(prefix + 'ImgModeUpload');
+
+    function setMode(m){
+      mode = m;
+      btnLink.classList.toggle('active', m === 'link');
+      btnUpload.classList.toggle('active', m === 'upload');
+      urlEl.style.display = m === 'link' ? '' : 'none';
+      fileEl.style.display = m === 'upload' ? '' : 'none';
+    }
+    function updatePreview(){
+      if(current){ previewEl.src = current; previewEl.style.display = 'block'; }
+      else { previewEl.style.display = 'none'; previewEl.src = ''; }
+      if(onChange) onChange();
+    }
+
+    btnLink.addEventListener('click', function(){ setMode('link'); current = ''; fileEl.value = ''; updatePreview(); });
+    btnUpload.addEventListener('click', function(){ setMode('upload'); current = ''; urlEl.value = ''; updatePreview(); });
+    urlEl.addEventListener('input', function(){
+      var val = this.value.trim();
+      current = val ? normalizeUrl(val) : '';
+      updatePreview();
+    });
+    fileEl.addEventListener('change', async function(){
+      var file = this.files && this.files[0];
+      if(!file) return;
+      if(file.size > 8 * 1024 * 1024){ toast('Imagem muito grande (máx. 8MB)'); this.value = ''; return; }
+      try{ current = await resizeImageFile(file); updatePreview(); }
+      catch(e){ toast('Não deu para ler essa imagem'); }
+    });
+
+    return {
+      get value(){ return current; },
+      set: function(val){
+        current = val || '';
+        setMode(val && /^data:/.test(val) ? 'upload' : 'link');
+        if(mode === 'link') urlEl.value = val || '';
+        updatePreview();
+      },
+      reset: function(){ current = ''; urlEl.value = ''; fileEl.value = ''; setMode('link'); updatePreview(); }
+    };
+  }
+
+  /* ---------- tarefas simples ---------- */
+  var currentTasks = [];
+  var editingTaskId = null;
+  var addTaskCard = document.getElementById('addTaskCard');
+  var taskImagePicker = makeImagePicker('task');
+
+  function resetTaskForm(){
+    editingTaskId = null;
+    document.getElementById('addTaskTitle').textContent = 'Nova tarefa';
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDesc').value = '';
+    document.getElementById('taskDone').checked = false;
+    taskImagePicker.reset();
+  }
+
+  document.getElementById('btnShowAddTask').addEventListener('click', function(){
+    var willShow = addTaskCard.style.display === 'none' || !addTaskCard.style.display;
+    if(willShow) resetTaskForm();
+    addTaskCard.style.display = willShow ? '' : 'none';
+  });
+  document.getElementById('btnCancelTask').addEventListener('click', function(){
+    addTaskCard.style.display = 'none';
+  });
+
+  document.getElementById('btnSaveTask').addEventListener('click', async function(){
+    var title = document.getElementById('taskTitle').value.trim();
+    var description = document.getElementById('taskDesc').value.trim();
+    var done = document.getElementById('taskDone').checked;
+    if(!title){ toast('Preencha ao menos o título'); return; }
+    var btn = this; btn.disabled = true;
+    try{
+      var payload = { type: 'task', title: title, description: description, image: taskImagePicker.value || null, done: done, updated_at: new Date().toISOString() };
+      if(editingTaskId){
+        await tasksCol.update(editingTaskId, payload);
+        toast('Tarefa atualizada');
+      } else {
+        payload.created_at = new Date().toISOString();
+        await tasksCol.add(payload);
+        toast('Tarefa criada');
+      }
+      addTaskCard.style.display = 'none';
+      await loadAll();
+    }catch(e){ toast('Não deu para salvar a tarefa agora'); }
+    btn.disabled = false;
+  });
+
+  function renderTasks(){
+    var list = document.getElementById('taskList');
+    var empty = document.getElementById('taskEmpty');
+    list.innerHTML = '';
+    empty.style.display = currentTasks.length ? 'none' : '';
+    currentTasks.forEach(function(t){
+      var card = document.createElement('div');
+      card.className = 'task-card' + (t.done ? ' done' : '');
+      card.dataset.id = t.id;
+
+      card.innerHTML =
+        (t.image ? '<img class="task-thumb" src="" alt="">' : '<div class="task-noimg">' + initials(t.title) + '</div>') +
+        '<div class="task-body">' +
+          '<div class="task-top">' +
+            '<label class="checkbox-row"><input type="checkbox" data-act="toggle-done"' + (t.done ? ' checked' : '') + '></label>' +
+            '<div class="task-title' + (t.done ? ' done' : '') + '"></div>' +
+            '<div class="task-actions">' +
+              '<button class="icon-btn" data-act="edit" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>' +
+              '<button class="icon-btn" data-act="delete" title="Excluir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>' +
+            '</div>' +
+          '</div>' +
+          (t.description ? '<div class="task-desc"></div>' : '') +
+        '</div>';
+
+      card.querySelector('.task-title').textContent = t.title || '(sem título)';
+      if(t.image){ card.querySelector('.task-thumb').src = t.image; }
+      if(t.description){ card.querySelector('.task-desc').textContent = t.description; }
+
+      list.appendChild(card);
+    });
+  }
+
+  document.getElementById('taskList').addEventListener('click', async function(e){
+    var card = e.target.closest('.task-card');
+    if(!card) return;
+    var id = card.dataset.id;
+    var t = currentTasks.find(function(x){ return String(x.id) === String(id); });
+    if(!t) return;
+
+    var editBtn = e.target.closest('[data-act="edit"]');
+    if(editBtn){
+      editingTaskId = t.id;
+      document.getElementById('addTaskTitle').textContent = 'Editar tarefa';
+      document.getElementById('taskTitle').value = t.title || '';
+      document.getElementById('taskDesc').value = t.description || '';
+      document.getElementById('taskDone').checked = !!t.done;
+      taskImagePicker.set(t.image || '');
+      addTaskCard.style.display = '';
+      addTaskCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    var delBtn = e.target.closest('[data-act="delete"]');
+    if(delBtn){
+      if(delBtn.dataset.confirm !== '1'){
+        delBtn.dataset.confirm = '1';
+        delBtn.title = 'Clique de novo para confirmar';
+        delBtn.style.color = 'var(--danger)';
+        delBtn.style.borderColor = 'var(--danger)';
+        setTimeout(function(){ delBtn.dataset.confirm = ''; delBtn.title = 'Excluir'; delBtn.style.color = ''; delBtn.style.borderColor = ''; }, 3000);
+        return;
+      }
+      try{
+        await tasksCol.remove(t.id);
+        currentTasks = currentTasks.filter(function(x){ return x.id !== t.id; });
+        renderTasks();
+        toast('Tarefa excluída');
+      }catch(e2){ toast('Não deu para excluir agora'); }
+    }
+  });
+
+  document.getElementById('taskList').addEventListener('change', async function(e){
+    var cb = e.target.closest('[data-act="toggle-done"]');
+    if(!cb) return;
+    var card = e.target.closest('.task-card');
+    var id = card.dataset.id;
+    var t = currentTasks.find(function(x){ return String(x.id) === String(id); });
+    if(!t) return;
+    var done = cb.checked;
+    try{
+      await tasksCol.update(t.id, { done: done, updated_at: new Date().toISOString() });
+      t.done = done;
+      card.classList.toggle('done', done);
+      card.querySelector('.task-title').classList.toggle('done', done);
+    }catch(e2){
+      cb.checked = !done;
+      toast('Não deu para atualizar agora');
+    }
+  });
+
+  /* ---------- fluxos / etapas ---------- */
+  var currentFlows = [];
+  var editingFlowId = null;
+  var addFlowCard = document.getElementById('addFlowCard');
+  var flowTitleEl = document.getElementById('flowTitle');
+  var flowTextEl = document.getElementById('flowText');
+  var flowPreviewWrap = document.getElementById('flowPreviewWrap');
+  var flowPreviewBox = document.getElementById('flowPreviewBox');
+
+  function parseFlowText(raw){
+    var lines = (raw || '').split('\n');
+    var steps = [];
+    var notes = [];
+    var warnRe = /^\s*(aten[cç][aã]o|importante|obs(erva[cç][aã]o)?|cuidado)\s*:\s*/i;
+    var bulletRe = /^\s*[-*•]\s+/;
+    var numRe = /^\s*\d+[.)]\s+/;
+    var indentRe = /^[ \t]{2,}\S/;
+
+    function stripMarker(s){
+      return s.replace(bulletRe, '').replace(numRe, '').trim();
+    }
+
+    lines.forEach(function(rawLine){
+      var trimmed = rawLine.trim();
+      if(!trimmed) return;
+
+      var warnMatch = trimmed.match(warnRe);
+      if(warnMatch){
+        var warnText = trimmed.slice(warnMatch[0].length).trim();
+        if(warnText){
+          if(steps.length) steps[steps.length - 1].warnings.push(warnText);
+          else notes.push(warnText);
+        }
+        return;
+      }
+
+      var looksLikeSub = (bulletRe.test(rawLine) || indentRe.test(rawLine)) && !numRe.test(trimmed);
+      if(looksLikeSub && steps.length){
+        steps[steps.length - 1].subSteps.push(stripMarker(trimmed));
+        return;
+      }
+
+      steps.push({ text: stripMarker(trimmed), subSteps: [], warnings: [] });
+    });
+
+    return { steps: steps, notes: notes };
+  }
+
+  function buildWarnCallout(text){
+    var div = document.createElement('div');
+    div.className = 'callout warn';
+    div.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><span></span>';
+    div.querySelector('span').textContent = text;
+    return div;
+  }
+
+  function buildStepsAndNotesNodes(content){
+    var frag = document.createDocumentFragment();
+    (content.notes || []).forEach(function(n){ frag.appendChild(buildWarnCallout(n)); });
+    var steps = content.steps || [];
+    if(steps.length){
+      var ol = document.createElement('ol');
+      ol.className = 'steps';
+      steps.forEach(function(s, idx){
+        var li = document.createElement('li');
+        var dot = document.createElement('span');
+        dot.className = 'dot';
+        dot.textContent = String(idx + 1);
+        var body = document.createElement('div');
+        var textDiv = document.createElement('div');
+        textDiv.textContent = s.text;
+        body.appendChild(textDiv);
+        if(s.subSteps && s.subSteps.length){
+          var ul = document.createElement('ul');
+          ul.className = 'sub-steps';
+          s.subSteps.forEach(function(sub){
+            var subLi = document.createElement('li');
+            subLi.textContent = sub;
+            ul.appendChild(subLi);
+          });
+          body.appendChild(ul);
+        }
+        (s.warnings || []).forEach(function(w){ body.appendChild(buildWarnCallout(w)); });
+        li.appendChild(dot);
+        li.appendChild(body);
+        ol.appendChild(li);
+      });
+      frag.appendChild(ol);
+    }
+    return frag;
+  }
+
+  function buildFlowCard(f, num, readOnly){
+    var wrap = document.createElement('div');
+    wrap.className = 'flow' + (f.done ? ' done' : '');
+    if(f.id != null) wrap.dataset.id = f.id;
+
+    var head = document.createElement('div');
+    head.className = 'flow-head';
+    var numSpan = document.createElement('span');
+    numSpan.className = 'flow-num';
+    numSpan.textContent = num;
+    var titleSpan = document.createElement('span');
+    titleSpan.className = 'flow-title' + (f.done ? ' done' : '');
+    titleSpan.textContent = f.title || '(sem título)';
+    head.appendChild(numSpan);
+    head.appendChild(titleSpan);
+
+    if(!readOnly){
+      var actions = document.createElement('div');
+      actions.className = 'flow-actions';
+      actions.innerHTML =
+        '<label class="checkbox-row"><input type="checkbox" data-act="toggle-done"' + (f.done ? ' checked' : '') + '></label>' +
+        '<button class="icon-btn" data-act="edit" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>' +
+        '<button class="icon-btn" data-act="delete" title="Excluir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>';
+      head.appendChild(actions);
+    }
+
+    var body = document.createElement('div');
+    body.className = 'flow-body';
+    if(f.image){
+      var img = document.createElement('img');
+      img.className = 'flow-image';
+      img.src = f.image;
+      img.alt = '';
+      body.appendChild(img);
+    }
+    body.appendChild(buildStepsAndNotesNodes(f.content || {}));
+
+    wrap.appendChild(head);
+    wrap.appendChild(body);
+    return wrap;
+  }
+
+  /* ---- editor estruturado dos passos: fonte da verdade é flowModel, editável direto ---- */
+  var flowModel = { notes: [], steps: [] };
+  var flowEditorEl = document.getElementById('flowEditor');
+
+  function emptyStep(){ return { text: '', subSteps: [], warnings: [] }; }
+
+  function cloneFlowContent(content){
+    content = content || {};
+    return {
+      notes: (content.notes || []).slice(),
+      steps: (content.steps || []).map(function(s){
+        return { text: s.text || '', subSteps: (s.subSteps || []).slice(), warnings: (s.warnings || []).slice() };
+      })
+    };
+  }
+
+  function sanitizeFlowContent(model){
+    return {
+      notes: model.notes.map(function(n){ return n.trim(); }).filter(Boolean),
+      steps: model.steps
+        .map(function(s){
+          return {
+            text: s.text.trim(),
+            subSteps: s.subSteps.map(function(x){ return x.trim(); }).filter(Boolean),
+            warnings: s.warnings.map(function(x){ return x.trim(); }).filter(Boolean)
+          };
+        })
+        .filter(function(s){ return s.text || s.subSteps.length || s.warnings.length; })
+    };
+  }
+
+  function removeIconSvg(){
+    return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+  }
+
+  function focusLastWithin(container, selector){
+    if(!container) return;
+    var inputs = container.querySelectorAll(selector);
+    var last = inputs[inputs.length - 1];
+    if(last) last.focus();
+  }
+
+  function renderFlowEditor(){
+    var el = flowEditorEl;
+    el.innerHTML = '';
+
+    var notesWrap = document.createElement('div');
+    notesWrap.className = 'fe-notes';
+    flowModel.notes.forEach(function(note, i){
+      var row = document.createElement('div');
+      row.className = 'fe-row warn';
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.value = note;
+      input.placeholder = 'Aviso geral (aparece antes do passo 1)';
+      input.addEventListener('input', function(){ flowModel.notes[i] = this.value; syncPreview(); });
+      var rm = document.createElement('button');
+      rm.type = 'button'; rm.className = 'fe-remove-btn'; rm.title = 'Remover aviso';
+      rm.innerHTML = removeIconSvg();
+      rm.addEventListener('click', function(){ flowModel.notes.splice(i, 1); renderFlowEditor(); syncPreview(); });
+      row.appendChild(input); row.appendChild(rm);
+      notesWrap.appendChild(row);
+    });
+    el.appendChild(notesWrap);
+
+    var addNoteBtn = document.createElement('button');
+    addNoteBtn.type = 'button'; addNoteBtn.className = 'fe-add-link';
+    addNoteBtn.textContent = '+ aviso geral';
+    addNoteBtn.addEventListener('click', function(){
+      flowModel.notes.push('');
+      renderFlowEditor();
+      focusLastWithin(flowEditorEl, '.fe-notes input');
+      syncPreview();
+    });
+    el.appendChild(addNoteBtn);
+
+    var stepsWrap = document.createElement('div');
+    stepsWrap.className = 'fe-steps';
+    flowModel.steps.forEach(function(step, si){
+      var box = document.createElement('div');
+      box.className = 'fe-step';
+
+      var head = document.createElement('div');
+      head.className = 'fe-step-head';
+      var num = document.createElement('span');
+      num.className = 'fe-step-num';
+      num.textContent = String(si + 1);
+      var textInput = document.createElement('input');
+      textInput.type = 'text';
+      textInput.value = step.text;
+      textInput.placeholder = 'Descreva o passo ' + (si + 1);
+      textInput.addEventListener('input', function(){ flowModel.steps[si].text = this.value; syncPreview(); });
+      var rmStep = document.createElement('button');
+      rmStep.type = 'button'; rmStep.className = 'fe-remove-btn'; rmStep.title = 'Remover passo';
+      rmStep.innerHTML = removeIconSvg();
+      rmStep.addEventListener('click', function(){ flowModel.steps.splice(si, 1); renderFlowEditor(); syncPreview(); });
+      head.appendChild(num); head.appendChild(textInput); head.appendChild(rmStep);
+      box.appendChild(head);
+
+      var subList = document.createElement('div');
+      subList.className = 'fe-sub-list';
+      step.subSteps.forEach(function(sub, subi){
+        var row = document.createElement('div');
+        row.className = 'fe-row';
+        var input = document.createElement('input');
+        input.type = 'text'; input.value = sub; input.placeholder = 'Sub-etapa';
+        input.addEventListener('input', function(){ flowModel.steps[si].subSteps[subi] = this.value; syncPreview(); });
+        var rm = document.createElement('button');
+        rm.type = 'button'; rm.className = 'fe-remove-btn'; rm.title = 'Remover sub-etapa';
+        rm.innerHTML = removeIconSvg();
+        rm.addEventListener('click', function(){ flowModel.steps[si].subSteps.splice(subi, 1); renderFlowEditor(); syncPreview(); });
+        row.appendChild(input); row.appendChild(rm);
+        subList.appendChild(row);
+      });
+      box.appendChild(subList);
+
+      var warnList = document.createElement('div');
+      warnList.className = 'fe-warn-list';
+      step.warnings.forEach(function(w, wi){
+        var row = document.createElement('div');
+        row.className = 'fe-row warn';
+        var input = document.createElement('input');
+        input.type = 'text'; input.value = w; input.placeholder = 'Aviso deste passo';
+        input.addEventListener('input', function(){ flowModel.steps[si].warnings[wi] = this.value; syncPreview(); });
+        var rm = document.createElement('button');
+        rm.type = 'button'; rm.className = 'fe-remove-btn'; rm.title = 'Remover aviso';
+        rm.innerHTML = removeIconSvg();
+        rm.addEventListener('click', function(){ flowModel.steps[si].warnings.splice(wi, 1); renderFlowEditor(); syncPreview(); });
+        row.appendChild(input); row.appendChild(rm);
+        warnList.appendChild(row);
+      });
+      box.appendChild(warnList);
+
+      var actions = document.createElement('div');
+      actions.className = 'fe-step-actions';
+      var addSub = document.createElement('button');
+      addSub.type = 'button'; addSub.className = 'fe-add-link';
+      addSub.textContent = '+ sub-etapa';
+      addSub.addEventListener('click', function(){
+        flowModel.steps[si].subSteps.push('');
+        renderFlowEditor();
+        focusLastWithin(flowEditorEl.querySelectorAll('.fe-step')[si], '.fe-sub-list input');
+        syncPreview();
+      });
+      var addWarn = document.createElement('button');
+      addWarn.type = 'button'; addWarn.className = 'fe-add-link';
+      addWarn.textContent = '+ aviso';
+      addWarn.addEventListener('click', function(){
+        flowModel.steps[si].warnings.push('');
+        renderFlowEditor();
+        focusLastWithin(flowEditorEl.querySelectorAll('.fe-step')[si], '.fe-warn-list input');
+        syncPreview();
+      });
+      actions.appendChild(addSub); actions.appendChild(addWarn);
+      box.appendChild(actions);
+
+      stepsWrap.appendChild(box);
+    });
+    el.appendChild(stepsWrap);
+
+    var addStepBtn = document.createElement('button');
+    addStepBtn.type = 'button'; addStepBtn.className = 'btn-ghost';
+    addStepBtn.style.marginTop = '12px';
+    addStepBtn.textContent = '+ Adicionar passo';
+    addStepBtn.addEventListener('click', function(){
+      flowModel.steps.push(emptyStep());
+      renderFlowEditor();
+      focusLastWithin(flowEditorEl, '.fe-step-head input');
+      syncPreview();
+    });
+    el.appendChild(addStepBtn);
+  }
+
+  function syncPreview(){
+    var title = flowTitleEl.value.trim();
+    var clean = sanitizeFlowContent(flowModel);
+    flowPreviewBox.innerHTML = '';
+    if(!title && !clean.steps.length && !clean.notes.length){ flowPreviewWrap.style.display = 'none'; return; }
+    flowPreviewWrap.style.display = '';
+    flowPreviewBox.appendChild(buildFlowCard({
+      title: title || '(sem título)',
+      image: flowImagePicker.value,
+      done: false,
+      content: clean
+    }, '•', true));
+  }
+
+  var flowImagePicker = makeImagePicker('flow', function(){ syncPreview(); });
+
+  flowTitleEl.addEventListener('input', syncPreview);
+
+  document.getElementById('btnOrganizeFlow').addEventListener('click', function(){
+    var parsed = parseFlowText(flowTextEl.value);
+    if(!parsed.steps.length && !parsed.notes.length){ toast('Escreva algo no texto para organizar'); return; }
+    flowModel = parsed;
+    renderFlowEditor();
+    syncPreview();
+    toast('Organizado! Ajuste o que quiser abaixo.');
+  });
+
+  function resetFlowForm(){
+    editingFlowId = null;
+    document.getElementById('addFlowTitleLabel').textContent = 'Novo fluxo';
+    flowTitleEl.value = '';
+    flowTextEl.value = '';
+    document.getElementById('flowDone').checked = false;
+    flowImagePicker.reset();
+    flowModel = { notes: [], steps: [emptyStep()] };
+    renderFlowEditor();
+    syncPreview();
+  }
+
+  document.getElementById('btnShowAddFlow').addEventListener('click', function(){
+    var willShow = addFlowCard.style.display === 'none' || !addFlowCard.style.display;
+    if(willShow) resetFlowForm();
+    addFlowCard.style.display = willShow ? '' : 'none';
+  });
+  document.getElementById('btnCancelFlow').addEventListener('click', function(){
+    addFlowCard.style.display = 'none';
+  });
+
+  document.getElementById('btnSaveFlow').addEventListener('click', async function(){
+    var title = flowTitleEl.value.trim();
+    var done = document.getElementById('flowDone').checked;
+    var clean = sanitizeFlowContent(flowModel);
+    if(!title){ toast('Preencha o título do fluxo'); return; }
+    if(!clean.steps.length && !clean.notes.length){ toast('Escreva pelo menos um passo'); return; }
+    var btn = this; btn.disabled = true;
+    try{
+      var payload = {
+        type: 'flow',
+        title: title,
+        image: flowImagePicker.value || null,
+        done: done,
+        content: { raw: flowTextEl.value, steps: clean.steps, notes: clean.notes },
+        updated_at: new Date().toISOString()
+      };
+      if(editingFlowId){
+        await tasksCol.update(editingFlowId, payload);
+        toast('Fluxo atualizado');
+      } else {
+        payload.created_at = new Date().toISOString();
+        await tasksCol.add(payload);
+        toast('Fluxo criado');
+      }
+      addFlowCard.style.display = 'none';
+      await loadAll();
+    }catch(e){ toast('Não deu para salvar o fluxo agora'); }
+    btn.disabled = false;
+  });
+
+  function renderFlows(){
+    var list = document.getElementById('flowList');
+    var empty = document.getElementById('flowEmpty');
+    list.innerHTML = '';
+    empty.style.display = currentFlows.length ? 'none' : '';
+    currentFlows.forEach(function(f, idx){
+      var n = idx + 1;
+      var num = n < 10 ? '0' + n : String(n);
+      list.appendChild(buildFlowCard(f, num, false));
+    });
+  }
+
+  document.getElementById('flowList').addEventListener('click', async function(e){
+    var card = e.target.closest('.flow');
+    if(!card) return;
+    var id = card.dataset.id;
+    var f = currentFlows.find(function(x){ return String(x.id) === String(id); });
+    if(!f) return;
+
+    var editBtn = e.target.closest('[data-act="edit"]');
+    if(editBtn){
+      editingFlowId = f.id;
+      document.getElementById('addFlowTitleLabel').textContent = 'Editar fluxo';
+      flowTitleEl.value = f.title || '';
+      flowTextEl.value = (f.content && f.content.raw) || '';
+      document.getElementById('flowDone').checked = !!f.done;
+      flowImagePicker.set(f.image || '');
+      flowModel = cloneFlowContent(f.content);
+      if(!flowModel.steps.length) flowModel.steps.push(emptyStep());
+      renderFlowEditor();
+      syncPreview();
+      addFlowCard.style.display = '';
+      addFlowCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    var delBtn = e.target.closest('[data-act="delete"]');
+    if(delBtn){
+      if(delBtn.dataset.confirm !== '1'){
+        delBtn.dataset.confirm = '1';
+        delBtn.title = 'Clique de novo para confirmar';
+        delBtn.style.color = 'var(--danger)';
+        delBtn.style.borderColor = 'var(--danger)';
+        setTimeout(function(){ delBtn.dataset.confirm = ''; delBtn.title = 'Excluir'; delBtn.style.color = ''; delBtn.style.borderColor = ''; }, 3000);
+        return;
+      }
+      try{
+        await tasksCol.remove(f.id);
+        currentFlows = currentFlows.filter(function(x){ return x.id !== f.id; });
+        renderFlows();
+        toast('Fluxo excluído');
+      }catch(e2){ toast('Não deu para excluir agora'); }
+    }
+  });
+
+  document.getElementById('flowList').addEventListener('change', async function(e){
+    var cb = e.target.closest('[data-act="toggle-done"]');
+    if(!cb) return;
+    var card = e.target.closest('.flow');
+    var id = card.dataset.id;
+    var f = currentFlows.find(function(x){ return String(x.id) === String(id); });
+    if(!f) return;
+    var done = cb.checked;
+    try{
+      await tasksCol.update(f.id, { done: done, updated_at: new Date().toISOString() });
+      f.done = done;
+      card.classList.toggle('done', done);
+      card.querySelector('.flow-title').classList.toggle('done', done);
+    }catch(e2){
+      cb.checked = !done;
+      toast('Não deu para atualizar agora');
+    }
+  });
+
+  /* ---------- carga inicial (tarefas + fluxos vêm da mesma tabela) ---------- */
+  async function loadAll(){
+    var taskErrEl = document.getElementById('taskError');
+    var flowErrEl = document.getElementById('flowError');
+    taskErrEl.style.display = 'none';
+    flowErrEl.style.display = 'none';
+    try{
+      var rows = await sbFetch('tasks?select=*&order=created_at.asc') || [];
+      currentFlows = rows.filter(function(r){ return r.type === 'flow'; });
+      currentTasks = rows.filter(function(r){ return r.type !== 'flow'; }).slice().reverse();
+      renderTasks();
+      renderFlows();
+    }catch(e){
+      taskErrEl.style.display = '';
+      taskErrEl.textContent = 'Não deu para carregar as tarefas agora. Verifique se a tabela "tasks" já foi criada no Supabase.';
+      flowErrEl.style.display = '';
+      flowErrEl.textContent = 'Não deu para carregar os fluxos agora. Verifique se a tabela "tasks" já foi criada no Supabase.';
+    }
+  }
+
   initVault();
+  loadAll();
 })();
 </script>
 </body>
