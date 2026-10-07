@@ -3,299 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rafinhadr | Desenvolvedor Full-Stack & Criador</title>
+<title>Rafinhadr | Bots para Discord, FiveM e Sites</title>
 <link rel="icon" type="image/png" href="img/rafinhalogo.png">
-<meta name="description" content="Portfólio de Rafinhadr — desenvolvimento web, sistemas, bots para Discord e soluções digitais.">
-<meta name="theme-color" content="#03070d">
+<meta name="description" content="Bots para Discord e servidores FiveM (GTA RP), whitelist integrada ao site, sistemas e sites sob medida.">
+<meta name="theme-color" content="#0a0c10">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#03070d;--bg2:#060d17;--panel:rgba(8,20,34,.72);--panel2:rgba(12,30,50,.6);
-  --line:rgba(0,229,255,.16);--line2:rgba(0,229,255,.34);
-  --text:#e6f8ff;--muted:#8fb3c4;--faint:#4f6f80;
-  --cyan:#00e5ff;--cyan2:#4dd9ff;--gold:#ffb627;--red:#ff3b4e;--green:#3dffa8;
-  --glow:0 0 18px rgba(0,229,255,.45);
-  --hud:'Orbitron',sans-serif;--sans:'Rajdhani',sans-serif;--mono:'JetBrains Mono',monospace;
-  --max:1160px;
+  --bg:#0a0c10;--panel:#0f1218;--panel2:#141820;--line:#1e232d;--line2:#2a303c;
+  --text:#e8ebf0;--muted:#8b93a3;--faint:#566070;
+  --accent:#4ade80;--accent-dim:rgba(74,222,128,.1);
+  --kw:#c792ea;--fn:#61afef;--str:#e6c07b;--prop:#7dd3fc;--num:#f78c6c;--cm:#5c6779;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif;
+  --max:1140px;--r:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-::selection{background:rgba(0,229,255,.3);color:#fff}
-a{color:inherit;text-decoration:none}button,input,textarea{font:inherit}button{cursor:pointer}
-
-/* ---- Background layers: grid, radial glow, scanlines, code rain ---- */
-#rain{position:fixed;inset:0;z-index:-3;opacity:.16;pointer-events:none}
-body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-  background:
-    radial-gradient(900px 600px at 78% 18%,rgba(0,140,255,.14),transparent 60%),
-    radial-gradient(700px 500px at 10% 90%,rgba(0,229,255,.08),transparent 60%),
-    linear-gradient(rgba(0,229,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,229,255,.045) 1px,transparent 1px);
-  background-size:auto,auto,56px 56px,56px 56px}
-body:after{content:"";position:fixed;inset:0;z-index:999;pointer-events:none;
-  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
-
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:40px 40px;mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%)}
+::selection{background:rgba(74,222,128,.25)}
+a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .wrap{max-width:var(--max);margin:auto;padding:0 28px}
-section{padding:110px 0;position:relative}
-
-/* ---- Boot screen ---- */
-#boot{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
-#boot.done{opacity:0;visibility:hidden}
-.boot-box{width:min(520px,90vw);font:13px/1.9 var(--mono);color:var(--cyan)}
-.boot-box .l{opacity:0;animation:fadeIn .2s forwards}
-.boot-box .ok{color:var(--green)}
-.boot-bar{height:2px;background:rgba(0,229,255,.15);margin-top:16px;overflow:hidden}
-.boot-bar i{display:block;height:100%;width:0;background:var(--cyan);box-shadow:var(--glow);animation:load 1.6s cubic-bezier(.6,.1,.3,1) forwards}
-.boot-skip{margin-top:14px;font-size:11px;color:var(--faint)}
-@keyframes load{to{width:100%}}
-@keyframes fadeIn{to{opacity:1}}
+section{padding:96px 0}
+.mono{font-family:var(--mono)}
+.c-kw{color:var(--kw)}.c-fn{color:var(--fn)}.c-str{color:var(--str)}.c-prop{color:var(--prop)}.c-num{color:var(--num)}.c-cm{color:var(--cm)}.c-ac{color:var(--accent)}
 
 /* ---- Header ---- */
-header{position:sticky;top:0;z-index:100;background:rgba(3,7,13,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-header:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.6}
-nav{height:70px;max-width:var(--max);margin:auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{display:flex;align-items:center;gap:10px;font:700 14px var(--hud);letter-spacing:.14em;text-transform:uppercase}
-.logo-ring{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cyan);box-shadow:var(--glow),inset 0 0 8px rgba(0,229,255,.5);display:grid;place-items:center;position:relative}
-.logo-ring:after{content:"";width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
-.logo b{color:var(--cyan)}
-.nav-right{display:flex;align-items:center;gap:22px}
-.nav-links{display:flex;gap:4px;list-style:none}
-.nav-links a{display:block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border:1px solid transparent;transition:.2s}
-.nav-links a span{color:var(--cyan);margin-right:4px}
-.nav-links a:hover{color:var(--text);border-color:var(--line2);background:rgba(0,229,255,.06);box-shadow:inset 0 0 12px rgba(0,229,255,.12)}
-.sys-clock{font:11px var(--mono);color:var(--cyan);letter-spacing:.08em;opacity:.8}
-.access-link{display:flex;align-items:center;color:var(--faint);opacity:.6;transition:.2s}
-.access-link:hover{color:var(--cyan);opacity:1;filter:drop-shadow(0 0 6px var(--cyan))}
-.nav-toggle{display:none;background:none;border:1px solid var(--line2);color:var(--cyan);width:36px;height:36px}
+header{position:sticky;top:0;z-index:100;background:rgba(10,12,16,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{height:64px;max-width:var(--max);margin:auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font:600 14px var(--mono)}
+.logo img{width:26px;height:26px;border-radius:6px}
+.logo .path{color:var(--faint)}.logo b{color:var(--accent);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:18px}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{display:block;font:500 13px var(--mono);color:var(--muted);padding:7px 11px;border-radius:6px;transition:.15s}
+.nav-links a:hover{color:var(--text);background:var(--panel2)}
+.nav-cta{font:600 13px var(--mono);color:var(--bg);background:var(--accent);padding:8px 14px;border-radius:7px;transition:.15s}
+.nav-cta:hover{filter:brightness(1.1)}
+.access-link{display:flex;color:var(--faint);opacity:.5;transition:.15s}.access-link:hover{opacity:1;color:var(--text)}
+.nav-toggle{display:none;background:none;border:1px solid var(--line2);color:var(--text);width:36px;height:36px;border-radius:7px}
 
-/* ---- HUD primitives ---- */
-.hud{position:relative;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(6px);
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
-.hud:before,.hud:after{content:"";position:absolute;width:14px;height:14px;border-color:var(--cyan);border-style:solid;pointer-events:none;transition:.3s}
-.hud:before{top:6px;left:6px;border-width:1.5px 0 0 1.5px}
-.hud:after{bottom:6px;right:6px;border-width:0 1.5px 1.5px 0}
-.hud:hover:before,.hud:hover:after{width:22px;height:22px;filter:drop-shadow(0 0 4px var(--cyan))}
-
-.eyebrow{display:flex;align-items:center;gap:12px;font:500 12px var(--mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
-.eyebrow span{color:var(--cyan)}
-.eyebrow:after{content:"";flex:0 0 80px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent)}
-h1,h2,h3{font-family:var(--hud);letter-spacing:.02em;font-weight:700}
-h2{font-size:clamp(26px,3.6vw,38px);line-height:1.15;text-transform:uppercase}
-h2 .c{color:var(--cyan);text-shadow:var(--glow)}
-p{color:var(--muted)}
-.section-head{margin-bottom:48px}.section-head p{margin-top:12px;max-width:650px}
+/* ---- Section heads ---- */
+.sh{margin-bottom:44px;max-width:680px}
+.sh .tag{font:500 13px var(--mono);color:var(--accent);margin-bottom:10px;display:block}
+.sh .tag i{font-style:normal;color:var(--faint)}
+h1,h2,h3{letter-spacing:-.025em;line-height:1.15}
+h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
+.sh p{color:var(--muted);margin-top:12px;font-size:16.5px}
 
 /* ---- Buttons ---- */
-.btns{display:flex;gap:14px;flex-wrap:wrap}
-.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:13px 22px;font:700 12px var(--hud);letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--cyan);transition:.25s;
-  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
-.primary{background:var(--cyan);color:#001018;box-shadow:var(--glow)}
-.primary:hover{background:#fff;border-color:#fff;box-shadow:0 0 30px rgba(0,229,255,.7)}
-.ghost{color:var(--cyan);background:rgba(0,229,255,.05)}
-.ghost:hover{background:rgba(0,229,255,.15);box-shadow:inset 0 0 20px rgba(0,229,255,.25)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:8px;font:600 14px var(--mono);border:1px solid var(--line2);transition:.15s}
+.btn.primary{background:var(--accent);color:#06210f;border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn.ghost{color:var(--text);background:var(--panel)}
+.btn.ghost:hover{border-color:var(--muted)}
+
+/* ---- Editor window ---- */
+.editor{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.editor-bar{display:flex;align-items:center;background:var(--panel2);border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:7px;padding:0 14px}.dots i{width:10px;height:10px;border-radius:50%;background:#2e3440}
+.etab{font:12px var(--mono);color:var(--faint);padding:11px 16px;border-right:1px solid var(--line)}
+.etab.on{color:var(--text);background:var(--panel);box-shadow:inset 0 2px 0 var(--accent)}
+.code{padding:18px 0;font:13px/1.85 var(--mono);overflow-x:auto;white-space:pre;counter-reset:ln}
+.code .l{display:block;padding:0 18px 0 0}
+.code .l:before{counter-increment:ln;content:counter(ln);display:inline-block;width:44px;padding-right:16px;text-align:right;color:#323a47;user-select:none}
+.editor-status{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--faint);padding:7px 14px;border-top:1px solid var(--line);background:var(--panel2)}
+.editor-status .ok{color:var(--accent)}
 
 /* ---- Hero ---- */
-.hero{min-height:calc(100vh - 70px);display:flex;align-items:center;padding:80px 0}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
-.kicker{display:inline-flex;align-items:center;gap:10px;font:500 12px var(--mono);color:var(--cyan);letter-spacing:.1em;border:1px solid var(--line2);padding:7px 12px;margin-bottom:22px;background:rgba(0,229,255,.05)}
-.kicker i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 1.6s infinite}
-@keyframes blink{50%{opacity:.25}}
-.hero h1{font-size:clamp(34px,5.4vw,62px);line-height:1.05;margin-bottom:22px;text-transform:uppercase}
-.hero h1 .c{color:var(--cyan);text-shadow:0 0 24px rgba(0,229,255,.55)}
-.hero h1 em{display:block;font-style:normal;font:500 clamp(18px,2.2vw,24px)/1.4 var(--mono);color:var(--muted);text-transform:none;margin-top:14px;min-height:1.4em}
-.caret{display:inline-block;width:.55em;height:1em;background:var(--cyan);vertical-align:-.12em;margin-left:3px;box-shadow:var(--glow);animation:blink 1s steps(1) infinite}
-.hero-copy>p{font-size:19px;max-width:580px;margin-bottom:32px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px;max-width:560px}
-.stat{padding:14px 16px}
-.stat strong{display:block;font:700 18px var(--hud);color:var(--cyan);text-shadow:var(--glow)}
-.stat span{font:10px var(--mono);color:var(--faint);letter-spacing:.08em}
+.hero{padding:84px 0 72px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
+.status-pill{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--muted);border:1px solid var(--line2);background:var(--panel);padding:6px 12px;border-radius:99px;margin-bottom:24px}
+.status-pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.hero h1{font-size:clamp(34px,4.6vw,52px);font-weight:700;margin-bottom:20px}
+.hero h1 span{font-family:var(--mono);font-weight:700;color:var(--accent);letter-spacing:-.04em}
+.hero-copy>p{color:var(--muted);font-size:17.5px;max-width:520px;margin-bottom:30px}
+.trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:34px;font:12.5px var(--mono);color:var(--faint)}
+.trust span:before{content:"✓ ";color:var(--accent)}
 
-/* Arc reactor HUD */
-.reactor-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:24px}
-.reactor{position:relative;width:min(420px,80vw);aspect-ratio:1}
-.reactor svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.spin{transform-origin:200px 200px;animation:spin 24s linear infinite}
-.spin.r{animation-direction:reverse;animation-duration:16s}
-.spin.f{animation-duration:8s}
-@keyframes spin{to{transform:rotate(360deg)}}
-.core{position:absolute;inset:34%;border-radius:50%;background:radial-gradient(circle,#fff 0 12%,#9ff4ff 22%,rgba(0,229,255,.55) 45%,rgba(0,229,255,.05) 72%);box-shadow:0 0 60px rgba(0,229,255,.6),0 0 140px rgba(0,229,255,.3);animation:pulse 3s ease-in-out infinite;display:grid;place-items:center}
-.core img{width:46%;filter:drop-shadow(0 0 8px rgba(0,0,0,.6));opacity:.9}
-@keyframes pulse{50%{box-shadow:0 0 90px rgba(0,229,255,.8),0 0 180px rgba(0,229,255,.4);transform:scale(1.03)}}
-.r-label{position:absolute;font:10px var(--mono);color:var(--cyan);letter-spacing:.1em;opacity:.85;white-space:nowrap}
-.r-label b{display:block;color:var(--text);font-weight:500}
-.r-label.tl{top:4%;left:-4%}.r-label.tr{top:10%;right:-6%;text-align:right}.r-label.bl{bottom:8%;left:-6%}.r-label.br{bottom:2%;right:-2%;text-align:right}
+/* ---- Stack strip ---- */
+.stack{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(15,18,24,.6)}
+.stack .wrap{display:flex;align-items:center;gap:28px;padding-top:18px;padding-bottom:18px;overflow-x:auto;font:13px var(--mono);color:var(--muted);white-space:nowrap}
+.stack .lbl{color:var(--faint)}
 
-/* Code window */
-.code-card{width:100%;overflow:hidden}
-.code-head{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font:11px var(--mono);color:var(--faint);letter-spacing:.06em}
-.code-head .dot{width:8px;height:8px;background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
-.code-head .right{margin-left:auto;color:var(--green)}
-.code{padding:20px 20px;font:13px/1.95 var(--mono);overflow:auto;color:var(--text);white-space:pre}
-.ln{display:inline-block;width:28px;color:#2c4a5a;user-select:none}
-.kw{color:#c792ff}.key{color:var(--cyan)}.str{color:var(--gold)}.bool{color:var(--green)}.comment{color:#4f6f80}
-
-/* ---- About ---- */
-.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start}
-.terminal-about{padding:0;font:13px/2 var(--mono);color:var(--muted)}
-.terminal-about .body{padding:20px 22px}
-.terminal-about .p{color:var(--green)}.terminal-about .v{color:var(--gold)}.terminal-about .k{color:var(--cyan)}
-.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
-.tag{border:1px solid var(--line2);background:rgba(0,229,255,.05);padding:5px 10px;font:11px var(--mono);color:var(--cyan2)}
-.tag:before{content:"#";color:var(--faint)}
-.about-text p{font-size:18px;margin-bottom:16px}
-.about-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:26px}
-.about-item{border-left:2px solid var(--cyan);padding:4px 0 4px 14px;background:linear-gradient(90deg,rgba(0,229,255,.06),transparent)}
-.about-item small{display:block;color:var(--faint);font:10px var(--mono);letter-spacing:.1em}
-.about-item strong{font-size:16px;font-weight:600}
-
-/* ---- Companies ---- */
-.company-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.company{padding:26px}
-.company-top{display:flex;justify-content:space-between;gap:15px;align-items:baseline}
-.company h3{font-size:16px;text-transform:uppercase}
-.company .type{font:10px var(--mono);color:var(--gold);letter-spacing:.1em}
-.company p{font-size:16px;margin-top:10px}
-
-/* ---- Projects ---- */
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
-.filter{background:transparent;border:1px solid var(--line);color:var(--muted);padding:8px 14px;font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;transition:.2s}
-.filter:before{content:"> ";color:var(--faint)}
-.filter.active,.filter:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08);box-shadow:inset 0 0 14px rgba(0,229,255,.15)}
-.filter.active:before{color:var(--cyan)}
-.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.project{overflow:hidden}
-.project-visual{position:relative;height:160px;display:flex;align-items:center;justify-content:center;font:900 40px var(--hud);color:var(--cyan);text-shadow:0 0 22px rgba(0,229,255,.7);border-bottom:1px solid var(--line);overflow:hidden;
-  background:radial-gradient(circle at 50% 50%,rgba(0,229,255,.16),transparent 60%),repeating-linear-gradient(90deg,rgba(0,229,255,.06) 0 1px,transparent 1px 24px),repeating-linear-gradient(0deg,rgba(0,229,255,.06) 0 1px,transparent 1px 24px)}
-.project-visual:after{content:"";position:absolute;left:0;right:0;height:40%;top:-40%;background:linear-gradient(to bottom,transparent,rgba(0,229,255,.18),transparent);animation:scan 3.5s linear infinite}
-@keyframes scan{to{top:110%}}
-.project-body{padding:20px 22px 22px}
-.project-cat{font:10px var(--mono);color:var(--gold);letter-spacing:.12em}
-.project h3{font-size:16px;margin:8px 0;text-transform:uppercase}
-.project p{font-size:16px}
-.tech{display:flex;gap:6px;flex-wrap:wrap;margin:15px 0}
-.tech span{font:10px var(--mono);padding:4px 8px;border:1px solid var(--line);color:var(--cyan2)}
-.project a{font:700 11px var(--mono);color:var(--cyan);letter-spacing:.08em;text-transform:uppercase}
-.project a:hover{text-shadow:var(--glow)}
-
-/* ---- Skills ---- */
-.skill-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.skill{padding:16px 18px}
-.skill-top{display:flex;justify-content:space-between;margin-bottom:10px}
-.skill-name{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
-.skill-pct{font:700 12px var(--hud);color:var(--cyan)}
-.bar{height:6px;background:rgba(0,229,255,.08);border:1px solid var(--line);position:relative;overflow:hidden}
-.bar i{display:block;height:100%;width:var(--w);background:repeating-linear-gradient(90deg,var(--cyan) 0 6px,transparent 6px 8px);box-shadow:0 0 10px rgba(0,229,255,.6)}
-
-/* ---- Timeline ---- */
-.timeline{position:relative;max-width:780px}
-.timeline:before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:linear-gradient(var(--cyan),rgba(0,229,255,.1))}
-.event{position:relative;padding-left:44px;margin-bottom:40px}.event:last-child{margin-bottom:0}
-.node{position:absolute;left:0;top:4px;width:17px;height:17px;transform:rotate(45deg);border:1.5px solid var(--cyan);background:var(--bg);transition:.3s}
-.event:hover .node{background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
-.year{font:11px var(--mono);color:var(--gold);letter-spacing:.14em;margin-bottom:6px}
-.event h3{font-size:16px;text-transform:uppercase}
-.event p{font-size:16px;margin-top:5px}
+/* ---- Cards (generic) ---- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--line2)}
 
 /* ---- Services ---- */
 .services{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .service{padding:26px}
-.service .icon{width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:50%;font:16px var(--mono);color:var(--cyan);margin-bottom:16px;box-shadow:inset 0 0 12px rgba(0,229,255,.2)}
-.service h3{font-size:14px;margin-bottom:8px;text-transform:uppercase}
-.service p{font-size:15px}
+.service .file{font:12.5px var(--mono);color:var(--faint);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.service .file b{color:var(--accent);font-weight:600}
+.service h3{font-size:19px;margin-bottom:8px}
+.service p{color:var(--muted);font-size:15px}
+.service ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:6px;font:13px var(--mono);color:var(--muted)}
+.service li:before{content:"→ ";color:var(--faint)}
+
+/* ---- FiveM ---- */
+#fivem{background:linear-gradient(to bottom,transparent,rgba(74,222,128,.025) 30%,transparent)}
+.fivem-badge{display:inline-flex;gap:8px;align-items:center;font:600 12px var(--mono);color:#f59e0b;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);padding:5px 11px;border-radius:6px;margin-bottom:14px}
+.modules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:64px}
+.module{padding:20px 22px}
+.module .cmd{font:600 13px var(--mono);color:var(--accent);margin-bottom:8px}
+.module h3{font-size:16px;margin-bottom:6px}
+.module p{color:var(--muted);font-size:14px}
+
+/* Whitelist integration showcase */
+.wl{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center;margin-bottom:72px}
+.wl-steps{list-style:none;display:flex;flex-direction:column;gap:18px;margin-top:26px}
+.wl-steps li{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.wl-steps .n{width:30px;height:30px;border-radius:7px;border:1px solid var(--line2);background:var(--panel);display:grid;place-items:center;font:600 12px var(--mono);color:var(--accent)}
+.wl-steps b{display:block;font-size:15px}
+.wl-steps span{color:var(--muted);font-size:14px}
+.wl-demo{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.mock-title{font:11.5px var(--mono);color:var(--faint);margin-bottom:8px}
+.mock-site{padding:18px}
+.mock-site h4{font-size:14px;margin-bottom:12px}
+.mf{margin-bottom:9px}
+.mf small{display:block;font:10.5px var(--mono);color:var(--faint);margin-bottom:3px}
+.mf div{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-size:12.5px;color:var(--muted)}
+.mock-site .send{margin-top:12px;background:var(--accent);color:#06210f;font:600 12px var(--mono);text-align:center;padding:8px;border-radius:6px}
+.discord{background:#313338;border:1px solid #232428;border-radius:var(--r);padding:16px;font-size:13px;color:#dbdee1}
+.dc-head{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.dc-av{width:32px;height:32px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font:700 12px var(--mono);color:#06210f}
+.dc-name{font-weight:600;color:#fff;font-size:13.5px}
+.dc-bot{font-size:9.5px;font-weight:700;background:#5865f2;color:#fff;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:1px}
+.dc-embed{background:#2b2d31;border-left:4px solid var(--accent);border-radius:4px;padding:11px 13px;margin-left:42px}
+.dc-embed b{color:#fff;display:block;margin-bottom:6px;font-size:13.5px}
+.dc-embed .row{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:12.5px}
+.dc-embed .k{color:#b5bac1;font-weight:600}
+.dc-btns{display:flex;gap:8px;margin:10px 0 0 42px}
+.dc-btns span{font-size:12px;font-weight:600;color:#fff;padding:6px 12px;border-radius:4px}
+.dc-btns .y{background:#248046}.dc-btns .no{background:#da373c}
+.dc-log{margin:12px 0 0 42px;font:11.5px var(--mono);color:var(--accent)}
+
+/* Plans */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.plan{padding:28px;display:flex;flex-direction:column;position:relative}
+.plan.hot{border-color:rgba(74,222,128,.45);box-shadow:0 0 0 1px rgba(74,222,128,.15),0 20px 50px rgba(74,222,128,.06)}
+.plan .flag{position:absolute;top:-11px;left:28px;font:600 11px var(--mono);background:var(--accent);color:#06210f;padding:3px 9px;border-radius:5px}
+.plan .pname{font:600 13px var(--mono);color:var(--accent)}
+.plan h3{font-size:21px;margin:6px 0 4px}
+.plan .pdesc{color:var(--muted);font-size:14px;min-height:44px}
+.plan .price{font:700 22px var(--mono);margin:18px 0 4px}
+.plan .price small{font:12px var(--mono);color:var(--faint);display:block;font-weight:400}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin:18px 0 26px;font-size:14px;flex:1}
+.plan li{display:flex;gap:9px;color:var(--muted)}
+.plan li:before{content:"✓";color:var(--accent);font-family:var(--mono);flex:none}
+.plan li.plus{color:var(--text)}
+.plan .btn{justify-content:center}
+.plans-note{margin-top:22px;font:13px var(--mono);color:var(--faint);text-align:center}
+
+/* ---- Process ---- */
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--panel)}
+.step{padding:24px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .sn{font:600 12px var(--mono);color:var(--faint);margin-bottom:14px}
+.step .sn b{color:var(--accent);font-weight:600}
+.step h3{font-size:16px;margin-bottom:6px}
+.step p{color:var(--muted);font-size:14px}
+
+/* ---- Portfolio ---- */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.filter{background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:7px 13px;border-radius:7px;font:500 12.5px var(--mono);transition:.15s}
+.filter:hover{color:var(--text)}
+.filter.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.project{overflow:hidden}
+.project:hover{transform:translateY(-2px)}
+.pv{height:140px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;font:700 30px var(--mono);color:var(--line2);
+  background:radial-gradient(circle at 30% 20%,rgba(74,222,128,.08),transparent 60%),var(--panel2)}
+.pv span{color:var(--accent);opacity:.85}
+.pb{padding:20px 22px}
+.pb .cat{font:500 11.5px var(--mono);color:var(--faint)}
+.pb h3{font-size:17px;margin:6px 0}
+.pb p{color:var(--muted);font-size:14.5px}
+.tech{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.tech span{font:11.5px var(--mono);padding:3px 8px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+
+/* ---- About ---- */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.about p{color:var(--muted);margin-bottom:14px;font-size:16.5px}
+.terminal .code{font-size:13px}
+
+/* ---- FAQ ---- */
+.faq{max-width:760px;display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:0 20px}
+.faq summary{list-style:none;cursor:pointer;padding:17px 0;font-weight:600;display:flex;justify-content:space-between;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";font:500 18px var(--mono);color:var(--faint);line-height:1}
+.faq details[open] summary:after{content:"−";color:var(--accent)}
+.faq details p{color:var(--muted);font-size:15px;padding-bottom:18px;margin-top:-4px}
 
 /* ---- Contact ---- */
-.contact-box{padding:46px}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:45px;margin-top:32px}
-.form{display:flex;flex-direction:column;gap:8px}
-.form label{font:10px var(--mono);color:var(--cyan);letter-spacing:.12em;margin-top:6px}
-.form label:before{content:"// ";color:var(--faint)}
-.form input,.form textarea{background:rgba(0,10,20,.6);border:1px solid var(--line);color:var(--text);padding:12px 14px;outline:none;font:14px var(--mono);transition:.2s}
-.form input::placeholder,.form textarea::placeholder{color:#3d5868}
-.form input:focus,.form textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 18px rgba(0,229,255,.25)}
-.form textarea{min-height:125px;resize:vertical}
-.form .btn{margin-top:10px;justify-content:center}
-.channels{display:flex;flex-direction:column;gap:12px}
-.channel{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;transition:.2s}
-.channel small{display:block;font:10px var(--mono);color:var(--faint);letter-spacing:.12em;text-transform:uppercase}
-.channel strong{font-size:16px;font-weight:600}
-.channel:hover{border-color:var(--line2);background:rgba(0,229,255,.06)}
+.contact{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.form{padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .full{grid-column:1/-1}
+.form label{display:block;font:500 12px var(--mono);color:var(--muted);margin-bottom:6px}
+.form input,.form textarea,.form select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:11px 13px;border-radius:7px;outline:none;font-size:14.5px;transition:.15s}
+.form select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--faint) 50%),linear-gradient(135deg,var(--faint) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.form input:focus,.form textarea:focus,.form select:focus{border-color:var(--accent)}
+.form textarea{min-height:120px;resize:vertical}
+.form .btn{justify-content:center}
+.channels{display:flex;flex-direction:column;gap:10px}
+.channel{display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
+.channel small{display:block;font:12px var(--mono);color:var(--faint)}
+.channel strong{font-size:15px;font-weight:600}
+.channel .arr{font-family:var(--mono);color:var(--faint);transition:.15s}
+.channel:hover .arr{color:var(--accent);transform:translateX(3px)}
 
 footer{border-top:1px solid var(--line);padding:26px 0}
-.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.foot p,.foot a{font:11px var(--mono);color:var(--faint);letter-spacing:.06em}
-.foot a:hover{color:var(--cyan)}
-.foot-links{display:flex;gap:18px}
-.foot .status{color:var(--green)}
+.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;font:12.5px var(--mono);color:var(--faint)}
+.foot-links{display:flex;gap:18px}.foot a:hover{color:var(--text)}
 .hidden{display:none!important}
 
-/* ---- Scroll reveal + cursor glow ---- */
-@media (prefers-reduced-motion: no-preference){
-  .reveal{opacity:0;transform:translateY(28px);filter:blur(4px);transition:opacity .8s cubic-bezier(.16,.8,.3,1),transform .8s cubic-bezier(.16,.8,.3,1),filter .8s;transition-delay:var(--rd,0ms)}
-  .reveal.in-view{opacity:1;transform:none;filter:none}
-  .bar i{width:0}
-  .skill.in-view .bar i{width:var(--w);transition:width 1.2s cubic-bezier(.16,.8,.3,1) .2s}
+/* ---- Reveal ---- */
+@media (prefers-reduced-motion:no-preference){
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;transition-delay:var(--rd,0ms)}
+  .reveal.in{opacity:1;transform:none}
+  .cursor{animation:blink 1.1s steps(1) infinite}
 }
-@media (prefers-reduced-motion: reduce){
-  .spin,.core,.project-visual:after,.kicker i,.caret{animation:none}
-  #rain{display:none}
-}
-.hover-glow{transition:transform .35s cubic-bezier(.16,.8,.3,1),border-color .35s,box-shadow .35s}
-.hover-glow{background-image:radial-gradient(260px circle at var(--mx,-300px) var(--my,-300px),rgba(0,229,255,.12),transparent 70%)}
-.hover-glow:hover{transform:translateY(-3px);border-color:var(--line2)}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--accent);vertical-align:-2px}
+@keyframes blink{50%{opacity:0}}
 
-@media(max-width:1000px){.sys-clock{display:none}}
-@media(max-width:900px){
-  .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
-  .hero{padding-top:50px}.hero-grid{gap:50px}
-  .nav-links{position:absolute;left:0;right:0;top:70px;display:none;flex-direction:column;gap:0;background:rgba(3,7,13,.97);border-bottom:1px solid var(--line)}
-  .nav-links.open{display:flex}.nav-links li a{padding:15px 28px;border:0;border-top:1px solid var(--line)}
+/* ---- Responsive ---- */
+@media(max-width:980px){
+  .hero-grid,.wl,.about,.contact{grid-template-columns:1fr}
+  .services,.modules,.plans{grid-template-columns:1fr 1fr}
+  .process{grid-template-columns:1fr 1fr}.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .nav-links{position:absolute;left:0;right:0;top:64px;display:none;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 16px 14px}
+  .nav-links.open{display:flex}.nav-links a{padding:12px}
   .nav-toggle{display:block}
-  .company-grid,.projects{grid-template-columns:1fr}
-  .services{grid-template-columns:repeat(2,1fr)}
-  .r-label{display:none}
 }
-@media(max-width:620px){
-  section{padding:76px 0}.wrap,nav{padding:0 16px}
-  .skill-list,.services,.about-list{grid-template-columns:1fr}
-  .contact-box{padding:30px 18px}
-  .stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.stat{padding:10px}.stat strong{font-size:14px}
+@media(max-width:640px){
+  section{padding:72px 0}.wrap,nav{padding:0 16px}
+  .hero{padding:56px 0 56px}
+  .services,.modules,.plans,.projects,.process,.wl-demo,.form{grid-template-columns:1fr}
+  .step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}
+  .nav-cta{display:none}
   .code{font-size:11.5px}
+  .plan{padding:24px}
 }
 </style>
 </head>
 <body>
-<canvas id="rain" aria-hidden="true"></canvas>
-
-<div id="boot" aria-hidden="true">
-  <div class="boot-box">
-    <div class="l" style="animation-delay:.05s">&gt; J.A.R.V.I.S. protocol // rafinhadr.sys</div>
-    <div class="l" style="animation-delay:.3s">&gt; carregando módulos de interface ........ <span class="ok">OK</span></div>
-    <div class="l" style="animation-delay:.6s">&gt; sincronizando projetos ................. <span class="ok">OK</span></div>
-    <div class="l" style="animation-delay:.9s">&gt; calibrando reator arc .................. <span class="ok">OK</span></div>
-    <div class="l" style="animation-delay:1.2s">&gt; bem-vindo, visitante.</div>
-    <div class="boot-bar"><i></i></div>
-    <div class="boot-skip">[ clique para pular ]</div>
-  </div>
-</div>
-
 <header>
 <nav>
-<a class="logo" href="#top"><span class="logo-ring"></span><span>rafinha<b>dr</b></span></a>
+<a class="logo" href="#top"><img src="img/rafinhalogo.png" alt=""><span><span class="path">~/</span>rafinha<b>dr</b></span></a>
 <div class="nav-right">
 <ul class="nav-links" id="navLinks">
-<li><a href="#sobre"><span>01</span>Sobre</a></li>
-<li><a href="#empresas"><span>02</span>Empresas</a></li>
-<li><a href="#projetos"><span>03</span>Projetos</a></li>
-<li><a href="#skills"><span>04</span>Skills</a></li>
-<li><a href="#trajetoria"><span>05</span>Jornada</a></li>
-<li><a href="#contato"><span>06</span>Contato</a></li>
+<li><a href="#servicos">serviços</a></li>
+<li><a href="#fivem">bots_fivem</a></li>
+<li><a href="#portfolio">portfólio</a></li>
+<li><a href="#sobre">sobre</a></li>
+<li><a href="#faq">faq</a></li>
 </ul>
-<span class="sys-clock" id="sysClock">SYS 00:00:00</span>
+<a class="nav-cta" href="#contato">orçamento()</a>
 <a class="access-link" href="./central-autoforte.html" target="_blank" rel="noopener" aria-label="Acesso">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
 </a>
 <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
 </div>
@@ -303,195 +275,216 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 </header>
 
 <main id="top">
+
+<!-- ============ HERO ============ -->
 <section class="hero">
 <div class="wrap hero-grid">
 <div class="hero-copy">
-<div class="kicker"><i></i>SISTEMA ONLINE // DEV &amp; CRIADOR</div>
-<h1>Arquiteto de <span class="c">soluções</span><em><span id="typed"></span><span class="caret"></span></em></h1>
-<p>Transformo ideias em sites, sistemas, automações e bots que funcionam de verdade — unindo desenvolvimento, tecnologia e design.</p>
-<div class="btns"><a class="btn primary" href="#projetos">Ver Projetos →</a><a class="btn ghost" href="#contato">Falar Comigo</a></div>
-<div class="stats"><div class="stat hud"><strong>WEB</strong><span>DESENVOLVIMENTO</span></div><div class="stat hud"><strong>BOTS</strong><span>DISCORD &amp; AUTO</span></div><div class="stat hud"><strong>UI/UX</strong><span>DESIGN</span></div></div>
+<div class="status-pill"><i></i>disponível para novos projetos</div>
+<h1>Bots para Discord e sites <span>sob medida</span> para o seu servidor.</h1>
+<p>Desenvolvo bots de administração para servidores FiveM / GTA RP, sites e sistemas integrados — com código limpo, entrega organizada e suporte de verdade.</p>
+<div class="btns"><a class="btn primary" href="#fivem">Ver bots FiveM →</a><a class="btn ghost" href="#contato">Pedir orçamento</a></div>
+<div class="trust"><span>Whitelist pelo site</span><span>Suporte pós-entrega</span><span>Código próprio</span></div>
 </div>
 
-<div class="reactor-wrap">
-<div class="reactor" aria-hidden="true">
-<svg viewBox="0 0 400 400">
-  <defs>
-    <linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#00e5ff" stop-opacity="0"/><stop offset="1" stop-color="#00e5ff"/></linearGradient>
-  </defs>
-  <circle cx="200" cy="200" r="196" fill="none" stroke="rgba(0,229,255,.15)" stroke-width="1"/>
-  <g class="spin">
-    <circle cx="200" cy="200" r="185" fill="none" stroke="#00e5ff" stroke-width="1" stroke-dasharray="2 8" opacity=".7"/>
-    <path d="M200 15 A185 185 0 0 1 385 200" fill="none" stroke="url(#fade)" stroke-width="3"/>
-  </g>
-  <g class="spin r">
-    <circle cx="200" cy="200" r="160" fill="none" stroke="#00e5ff" stroke-width="10" stroke-dasharray="60 24" opacity=".35"/>
-  </g>
-  <g class="spin f">
-    <circle cx="200" cy="200" r="138" fill="none" stroke="#00e5ff" stroke-width="2" stroke-dasharray="120 40 20 40" opacity=".8"/>
-  </g>
-  <g class="spin r" style="animation-duration:30s">
-    <circle cx="200" cy="200" r="118" fill="none" stroke="#ffb627" stroke-width="1" stroke-dasharray="1 5" opacity=".7"/>
-  </g>
-  <g id="ticks" stroke="#00e5ff" opacity=".5"></g>
-</svg>
-<div class="core"><img src="img/rafinhalogo.png" alt=""></div>
-<div class="r-label tl">CORE_TEMP<b>36.6°C</b></div>
-<div class="r-label tr">PWR_OUTPUT<b id="pwr">98.4%</b></div>
-<div class="r-label bl">LOCATION<b>BRASIL // BR</b></div>
-<div class="r-label br">STATUS<b style="color:var(--green)">DISPONÍVEL</b></div>
-</div>
-
-<div class="code-card hud">
-<div class="code-head"><i class="dot"></i>rafinhadr.ts<span class="right">● compiled</span></div>
-<pre class="code"><span class="ln">01</span><span class="kw">const</span> <span class="key">rafinhadr</span> = {
-<span class="ln">02</span>  <span class="key">role</span>: <span class="str">"Developer &amp; Creator"</span>,
-<span class="ln">03</span>  <span class="key">stack</span>: [<span class="str">"JS"</span>, <span class="str">"Node"</span>, <span class="str">"React"</span>],
-<span class="ln">04</span>  <span class="key">focus</span>: [<span class="str">"Web"</span>, <span class="str">"Bots"</span>, <span class="str">"Sistemas"</span>],
-<span class="ln">05</span>  <span class="key">available</span>: <span class="bool">true</span>
-<span class="ln">06</span>};</pre>
-</div>
+<div class="editor" aria-label="Exemplo de código do bot">
+<div class="editor-bar"><div class="dots"><i></i><i></i><i></i></div><span class="etab on">whitelist.js</span><span class="etab">staff.js</span></div>
+<pre class="code"><span class="l"><span class="c-cm">// pedido de whitelist enviado pelo site</span></span><span class="l"><span class="c-prop">bot</span>.<span class="c-fn">on</span>(<span class="c-str">'whitelist:aprovada'</span>, <span class="c-kw">async</span> (pedido) =&gt; {</span><span class="l">  <span class="c-kw">const</span> membro = <span class="c-kw">await</span> <span class="c-fn">buscarMembro</span>(pedido.discord);</span><span class="l"></span><span class="l">  <span class="c-kw">await</span> membro.roles.<span class="c-fn">add</span>(cargos.<span class="c-prop">cidadao</span>);</span><span class="l">  <span class="c-kw">await</span> membro.<span class="c-fn">setNickname</span>(pedido.nome);</span><span class="l">  <span class="c-kw">await</span> servidor.<span class="c-fn">liberarId</span>(pedido.id);</span><span class="l"></span><span class="l">  logs.<span class="c-fn">send</span>(<span class="c-str">`✅ ${membro} aprovado`</span>);</span><span class="l">});<span class="cursor"></span></span></pre>
+<div class="editor-status"><span>discord.js · node 20</span><span class="ok">● online</span></div>
 </div>
 </div>
 </section>
 
-<section id="sobre">
-<div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>01</span> Sobre</div><h2>Quem <span class="c">sou eu</span></h2></div>
-<div class="about-grid">
-<div class="terminal-about hud">
-<div class="code-head"><i class="dot"></i>~/rafinhadr — bash</div>
-<div class="body">
-<div><span class="p">$</span> cat perfil.json</div>
-<div>{</div>
-<div>&nbsp;&nbsp;<span class="k">"nome"</span>: <span class="v">"Rafinhadr"</span>,</div>
-<div>&nbsp;&nbsp;<span class="k">"áreas"</span>: [<span class="v">"Web", "Bots", "Sistemas"</span>],</div>
-<div>&nbsp;&nbsp;<span class="k">"design"</span>: <span class="v">true</span>,</div>
-<div>&nbsp;&nbsp;<span class="k">"aprendizado"</span>: <span class="v">"contínuo"</span></div>
-<div>}</div>
-<div><span class="p">$</span> <span class="caret"></span></div>
+<div class="stack" aria-label="Tecnologias">
+<div class="wrap"><span class="lbl">// stack</span><span>JavaScript</span><span>Node.js</span><span>Discord.js</span><span>React</span><span>HTML / CSS</span><span>MySQL / SQLite</span><span>FiveM (Lua)</span><span>APIs REST</span><span>Git</span></div>
 </div>
-</div>
-<div class="about-text">
-<p>Sou desenvolvedor e criador de soluções digitais. Gosto de pegar uma ideia ou problema e transformar isso em uma experiência simples, funcional e bem construída.</p>
-<p>Trabalho com desenvolvimento web, sistemas personalizados, bots para Discord, automações e interfaces. Também me preocupo com a parte visual para que o resultado final seja bonito e fácil de usar.</p>
-<div class="tags"><span class="tag">WebDevelopment</span><span class="tag">DiscordBots</span><span class="tag">Sistemas</span><span class="tag">Automações</span><span class="tag">UI/UX</span><span class="tag">BancoDeDados</span></div>
-<div class="about-list"><div class="about-item"><small>BASE</small><strong>Brasil 🇧🇷</strong></div><div class="about-item"><small>STATUS</small><strong>Disponível para projetos</strong></div><div class="about-item"><small>FOCO</small><strong>Performance &amp; experiência</strong></div><div class="about-item"><small>ESTILO</small><strong>Código limpo e funcional</strong></div></div>
-</div>
-</div>
-</div>
-</section>
 
-<section id="empresas">
-<div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>02</span> Empresas</div><h2>Projetos &amp; <span class="c">marcas</span></h2><p>Espaço reservado para apresentar empresas, marcas, equipes ou projetos dos quais você participa.</p></div>
-<div class="company-grid">
-<div class="company hud"><div class="company-top"><h3>Rafinhadr</h3><span class="type">DEV / DESIGN</span></div><p>Desenvolvimento de soluções digitais, sites, sistemas, bots e experiências personalizadas.</p></div>
-<div class="company hud"><div class="company-top"><h3>Projetos independentes</h3><span class="type">PROJETOS</span></div><p>Projetos próprios e trabalhos desenvolvidos para comunidades, eventos e clientes.</p></div>
-</div>
-</div>
-</section>
-
-<section id="projetos">
-<div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>03</span> Projetos</div><h2>O que <span class="c">construí</span></h2></div>
-<div class="filters" id="filters">
-<button class="filter active" data-filter="todos">Todos</button><button class="filter" data-filter="web">Web</button><button class="filter" data-filter="bot">Bot</button><button class="filter" data-filter="sistema">Sistema</button><button class="filter" data-filter="ecommerce">E-commerce</button><button class="filter" data-filter="outro">Outro</button>
-</div>
-<div class="projects" id="projects">
-<article class="project hud" data-cat="web"><div class="project-visual">&lt;/&gt;</div><div class="project-body"><span class="project-cat">[ WEB ]</span><h3>Portfólio &amp; Sites</h3><p>Sites modernos, responsivos e personalizados para apresentar projetos, serviços e marcas.</p><div class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span></div><a href="#contato">Ver projeto →</a></div></article>
-<article class="project hud" data-cat="bot"><div class="project-visual">{ }</div><div class="project-body"><span class="project-cat">[ BOT ]</span><h3>Bot para Discord</h3><p>Automação de comunidades, moderação, sistemas de cargos, verificações e ferramentas personalizadas.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>SQLite</span></div><a href="#contato">Ver projeto →</a></div></article>
-<article class="project hud" data-cat="sistema"><div class="project-visual">SYS</div><div class="project-body"><span class="project-cat">[ SISTEMA ]</span><h3>Sistemas personalizados</h3><p>Painéis e ferramentas desenvolvidos para organizar processos e facilitar o gerenciamento.</p><div class="tech"><span>JavaScript</span><span>Node.js</span><span>SQL</span></div><a href="#contato">Ver projeto →</a></div></article>
-<article class="project hud" data-cat="outro"><div class="project-visual">✦</div><div class="project-body"><span class="project-cat">[ OUTRO ]</span><h3>Automação &amp; Design</h3><p>Projetos que combinam automação, identidade visual, edição e soluções digitais.</p><div class="tech"><span>Design</span><span>Automação</span><span>UI/UX</span></div><a href="#contato">Ver projeto →</a></div></article>
-</div>
-</div>
-</section>
-
-<section id="skills">
-<div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>04</span> Skills</div><h2>Linguagens &amp; <span class="c">tecnologias</span></h2></div>
-<div class="skill-list">
-<div class="skill hud"><div class="skill-top"><span class="skill-name">JavaScript</span><span class="skill-pct">90%</span></div><div class="bar"><i style="--w:90%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">HTML / CSS</span><span class="skill-pct">95%</span></div><div class="bar"><i style="--w:95%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">Node.js</span><span class="skill-pct">88%</span></div><div class="bar"><i style="--w:88%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">React</span><span class="skill-pct">80%</span></div><div class="bar"><i style="--w:80%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">Discord.js</span><span class="skill-pct">92%</span></div><div class="bar"><i style="--w:92%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">SQL / SQLite</span><span class="skill-pct">78%</span></div><div class="bar"><i style="--w:78%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">Git</span><span class="skill-pct">82%</span></div><div class="bar"><i style="--w:82%"></i></div></div>
-<div class="skill hud"><div class="skill-top"><span class="skill-name">UI / UX</span><span class="skill-pct">85%</span></div><div class="bar"><i style="--w:85%"></i></div></div>
-</div>
-</div>
-</section>
-
-<section id="trajetoria">
-<div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>05</span> Jornada</div><h2>Minha <span class="c">trajetória</span></h2></div>
-<div class="timeline">
-<div class="event"><span class="node"></span><div class="year">// INÍCIO</div><h3>Primeiros passos na programação</h3><p>Começo dos estudos de lógica, desenvolvimento web e criação de projetos próprios.</p></div>
-<div class="event"><span class="node"></span><div class="year">// EVOLUÇÃO</div><h3>JavaScript, Node.js &amp; Bots</h3><p>Aprofundamento em JavaScript e Node.js, com criação de bots e sistemas para Discord.</p></div>
-<div class="event"><span class="node"></span><div class="year">// PROJETOS</div><h3>Sistemas &amp; automações</h3><p>Desenvolvimento de soluções mais completas, bancos de dados, automações e ferramentas personalizadas.</p></div>
-<div class="event"><span class="node"></span><div class="year">// ATUALMENTE</div><h3>Desenvolvimento &amp; Design</h3><p>Unindo programação, design e experiência do usuário para criar projetos cada vez mais completos.</p></div>
-</div>
-</div>
-</section>
-
+<!-- ============ SERVIÇOS ============ -->
 <section id="servicos">
 <div class="wrap">
-<div class="section-head"><div class="eyebrow"><span>++</span> Serviços</div><h2>Como posso <span class="c">ajudar</span></h2></div>
+<div class="sh"><span class="tag"><i>01 /</i> serviços</span><h2>O que eu desenvolvo</h2><p>Três frentes, um objetivo: deixar o seu projeto funcionando bem e com cara profissional.</p></div>
 <div class="services">
-<div class="service hud"><div class="icon">&lt;/&gt;</div><h3>Desenvolvimento Web</h3><p>Sites, landing pages e portfólios modernos e responsivos.</p></div>
-<div class="service hud"><div class="icon">▣</div><h3>Sistemas</h3><p>Painéis, ferramentas internas e sistemas sob medida.</p></div>
-<div class="service hud"><div class="icon">{}</div><h3>Bots para Discord</h3><p>Comandos, automações, moderação e sistemas personalizados.</p></div>
-<div class="service hud"><div class="icon">⚙</div><h3>Automação</h3><p>Processos repetitivos transformados em fluxos automáticos.</p></div>
-<div class="service hud"><div class="icon">✦</div><h3>UI / UX</h3><p>Interfaces limpas, funcionais e pensadas para o usuário.</p></div>
-<div class="service hud"><div class="icon">◈</div><h3>Integrações</h3><p>APIs, bancos de dados, serviços externos e ferramentas conectadas.</p></div>
+<article class="service card"><div class="file"><b>{ }</b> bots/</div><h3>Bots para Discord</h3><p>Administração, moderação e automações sob medida para comunidades e servidores RP.</p><ul><li>Whitelist & cargos</li><li>Tickets e logs</li><li>Comandos personalizados</li></ul></article>
+<article class="service card"><div class="file"><b>&lt;/&gt;</b> sites/</div><h3>Sites & Landing pages</h3><p>Sites rápidos e responsivos para servidores, marcas, portfólios e vendas.</p><ul><li>Site do servidor RP</li><li>Landing page de vendas</li><li>Portfólio profissional</li></ul></article>
+<article class="service card"><div class="file"><b>⚙</b> sistemas/</div><h3>Sistemas & Integrações</h3><p>Painéis, bancos de dados e integrações entre site, bot e servidor.</p><ul><li>Painel administrativo</li><li>Integração site ↔ bot</li><li>APIs e banco de dados</li></ul></article>
 </div>
 </div>
 </section>
 
+<!-- ============ FIVEM ============ -->
+<section id="fivem">
+<div class="wrap">
+<div class="sh"><span class="fivem-badge">▶ FiveM · GTA RP</span><span class="tag"><i>02 /</i> bots_fivem</span><h2>Bots de administração para o seu servidor RP</h2><p>Tudo o que a staff precisa para organizar a cidade: whitelist, hierarquia, cargos e logs — direto no Discord e, se quiser, integrado ao site.</p></div>
+
+<div class="modules">
+<div class="module card"><div class="cmd">/whitelist</div><h3>Whitelist</h3><p>Formulário com perguntas, análise pela staff e aprovação com um clique.</p></div>
+<div class="module card"><div class="cmd">/staff</div><h3>Hierarquia da staff</h3><p>Organograma, promoções, rebaixamentos e ponto da equipe registrados.</p></div>
+<div class="module card"><div class="cmd">/cargos</div><h3>Cargos automáticos</h3><p>Cargos de cidadão, facções, empregos e VIP aplicados automaticamente.</p></div>
+<div class="module card"><div class="cmd">/ticket</div><h3>Tickets & suporte</h3><p>Atendimento por categorias: denúncia, suporte, doação e revisão.</p></div>
+<div class="module card"><div class="cmd">/logs</div><h3>Logs & moderação</h3><p>Registro de entradas, saídas, punições, advertências e banimentos.</p></div>
+<div class="module card"><div class="cmd">/painel</div><h3>Painel web</h3><p>Painel no navegador para a staff gerenciar pedidos e membros.</p></div>
+</div>
+
+<div class="wl">
+<div>
+<span class="tag mono c-ac" style="font-size:13px">// destaque</span>
+<h2 style="margin-top:8px">Whitelist integrada ao site</h2>
+<p style="color:var(--muted);margin-top:12px">O jogador faz a whitelist pelo site do servidor e o bot cuida do resto — sem formulário perdido no chat.</p>
+<ol class="wl-steps">
+<li><span class="n">01</span><div><b>Jogador preenche no site</b><span>Login com Discord, dados do personagem e perguntas de RP.</span></div></li>
+<li><span class="n">02</span><div><b>Staff avalia no Discord</b><span>O pedido chega num canal privado com botões de aprovar ou reprovar.</span></div></li>
+<li><span class="n">03</span><div><b>Liberação automática</b><span>Cargo, nickname e ID liberado no servidor — tudo registrado nos logs.</span></div></li>
+</ol>
+</div>
+<div class="wl-demo" aria-hidden="true">
+<div>
+<div class="mock-title">seuservidor.com/whitelist</div>
+<div class="mock-site card">
+<h4>Whitelist — Cidade RP</h4>
+<div class="mf"><small>NOME DO PERSONAGEM</small><div>Carlos Mendes</div></div>
+<div class="mf"><small>ID NO JOGO</small><div>1042</div></div>
+<div class="mf"><small>DISCORD</small><div>@carlos.rp</div></div>
+<div class="mf"><small>O QUE É POWERGAMING?</small><div>Forçar ações irreais…</div></div>
+<div class="send">Enviar whitelist</div>
+</div>
+</div>
+<div>
+<div class="mock-title"># whitelist-pedidos</div>
+<div class="discord">
+<div class="dc-head"><div class="dc-av">R/</div><div><span class="dc-name">Cidade Bot</span><span class="dc-bot">APP</span></div></div>
+<div class="dc-embed"><b>📋 Novo pedido de whitelist</b>
+<div class="row"><span class="k">Personagem</span><span>Carlos Mendes</span><span class="k">ID</span><span>1042</span><span class="k">Discord</span><span>@carlos.rp</span><span class="k">Nota</span><span>9/10</span></div></div>
+<div class="dc-btns"><span class="y">Aprovar</span><span class="no">Reprovar</span></div>
+<div class="dc-log">✓ cargo Cidadão aplicado · ID 1042 liberado</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="sh" style="margin-bottom:34px"><span class="tag"><i>›</i> planos</span><h2>Escolha o pacote do seu servidor</h2><p>Todos os planos podem ser personalizados com a identidade visual e as regras da sua cidade.</p></div>
+<div class="plans">
+<article class="plan card">
+<span class="pname">essencial</span><h3>Bot Admin</h3><p class="pdesc">Para começar organizado no Discord.</p>
+<div class="price">Sob consulta<small>pagamento único</small></div>
+<ul><li>Whitelist pelo Discord</li><li>Cargos automáticos</li><li>Logs de entrada e saída</li><li>Comandos de moderação</li></ul>
+<a class="btn ghost" href="#contato" data-plan="Bot FiveM — Essencial">Quero este →</a>
+</article>
+<article class="plan card hot">
+<span class="flag">mais pedido</span>
+<span class="pname">profissional</span><h3>Bot Completo</h3><p class="pdesc">Toda a gestão da staff em um só bot.</p>
+<div class="price">Sob consulta<small>pagamento único</small></div>
+<ul><li>Tudo do Essencial</li><li class="plus">Hierarquia e ponto da staff</li><li class="plus">Sistema de tickets</li><li class="plus">Advertências e banimentos</li><li class="plus">Cargos de facções e empregos</li></ul>
+<a class="btn primary" href="#contato" data-plan="Bot FiveM — Profissional">Quero este →</a>
+</article>
+<article class="plan card">
+<span class="pname">premium</span><h3>Bot + Site</h3><p class="pdesc">Bot completo integrado ao site do servidor.</p>
+<div class="price">Sob consulta<small>pagamento único</small></div>
+<ul><li>Tudo do Profissional</li><li class="plus">Site do servidor</li><li class="plus">Whitelist pelo site</li><li class="plus">Login com Discord</li><li class="plus">Painel web da staff</li></ul>
+<a class="btn ghost" href="#contato" data-plan="Bot FiveM — Premium (Bot + Site)">Quero este →</a>
+</article>
+</div>
+<p class="plans-note">// precisa de algo diferente? monto um pacote sob medida.</p>
+</div>
+</section>
+
+<!-- ============ PROCESSO ============ -->
+<section id="processo">
+<div class="wrap">
+<div class="sh"><span class="tag"><i>03 /</i> processo</span><h2>Como funciona</h2></div>
+<div class="process">
+<div class="step"><div class="sn"><b>01</b> briefing</div><h3>Conversa</h3><p>Você conta o que o servidor precisa e como a staff funciona.</p></div>
+<div class="step"><div class="sn"><b>02</b> proposta</div><h3>Orçamento</h3><p>Escopo, prazo e valor fechados antes de começar.</p></div>
+<div class="step"><div class="sn"><b>03</b> build</div><h3>Desenvolvimento</h3><p>Acompanhamento do progresso e testes no seu Discord.</p></div>
+<div class="step"><div class="sn"><b>04</b> deploy</div><h3>Entrega & suporte</h3><p>Bot no ar, explicação para a staff e suporte após a entrega.</p></div>
+</div>
+</div>
+</section>
+
+<!-- ============ PORTFÓLIO ============ -->
+<section id="portfolio">
+<div class="wrap">
+<div class="sh"><span class="tag"><i>04 /</i> portfólio</span><h2>Projetos</h2></div>
+<div class="filters" id="filters">
+<button class="filter active" data-filter="todos">todos</button><button class="filter" data-filter="bot">bots</button><button class="filter" data-filter="web">sites</button><button class="filter" data-filter="sistema">sistemas</button>
+</div>
+<div class="projects">
+<article class="project card" data-cat="bot"><div class="pv"><span>/whitelist</span></div><div class="pb"><span class="cat">bot · fivem</span><h3>Bot de administração RP</h3><p>Whitelist, hierarquia da staff, tickets e logs para servidor de GTA RP.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>MySQL</span></div></div></article>
+<article class="project card" data-cat="web"><div class="pv"><span>&lt;/&gt;</span></div><div class="pb"><span class="cat">site</span><h3>Site com whitelist integrada</h3><p>Site do servidor com login via Discord e formulário de whitelist ligado ao bot.</p><div class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>API</span></div></div></article>
+<article class="project card" data-cat="bot"><div class="pv"><span>{ }</span></div><div class="pb"><span class="cat">bot · comunidade</span><h3>Bot para comunidades</h3><p>Moderação, verificação de membros, cargos por reação e comandos personalizados.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>SQLite</span></div></div></article>
+<article class="project card" data-cat="sistema"><div class="pv"><span>SYS</span></div><div class="pb"><span class="cat">sistema</span><h3>Sistemas internos</h3><p>Painéis e ferramentas para organizar processos e equipes.</p><div class="tech"><span>JavaScript</span><span>Node.js</span><span>SQL</span></div></div></article>
+</div>
+</div>
+</section>
+
+<!-- ============ SOBRE ============ -->
+<section id="sobre">
+<div class="wrap about">
+<div>
+<div class="sh" style="margin-bottom:22px"><span class="tag"><i>05 /</i> sobre</span><h2>Quem desenvolve</h2></div>
+<p>Sou o Rafinhadr, desenvolvedor focado em bots para Discord, sites e sistemas. Conheço de perto a rotina de servidores RP e construo ferramentas que facilitam a vida da staff e dos jogadores.</p>
+<p>Gosto de código limpo, entregas organizadas e de explicar tudo para que você saiba exatamente o que está recebendo.</p>
+</div>
+<div class="editor terminal">
+<div class="editor-bar"><div class="dots"><i></i><i></i><i></i></div><span class="etab on">perfil.json</span></div>
+<pre class="code"><span class="l">{</span><span class="l">  <span class="c-prop">"nome"</span>: <span class="c-str">"Rafinhadr"</span>,</span><span class="l">  <span class="c-prop">"foco"</span>: [<span class="c-str">"bots"</span>, <span class="c-str">"sites"</span>, <span class="c-str">"sistemas"</span>],</span><span class="l">  <span class="c-prop">"nicho"</span>: <span class="c-str">"FiveM / GTA RP"</span>,</span><span class="l">  <span class="c-prop">"base"</span>: <span class="c-str">"Brasil"</span>,</span><span class="l">  <span class="c-prop">"disponivel"</span>: <span class="c-kw">true</span></span><span class="l">}</span></pre>
+</div>
+</div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+<div class="wrap">
+<div class="sh"><span class="tag"><i>06 /</i> faq</span><h2>Perguntas frequentes</h2></div>
+<div class="faq">
+<details><summary>O bot fica hospedado onde?</summary><p>Posso configurar o bot na sua hospedagem ou indicar e cuidar de uma para você. Você recebe tudo funcionando.</p></details>
+<details><summary>Dá para personalizar com as regras do meu servidor?</summary><p>Sim. Perguntas da whitelist, cargos, hierarquia, mensagens e cores são configurados de acordo com a sua cidade.</p></details>
+<details><summary>Como funciona a whitelist pelo site?</summary><p>O jogador entra com o Discord no site, preenche o formulário e o pedido chega para a staff no Discord. Ao aprovar, o bot aplica o cargo e libera o ID automaticamente.</p></details>
+<details><summary>Tem suporte depois da entrega?</summary><p>Sim. Após a entrega há um período de suporte para ajustes e dúvidas da staff.</p></details>
+</div>
+</div>
+</section>
+
+<!-- ============ CONTATO ============ -->
 <section id="contato">
 <div class="wrap">
-<div class="contact-box hud">
-<div class="section-head"><div class="eyebrow"><span>06</span> Contato</div><h2>Vamos <span class="c">conversar</span></h2><p>Tem um projeto? Me manda uma mensagem.</p></div>
-<div class="contact-grid">
-<form class="form" id="contactForm">
-<label for="nome">NOME</label><input id="nome" required placeholder="Como posso te chamar?">
-<label for="email">EMAIL</label><input id="email" type="email" required placeholder="seu@email.com">
-<label for="assunto">ASSUNTO</label><input id="assunto" required placeholder="Sobre o que vamos conversar?">
-<label for="mensagem">MENSAGEM</label><textarea id="mensagem" required placeholder="Conte um pouco sobre o projeto..."></textarea>
-<button class="btn primary" type="submit">Transmitir Mensagem →</button>
+<div class="sh"><span class="tag"><i>07 /</i> contato</span><h2>Vamos tirar o seu projeto do papel</h2><p>Me conta o que você precisa e eu respondo com uma proposta.</p></div>
+<div class="contact">
+<form class="form card" id="contactForm">
+<div><label for="nome">nome</label><input id="nome" required placeholder="Seu nome"></div>
+<div><label for="email">email</label><input id="email" type="email" required placeholder="seu@email.com"></div>
+<div class="full"><label for="assunto">interesse</label>
+<select id="assunto" required>
+<option value="">Selecione…</option>
+<option>Bot FiveM — Essencial</option>
+<option>Bot FiveM — Profissional</option>
+<option>Bot FiveM — Premium (Bot + Site)</option>
+<option>Bot para Discord (outro)</option>
+<option>Site / Landing page</option>
+<option>Sistema / Integração</option>
+<option>Outro</option>
+</select></div>
+<div class="full"><label for="mensagem">mensagem</label><textarea id="mensagem" required placeholder="Conte sobre o seu servidor ou projeto…"></textarea></div>
+<button class="btn primary full" type="submit">enviar_mensagem() →</button>
 </form>
 <div class="channels">
-<a class="channel hud" href="#" data-placeholder="whatsapp"><div><small>WhatsApp</small><strong>Adicionar número</strong></div></a>
-<a class="channel hud" href="#" data-placeholder="instagram"><div><small>Instagram</small><strong>@rafinhadr_</strong></div></a>
-<a class="channel hud" href="#" data-placeholder="github"><div><small>GitHub</small><strong>github.com/rafinhadr</strong></div></a>
-<a class="channel hud" href="#" data-placeholder="email"><div><small>Email</small><strong>Adicionar email</strong></div></a>
-</div>
+<a class="channel card" href="#" data-placeholder="whatsapp"><div><small>whatsapp</small><strong>Adicionar número</strong></div><span class="arr">→</span></a>
+<a class="channel card" href="#" data-placeholder="discord"><div><small>discord</small><strong>Adicionar usuário</strong></div><span class="arr">→</span></a>
+<a class="channel card" href="#" data-placeholder="instagram"><div><small>instagram</small><strong>@rafinhadr_</strong></div><span class="arr">→</span></a>
+<a class="channel card" href="#" data-placeholder="github"><div><small>github</small><strong>github.com/rafinhadr</strong></div><span class="arr">→</span></a>
 </div>
 </div>
 </div>
 </section>
 </main>
 
-<footer><div class="wrap foot"><p>© 2026 Rafinhadr // <span class="status">● all systems operational</span></p><div class="foot-links"><a href="#top">Topo</a><a href="#projetos">Projetos</a><a href="#contato">Contato</a></div></div></footer>
+<footer><div class="wrap foot"><span>© 2026 rafinhadr — bots, sites & sistemas</span><div class="foot-links"><a href="#fivem">bots_fivem</a><a href="#portfolio">portfólio</a><a href="#contato">contato</a></div></div></footer>
 
 <script>
-const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* ---- Boot screen (once per session) ---- */
-(function(){
-  const boot=document.getElementById('boot');
-  let seen=false;try{seen=sessionStorage.getItem('booted')==='1'}catch(e){}
-  if(seen||reduceMotion){boot.remove();return}
-  const close=()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),700);try{sessionStorage.setItem('booted','1')}catch(e){}};
-  boot.addEventListener('click',close);
-  setTimeout(close,2000);
-})();
-
 const navToggle=document.getElementById('navToggle'),navLinks=document.getElementById('navLinks');
 navToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',open?'true':'false')});
 navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
 
+/* ---- Portfolio filters ---- */
 const filters=document.querySelectorAll('.filter'),projects=document.querySelectorAll('.project');
 filters.forEach(btn=>btn.addEventListener('click',()=>{
   filters.forEach(b=>b.classList.remove('active'));btn.classList.add('active');
@@ -499,123 +492,31 @@ filters.forEach(btn=>btn.addEventListener('click',()=>{
   projects.forEach(p=>p.classList.toggle('hidden',f!=='todos'&&p.dataset.cat!==f));
 }));
 
+/* ---- Plan buttons pre-select the plan in the contact form ---- */
+const assunto=document.getElementById('assunto');
+document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{assunto.value=a.dataset.plan}));
+
 document.getElementById('contactForm').addEventListener('submit',e=>{
   e.preventDefault();
   const nome=document.getElementById('nome').value.trim();
   const email=document.getElementById('email').value.trim();
-  const assunto=document.getElementById('assunto').value.trim();
+  const interesse=assunto.value.trim();
   const msg=document.getElementById('mensagem').value.trim();
-  if(!nome||!email||!assunto||!msg)return;
+  if(!nome||!email||!interesse||!msg)return;
   const destination='SEU_EMAIL_AQUI@EXEMPLO.COM';
-  const subject=encodeURIComponent(assunto+' — contato de '+nome);
+  const subject=encodeURIComponent(interesse+' — contato de '+nome);
   const body=encodeURIComponent(msg+'\n\nEmail: '+email);
   window.location.href='mailto:'+destination+'?subject='+subject+'&body='+body;
 });
 
-/* ---- System clock in the nav ---- */
-(function(){
-  const el=document.getElementById('sysClock');
-  const tick=()=>{el.textContent='SYS '+new Date().toLocaleTimeString('pt-BR',{hour12:false})};
-  tick();setInterval(tick,1000);
-})();
-
-/* ---- Reactor tick marks + fluctuating power readout ---- */
-(function(){
-  const g=document.getElementById('ticks');
-  for(let i=0;i<60;i++){
-    const a=i*6*Math.PI/180,r1=i%5?100:94,r2=106;
-    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
-    l.setAttribute('x1',200+r1*Math.cos(a));l.setAttribute('y1',200+r1*Math.sin(a));
-    l.setAttribute('x2',200+r2*Math.cos(a));l.setAttribute('y2',200+r2*Math.sin(a));
-    g.appendChild(l);
-  }
-  const pwr=document.getElementById('pwr');
-  if(!reduceMotion)setInterval(()=>{pwr.textContent=(97+Math.random()*3).toFixed(1)+'%'},1400);
-})();
-
-/* ---- Typing effect in the hero ---- */
-(function(){
-  const el=document.getElementById('typed');
-  const phrases=['criador de experiências digitais.','sites & sistemas sob medida.','bots para Discord.','automações que trabalham por você.'];
-  if(reduceMotion){el.textContent=phrases[0];return}
-  let p=0,c=0,del=false;
-  (function step(){
-    const s=phrases[p];
-    el.textContent=s.slice(0,c);
-    if(!del&&c<s.length){c++;setTimeout(step,55)}
-    else if(!del){del=true;setTimeout(step,1800)}
-    else if(c>0){c--;setTimeout(step,25)}
-    else{del=false;p=(p+1)%phrases.length;setTimeout(step,300)}
-  })();
-})();
-
-/* ---- Code rain background ---- */
-(function(){
-  if(reduceMotion)return;
-  const cv=document.getElementById('rain'),ctx=cv.getContext('2d');
-  const chars='01<>/{}[]=;:$#アカサタナハマヤラワ'.split('');
-  const fs=15;let cols,drops;
-  const resize=()=>{cv.width=innerWidth;cv.height=innerHeight;cols=Math.ceil(cv.width/fs);drops=Array.from({length:cols},()=>Math.random()*-60)};
-  resize();addEventListener('resize',resize);
-  let last=0;
-  (function draw(t){
-    requestAnimationFrame(draw);
-    if(t-last<60)return;last=t;
-    ctx.fillStyle='rgba(3,7,13,.12)';ctx.fillRect(0,0,cv.width,cv.height);
-    ctx.font=fs+'px JetBrains Mono, monospace';
-    for(let i=0;i<cols;i++){
-      if(drops[i]<0){drops[i]+=.5;continue}
-      ctx.fillStyle=Math.random()>.97?'#e6f8ff':'#00e5ff';
-      ctx.fillText(chars[Math.random()*chars.length|0],i*fs,drops[i]*fs);
-      if(drops[i]*fs>cv.height&&Math.random()>.975)drops[i]=0;
-      drops[i]++;
-    }
-  })(0);
-})();
-
 /* ---- Scroll reveal ---- */
 (function(){
-  const groups=[
-    {sel:'.section-head',stagger:0},
-    {sel:'.about-grid > *',stagger:110},
-    {sel:'.company-grid > *',stagger:90},
-    {sel:'.projects > *',stagger:90},
-    {sel:'.skill-list > *',stagger:60},
-    {sel:'.timeline > *',stagger:100},
-    {sel:'.services > *',stagger:70},
-    {sel:'.contact-box',stagger:0},
-  ];
-  const revealEls=[];
-  groups.forEach(({sel,stagger})=>{
-    document.querySelectorAll(sel).forEach((el,i)=>{
-      el.classList.add('reveal');
-      if(stagger) el.style.setProperty('--rd',(i*stagger)+'ms');
-      revealEls.push(el);
-    });
-  });
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){entry.target.classList.add('in-view');io.unobserve(entry.target)}
-      });
-    },{threshold:.15,rootMargin:'0px 0px -8% 0px'});
-    revealEls.forEach(el=>io.observe(el));
-  } else {
-    revealEls.forEach(el=>el.classList.add('in-view'));
-  }
-})();
-
-/* ---- Hover glow that follows the cursor ---- */
-(function(){
-  if(!window.matchMedia('(hover:hover)').matches) return;
-  document.querySelectorAll('.company, .project, .service, .skill, .stat, .channel, .code-card, .terminal-about').forEach(el=>{
-    el.classList.add('hover-glow');
-    el.addEventListener('pointermove',e=>{
-      const r=el.getBoundingClientRect();
-      el.style.setProperty('--mx',(e.clientX-r.left)+'px');
-      el.style.setProperty('--my',(e.clientY-r.top)+'px');
-    });
-  });
+  const els=[];
+  [['.sh',0],['.services > *',80],['.modules > *',60],['.wl > *',120],['.plans > *',90],['.process',0],['.projects > *',80],['.about > *',100],['.faq > *',50],['.contact > *',100]]
+  .forEach(([sel,st])=>document.querySelectorAll(sel).forEach((el,i)=>{el.classList.add('reveal');if(st)el.style.setProperty('--rd',(i*st)+'ms');els.push(el)}));
+  if(!('IntersectionObserver' in window)){els.forEach(el=>el.classList.add('in'));return}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  els.forEach(el=>io.observe(el));
 })();
 </script>
 </body>
