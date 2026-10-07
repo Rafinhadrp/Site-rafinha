@@ -81,6 +81,7 @@ h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center}
 .status-pill{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--muted);border:1px solid var(--line2);background:var(--panel);padding:6px 12px;border-radius:99px;margin-bottom:24px}
 .status-pill i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.status-pill.off i{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.12)}
 .hero h1{font-size:clamp(34px,4.6vw,52px);font-weight:700;margin-bottom:20px}
 .hero h1 span{font-family:var(--mono);font-weight:700;color:var(--accent);letter-spacing:-.04em}
 .hero-copy>p{color:var(--muted);font-size:17.5px;max-width:520px;margin-bottom:30px}
@@ -187,6 +188,8 @@ h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
 .pb p{color:var(--muted);font-size:14.5px}
 .tech{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
 .tech span{font:11.5px var(--mono);padding:3px 8px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+.pb .plink{display:inline-block;margin-top:14px;font:600 12.5px var(--mono);color:var(--accent)}
+.pb .plink:hover{text-decoration:underline}
 
 /* ---- About ---- */
 .about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
@@ -218,6 +221,9 @@ h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
 .channel strong{font-size:15px;font-weight:600}
 .channel .arr{font-family:var(--mono);color:var(--faint);transition:.15s}
 .channel:hover .arr{color:var(--accent);transform:translateX(3px)}
+.channels-empty{color:var(--faint);font:13px var(--mono);padding:8px 2px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:var(--text);color:var(--bg);font:600 13px var(--mono);padding:9px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%)}
 
 footer{border-top:1px solid var(--line);padding:26px 0}
 .foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;font:12.5px var(--mono);color:var(--faint)}
@@ -280,7 +286,7 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 <section class="hero">
 <div class="wrap hero-grid">
 <div class="hero-copy">
-<div class="status-pill"><i></i>disponível para novos projetos</div>
+<div class="status-pill" id="statusPill"><i></i><span>disponível para novos projetos</span></div>
 <h1>Bots para Discord e sites <span>sob medida</span> para o seu servidor.</h1>
 <p>Desenvolvo bots de administração para servidores FiveM / GTA RP, sites e sistemas integrados — com código limpo, entrega organizada e suporte de verdade.</p>
 <div class="btns"><a class="btn primary" href="#fivem">Ver bots FiveM →</a><a class="btn ghost" href="#contato">Pedir orçamento</a></div>
@@ -362,28 +368,8 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 </div>
 
 <div class="sh" style="margin-bottom:34px"><span class="tag"><i>›</i> planos</span><h2>Escolha o pacote do seu servidor</h2><p>Todos os planos podem ser personalizados com a identidade visual e as regras da sua cidade.</p></div>
-<div class="plans">
-<article class="plan card">
-<span class="pname">essencial</span><h3>Bot Admin</h3><p class="pdesc">Para começar organizado no Discord.</p>
-<div class="price">Sob consulta<small>pagamento único</small></div>
-<ul><li>Whitelist pelo Discord</li><li>Cargos automáticos</li><li>Logs de entrada e saída</li><li>Comandos de moderação</li></ul>
-<a class="btn ghost" href="#contato" data-plan="Bot FiveM — Essencial">Quero este →</a>
-</article>
-<article class="plan card hot">
-<span class="flag">mais pedido</span>
-<span class="pname">profissional</span><h3>Bot Completo</h3><p class="pdesc">Toda a gestão da staff em um só bot.</p>
-<div class="price">Sob consulta<small>pagamento único</small></div>
-<ul><li>Tudo do Essencial</li><li class="plus">Hierarquia e ponto da staff</li><li class="plus">Sistema de tickets</li><li class="plus">Advertências e banimentos</li><li class="plus">Cargos de facções e empregos</li></ul>
-<a class="btn primary" href="#contato" data-plan="Bot FiveM — Profissional">Quero este →</a>
-</article>
-<article class="plan card">
-<span class="pname">premium</span><h3>Bot + Site</h3><p class="pdesc">Bot completo integrado ao site do servidor.</p>
-<div class="price">Sob consulta<small>pagamento único</small></div>
-<ul><li>Tudo do Profissional</li><li class="plus">Site do servidor</li><li class="plus">Whitelist pelo site</li><li class="plus">Login com Discord</li><li class="plus">Painel web da staff</li></ul>
-<a class="btn ghost" href="#contato" data-plan="Bot FiveM — Premium (Bot + Site)">Quero este →</a>
-</article>
-</div>
-<p class="plans-note">// precisa de algo diferente? monto um pacote sob medida.</p>
+<div class="plans" id="plans"></div>
+<p class="plans-note" id="plansNote"></p>
 </div>
 </section>
 
@@ -407,12 +393,7 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 <div class="filters" id="filters">
 <button class="filter active" data-filter="todos">todos</button><button class="filter" data-filter="bot">bots</button><button class="filter" data-filter="web">sites</button><button class="filter" data-filter="sistema">sistemas</button>
 </div>
-<div class="projects">
-<article class="project card" data-cat="bot"><div class="pv"><span>/whitelist</span></div><div class="pb"><span class="cat">bot · fivem</span><h3>Bot de administração RP</h3><p>Whitelist, hierarquia da staff, tickets e logs para servidor de GTA RP.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>MySQL</span></div></div></article>
-<article class="project card" data-cat="web"><div class="pv"><span>&lt;/&gt;</span></div><div class="pb"><span class="cat">site</span><h3>Site com whitelist integrada</h3><p>Site do servidor com login via Discord e formulário de whitelist ligado ao bot.</p><div class="tech"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>API</span></div></div></article>
-<article class="project card" data-cat="bot"><div class="pv"><span>{ }</span></div><div class="pb"><span class="cat">bot · comunidade</span><h3>Bot para comunidades</h3><p>Moderação, verificação de membros, cargos por reação e comandos personalizados.</p><div class="tech"><span>Node.js</span><span>Discord.js</span><span>SQLite</span></div></div></article>
-<article class="project card" data-cat="sistema"><div class="pv"><span>SYS</span></div><div class="pb"><span class="cat">sistema</span><h3>Sistemas internos</h3><p>Painéis e ferramentas para organizar processos e equipes.</p><div class="tech"><span>JavaScript</span><span>Node.js</span><span>SQL</span></div></div></article>
-</div>
+<div class="projects" id="projects"></div>
 </div>
 </section>
 
@@ -435,12 +416,7 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 <section id="faq">
 <div class="wrap">
 <div class="sh"><span class="tag"><i>06 /</i> faq</span><h2>Perguntas frequentes</h2></div>
-<div class="faq">
-<details><summary>O bot fica hospedado onde?</summary><p>Posso configurar o bot na sua hospedagem ou indicar e cuidar de uma para você. Você recebe tudo funcionando.</p></details>
-<details><summary>Dá para personalizar com as regras do meu servidor?</summary><p>Sim. Perguntas da whitelist, cargos, hierarquia, mensagens e cores são configurados de acordo com a sua cidade.</p></details>
-<details><summary>Como funciona a whitelist pelo site?</summary><p>O jogador entra com o Discord no site, preenche o formulário e o pedido chega para a staff no Discord. Ao aprovar, o bot aplica o cargo e libera o ID automaticamente.</p></details>
-<details><summary>Tem suporte depois da entrega?</summary><p>Sim. Após a entrega há um período de suporte para ajustes e dúvidas da staff.</p></details>
-</div>
+<div class="faq" id="faqList"></div>
 </div>
 </section>
 
@@ -455,23 +431,11 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 <div class="full"><label for="assunto">interesse</label>
 <select id="assunto" required>
 <option value="">Selecione…</option>
-<option>Bot FiveM — Essencial</option>
-<option>Bot FiveM — Profissional</option>
-<option>Bot FiveM — Premium (Bot + Site)</option>
-<option>Bot para Discord (outro)</option>
-<option>Site / Landing page</option>
-<option>Sistema / Integração</option>
-<option>Outro</option>
 </select></div>
 <div class="full"><label for="mensagem">mensagem</label><textarea id="mensagem" required placeholder="Conte sobre o seu servidor ou projeto…"></textarea></div>
 <button class="btn primary full" type="submit">enviar_mensagem() →</button>
 </form>
-<div class="channels">
-<a class="channel card" href="#" data-placeholder="whatsapp"><div><small>whatsapp</small><strong>Adicionar número</strong></div><span class="arr">→</span></a>
-<a class="channel card" href="#" data-placeholder="discord"><div><small>discord</small><strong>Adicionar usuário</strong></div><span class="arr">→</span></a>
-<a class="channel card" href="#" data-placeholder="instagram"><div><small>instagram</small><strong>@rafinhadr_</strong></div><span class="arr">→</span></a>
-<a class="channel card" href="#" data-placeholder="github"><div><small>github</small><strong>github.com/rafinhadr</strong></div><span class="arr">→</span></a>
-</div>
+<div class="channels" id="channels"></div>
 </div>
 </div>
 </section>
@@ -479,23 +443,78 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 
 <footer><div class="wrap foot"><span>© 2026 rafinhadr — bots, sites & sistemas</span><div class="foot-links"><a href="#fivem">bots_fivem</a><a href="#portfolio">portfólio</a><a href="#contato">contato</a></div></div></footer>
 
+<div class="toast" id="toast" role="status"></div>
+<script src="site-config.js"></script>
 <script>
 const navToggle=document.getElementById('navToggle'),navLinks=document.getElementById('navLinks');
 navToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');navToggle.setAttribute('aria-expanded',open?'true':'false')});
 navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
 
-/* ---- Portfolio filters ---- */
-const filters=document.querySelectorAll('.filter'),projects=document.querySelectorAll('.project');
-filters.forEach(btn=>btn.addEventListener('click',()=>{
-  filters.forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  const f=btn.dataset.filter;
-  projects.forEach(p=>p.classList.toggle('hidden',f!=='todos'&&p.dataset.cat!==f));
-}));
+/* ---- Content from site-config.js (edited in admin.html) ---- */
+const CFG=window.SITE_CONFIG||{};
+const contato=CFG.contato||{};
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const digits=v=>String(v||'').replace(/\D/g,'');
+const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:'';
+const waLink=text=>'https://wa.me/'+digits(contato.whatsapp)+'?text='+encodeURIComponent(text||contato.mensagemWhatsapp||'');
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2200)}
 
-/* ---- Plan buttons pre-select the plan in the contact form ---- */
+/* status */
+(function(){
+  const g=CFG.geral||{},pill=document.getElementById('statusPill');
+  if(g.textoStatus)pill.querySelector('span').textContent=g.textoStatus;
+  pill.classList.toggle('off',g.disponivel===false);
+})();
+
+/* plans */
 const assunto=document.getElementById('assunto');
-document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{assunto.value=a.dataset.plan}));
+(function(){
+  const planos=CFG.planos||[];
+  document.getElementById('plans').innerHTML=planos.map(p=>{
+    const nome='Bot FiveM — '+(p.titulo||p.rotulo||'');
+    return `<article class="plan card${p.destaque?' hot':''}">${p.destaque&&p.selo?`<span class="flag">${esc(p.selo)}</span>`:''}
+<span class="pname">${esc(p.rotulo)}</span><h3>${esc(p.titulo)}</h3><p class="pdesc">${esc(p.descricao)}</p>
+<div class="price">${esc(p.preco)}${p.precoNota?`<small>${esc(p.precoNota)}</small>`:''}</div>
+<ul>${(p.itens||[]).filter(Boolean).map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+<a class="btn ${p.destaque?'primary':'ghost'}" href="#contato" data-plan="${esc(nome)}">Quero este →</a></article>`;
+  }).join('');
+  document.getElementById('plansNote').textContent=CFG.notaPlanos||'';
+  const outros=['Bot para Discord (outro)','Site / Landing page','Sistema / Integração','Outro'];
+  planos.map(p=>'Bot FiveM — '+(p.titulo||p.rotulo||'')).concat(outros).forEach(o=>assunto.add(new Option(o,o)));
+  document.querySelectorAll('[data-plan]').forEach(a=>a.addEventListener('click',()=>{assunto.value=a.dataset.plan}));
+})();
 
+/* portfolio */
+(function(){
+  document.getElementById('projects').innerHTML=(CFG.projetos||[]).map(p=>{
+    const link=safeUrl(p.link);
+    return `<article class="project card" data-cat="${esc(p.categoria)}"><div class="pv"><span>${esc(p.capa)}</span></div><div class="pb"><span class="cat">${esc(p.etiqueta)}</span><h3>${esc(p.titulo)}</h3><p>${esc(p.descricao)}</p><div class="tech">${(p.tecnologias||[]).filter(Boolean).map(t=>`<span>${esc(t)}</span>`).join('')}</div>${link?`<a class="plink" href="${esc(link)}" target="_blank" rel="noopener">ver projeto →</a>`:''}</div></article>`;
+  }).join('');
+  const filters=document.querySelectorAll('.filter'),projects=document.querySelectorAll('.project');
+  filters.forEach(btn=>btn.addEventListener('click',()=>{
+    filters.forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+    const f=btn.dataset.filter;
+    projects.forEach(p=>p.classList.toggle('hidden',f!=='todos'&&p.dataset.cat!==f));
+  }));
+})();
+
+/* faq */
+document.getElementById('faqList').innerHTML=(CFG.faq||[]).filter(f=>f.pergunta).map(f=>`<details><summary>${esc(f.pergunta)}</summary><p>${esc(f.resposta)}</p></details>`).join('');
+
+/* contact channels */
+(function(){
+  const list=[];
+  if(digits(contato.whatsapp))list.push({k:'whatsapp',v:contato.whatsapp,href:waLink()});
+  if(contato.discord||safeUrl(contato.discordLink))list.push({k:'discord',v:contato.discord||'Entrar no servidor',href:safeUrl(contato.discordLink),copy:!safeUrl(contato.discordLink)&&contato.discord});
+  if(contato.email)list.push({k:'email',v:contato.email,href:'mailto:'+contato.email});
+  if(contato.instagram){const u=contato.instagram.replace(/^@/,'');list.push({k:'instagram',v:'@'+u,href:'https://instagram.com/'+encodeURIComponent(u)})}
+  if(contato.github){const u=contato.github.replace(/^.*github\.com\//,'');list.push({k:'github',v:'github.com/'+u,href:'https://github.com/'+encodeURIComponent(u)})}
+  const box=document.getElementById('channels');
+  box.innerHTML=list.length?list.map((c,i)=>`<a class="channel card" data-i="${i}" href="${esc(c.href||'#')}"${c.href&&!c.href.startsWith('mailto')?' target="_blank" rel="noopener"':''}><div><small>${c.k}</small><strong>${esc(c.v)}</strong></div><span class="arr">${c.copy?'⧉':'→'}</span></a>`).join(''):'<p class="channels-empty">// canais de contato em breve</p>';
+  box.querySelectorAll('.channel').forEach(a=>{const c=list[a.dataset.i];if(c.copy)a.addEventListener('click',e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(c.copy).then(()=>toast('Discord copiado: '+c.copy),()=>toast(c.copy))})});
+})();
+
+/* contact form: email if configured, otherwise WhatsApp */
 document.getElementById('contactForm').addEventListener('submit',e=>{
   e.preventDefault();
   const nome=document.getElementById('nome').value.trim();
@@ -503,10 +522,15 @@ document.getElementById('contactForm').addEventListener('submit',e=>{
   const interesse=assunto.value.trim();
   const msg=document.getElementById('mensagem').value.trim();
   if(!nome||!email||!interesse||!msg)return;
-  const destination='SEU_EMAIL_AQUI@EXEMPLO.COM';
-  const subject=encodeURIComponent(interesse+' — contato de '+nome);
-  const body=encodeURIComponent(msg+'\n\nEmail: '+email);
-  window.location.href='mailto:'+destination+'?subject='+subject+'&body='+body;
+  if(contato.email){
+    const subject=encodeURIComponent(interesse+' — contato de '+nome);
+    const body=encodeURIComponent(msg+'\n\nEmail: '+email);
+    window.location.href='mailto:'+contato.email+'?subject='+subject+'&body='+body;
+  }else if(digits(contato.whatsapp)){
+    window.open(waLink(`Olá! Sou ${nome} (${email}).\nInteresse: ${interesse}\n\n${msg}`),'_blank','noopener');
+  }else{
+    toast('Contato ainda não configurado.');
+  }
 });
 
 /* ---- Scroll reveal ---- */

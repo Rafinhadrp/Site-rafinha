@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel do Site | Rafinhadr</title>
+<link rel="icon" type="image/png" href="img/rafinhalogo.png">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;--panel:#0f1218;--panel2:#141820;--line:#1e232d;--line2:#2a303c;
+  --text:#e8ebf0;--muted:#8b93a3;--faint:#566070;
+  --accent:#4ade80;--accent-dim:rgba(74,222,128,.1);--warn:#f59e0b;--danger:#f87171;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif;--r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:110px}
+a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:900px;margin:auto;padding:0 20px}
+
+header{position:sticky;top:0;z-index:50;background:rgba(10,12,16,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top{height:60px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;font:600 14px var(--mono)}
+.logo img{width:24px;height:24px;border-radius:6px}
+.logo .path{color:var(--faint)}.logo b{color:var(--accent);font-weight:600}
+.top-links{display:flex;gap:6px}
+.top-links a{font:500 12.5px var(--mono);color:var(--muted);padding:7px 11px;border:1px solid var(--line);border-radius:7px}
+.top-links a:hover{color:var(--text);border-color:var(--line2)}
+
+h1{font-size:26px;letter-spacing:-.02em;margin:38px 0 6px}
+.lead{color:var(--muted);margin-bottom:28px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px}
+.box-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.box-head h2{font:600 14px var(--mono);color:var(--accent)}
+.box-head h2 i{font-style:normal;color:var(--faint)}
+.box-head p{font-size:12.5px;color:var(--faint)}
+.box-body{padding:18px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label.f{display:block}
+label.f>span{display:block;font:500 12px var(--mono);color:var(--muted);margin-bottom:6px}
+label.f>small{display:block;font-size:12px;color:var(--faint);margin-top:5px}
+input[type=text],input[type=password],input[type=email],input[type=url],textarea,select{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:7px;outline:none;font-size:14px;transition:border-color .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{min-height:92px;resize:vertical}
+.check{display:flex;align-items:center;gap:9px;font-size:14px;cursor:pointer}
+.check input{width:16px;height:16px;accent-color:var(--accent)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:8px;font:600 13px var(--mono);border:1px solid var(--line2);background:var(--panel2);color:var(--text);transition:.15s}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06210f}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.small{padding:6px 10px;font-size:12px}
+.btn.danger{color:var(--danger)}
+.btn.danger:hover{border-color:var(--danger)}
+
+.item{border:1px solid var(--line);background:var(--panel2);border-radius:9px;margin-bottom:12px}
+.item-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.item-head .t{font:600 13px var(--mono);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-head .t i{font-style:normal;color:var(--faint)}
+.item-body{padding:14px}
+.item-body .grid{gap:12px}
+.icon-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--line2);background:var(--panel);color:var(--muted);display:grid;place-items:center;font-size:13px}
+.icon-btn:hover{color:var(--text)}
+.icon-btn.del:hover{color:var(--danger);border-color:var(--danger)}
+.add{width:100%;border-style:dashed;color:var(--muted)}
+
+.conn{display:flex;align-items:center;gap:8px;font:500 12.5px var(--mono);color:var(--faint)}
+.conn i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.conn.ok{color:var(--accent)}.conn.ok i{background:var(--accent)}
+.conn.err{color:var(--danger)}.conn.err i{background:var(--danger)}
+.help{font-size:13px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.help ol{padding-left:18px;margin-top:6px}
+.help li{margin:3px 0}
+.help a{color:var(--accent);text-decoration:underline}
+.help code{font:12.5px var(--mono);color:var(--accent)}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(15,18,24,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.savebar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.savebar .msg{font:500 13px var(--mono);color:var(--muted)}
+.savebar .msg.dirty{color:var(--warn)}
+.savebar .msg.ok{color:var(--accent)}
+.savebar .msg.err{color:var(--danger)}
+.savebar .acts{display:flex;gap:8px}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .box-head{flex-direction:column;align-items:flex-start}
+  .savebar .acts{width:100%}.savebar .btn{flex:1}
+  .top-links a.hide-sm{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap top">
+<a class="logo" href="./index.html"><img src="img/rafinhalogo.png" alt=""><span><span class="path">~/</span>rafinha<b>dr</b><span class="path"> /admin</span></span></a>
+<nav class="top-links"><a class="hide-sm" href="./central-autoforte.html">central</a><a href="./index.html" target="_blank" rel="noopener">ver site ↗</a></nav>
+</div>
+</header>
+
+<main class="wrap">
+<h1>Painel do site</h1>
+<p class="lead">Edite preços, planos, contatos, projetos e perguntas. Ao publicar, o site é atualizado para todos os visitantes.</p>
+
+<!-- ===== Conexão ===== -->
+<section class="box">
+<div class="box-head"><h2><i>00 /</i> publicação</h2><span class="conn" id="conn"><i></i>não conectado</span></div>
+<div class="box-body">
+<div class="help" id="tokenHelp">
+<b>Primeira vez?</b> Para publicar direto daqui, crie uma chave de acesso no GitHub (só uma vez):
+<ol>
+<li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+<li>Em <b>Repository access</b>, escolha <b>Only select repositories</b> → <code>Site-rafinha</code></li>
+<li>Em <b>Permissions → Contents</b>, escolha <b>Read and write</b></li>
+<li>Gere a chave, copie e cole abaixo</li>
+</ol>
+</div>
+<div class="grid">
+<label class="f full"><span>chave de acesso do GitHub</span><input type="password" id="token" autocomplete="off" placeholder="github_pat_…"><small>A chave fica só neste navegador. Nunca compartilhe.</small></label>
+<label class="f"><span>repositório</span><input type="text" id="repo" value="Rafinhadrp/Site-rafinha"></label>
+<label class="f"><span>branch publicada</span><input type="text" id="branch" value="main"></label>
+<label class="check full"><input type="checkbox" id="remember" checked>lembrar a chave neste dispositivo</label>
+</div>
+<div class="row-actions">
+<button class="btn primary" id="btnConnect" type="button">Conectar</button>
+<button class="btn small danger" id="btnForget" type="button">Esquecer chave</button>
+</div>
+</div>
+</section>
+
+<!-- ===== Geral ===== -->
+<section class="box">
+<div class="box-head"><h2><i>01 /</i> geral</h2><p>Selo de disponibilidade no topo do site</p></div>
+<div class="box-body grid">
+<label class="check full"><input type="checkbox" data-path="geral.disponivel" data-type="bool">Disponível para novos projetos (ponto verde)</label>
+<label class="f full"><span>texto do selo</span><input type="text" data-path="geral.textoStatus" placeholder="disponível para novos projetos"></label>
+</div>
+</section>
+
+<!-- ===== Contatos ===== -->
+<section class="box">
+<div class="box-head"><h2><i>02 /</i> contatos</h2><p>Campos vazios não aparecem no site</p></div>
+<div class="box-body grid">
+<label class="f"><span>whatsapp (com DDD)</span><input type="text" data-path="contato.whatsapp" placeholder="55 11 91234-5678"><small>Inclua o 55 do Brasil.</small></label>
+<label class="f"><span>email</span><input type="email" data-path="contato.email" placeholder="voce@email.com"><small>Recebe as mensagens do formulário.</small></label>
+<label class="f full"><span>mensagem automática do whatsapp</span><input type="text" data-path="contato.mensagemWhatsapp"></label>
+<label class="f"><span>usuário do discord</span><input type="text" data-path="contato.discord" placeholder="rafinhadr"><small>Sem link: o visitante copia o usuário.</small></label>
+<label class="f"><span>convite do discord (opcional)</span><input type="url" data-path="contato.discordLink" placeholder="https://discord.gg/…"></label>
+<label class="f"><span>instagram</span><input type="text" data-path="contato.instagram" placeholder="rafinhadr_"></label>
+<label class="f"><span>github</span><input type="text" data-path="contato.github" placeholder="rafinhadr"></label>
+</div>
+</section>
+
+<!-- ===== Planos ===== -->
+<section class="box">
+<div class="box-head"><h2><i>03 /</i> planos fivem</h2><p>Preço livre: "R$ 150", "a partir de R$ 99", "Sob consulta"…</p></div>
+<div class="box-body">
+<div id="list-planos"></div>
+<button class="btn add" type="button" data-add="planos">+ adicionar plano</button>
+<label class="f" style="margin-top:16px"><span>nota abaixo dos planos</span><input type="text" data-path="notaPlanos"></label>
+</div>
+</section>
+
+<!-- ===== Projetos ===== -->
+<section class="box">
+<div class="box-head"><h2><i>04 /</i> portfólio</h2><p>Projetos exibidos na seção Projetos</p></div>
+<div class="box-body">
+<div id="list-projetos"></div>
+<button class="btn add" type="button" data-add="projetos">+ adicionar projeto</button>
+</div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="box">
+<div class="box-head"><h2><i>05 /</i> perguntas frequentes</h2></div>
+<div class="box-body">
+<div id="list-faq"></div>
+<button class="btn add" type="button" data-add="faq">+ adicionar pergunta</button>
+</div>
+</section>
+</main>
+
+<div class="savebar">
+<div class="wrap">
+<span class="msg" id="saveMsg">Sem alterações</span>
+<div class="acts">
+<button class="btn" id="btnDownload" type="button" title="Baixar o arquivo site-config.js para enviar manualmente">Baixar arquivo</button>
+<button class="btn primary" id="btnPublish" type="button">Publicar no site</button>
+</div>
+</div>
+</div>
+
+<script src="site-config.js"></script>
+<script>
+const CONFIG_PATH='site-config.js';
+const TEMPLATES={
+  planos:()=>({rotulo:'novo',titulo:'Novo plano',descricao:'',preco:'Sob consulta',precoNota:'pagamento único',destaque:false,selo:'',itens:[]}),
+  projetos:()=>({titulo:'Novo projeto',categoria:'bot',etiqueta:'bot',capa:'{ }',descricao:'',tecnologias:[],link:''}),
+  faq:()=>({pergunta:'',resposta:''})
+};
+const ITEM_FIELDS={
+  planos:[
+    {k:'titulo',label:'nome do plano'},{k:'rotulo',label:'rótulo (acima do nome)'},
+    {k:'preco',label:'preço'},{k:'precoNota',label:'observação do preço',ph:'pagamento único'},
+    {k:'descricao',label:'descrição curta',full:true},
+    {k:'itens',label:'itens incluídos (um por linha)',type:'lines',full:true},
+    {k:'destaque',label:'Destacar este plano',type:'bool'},{k:'selo',label:'selo do destaque',ph:'mais pedido'}
+  ],
+  projetos:[
+    {k:'titulo',label:'título'},{k:'categoria',label:'filtro',type:'select',opts:[['bot','bots'],['web','sites'],['sistema','sistemas']]},
+    {k:'etiqueta',label:'etiqueta',ph:'bot · fivem'},{k:'capa',label:'texto da capa',ph:'/whitelist'},
+    {k:'descricao',label:'descrição',type:'area',full:true},
+    {k:'tecnologias',label:'tecnologias (separadas por vírgula)',type:'csv',full:true},
+    {k:'link',label:'link (opcional)',ph:'https://…',full:true}
+  ],
+  faq:[{k:'pergunta',label:'pergunta',full:true},{k:'resposta',label:'resposta',type:'area',full:true}]
+};
+const TITLE_KEY={planos:'titulo',projetos:'titulo',faq:'pergunta'};
+
+let cfg=JSON.parse(JSON.stringify(window.SITE_CONFIG||{}));
+let remoteSha=null,dirty=false;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---- storage helpers (may be unavailable) ---- */
+const store={
+  get(k){try{return localStorage.getItem(k)||sessionStorage.getItem(k)}catch(e){return null}},
+  set(k,v,persist){try{(persist?localStorage:sessionStorage).setItem(k,v);(persist?sessionStorage:localStorage).removeItem(k)}catch(e){}},
+  del(k){try{localStorage.removeItem(k);sessionStorage.removeItem(k)}catch(e){}}
+};
+
+/* ---- path get/set ---- */
+function getPath(path){return path.split('.').reduce((o,k)=>o==null?undefined:o[k],cfg)}
+function setPath(path,val){
+  const ks=path.split('.');let o=cfg;
+  ks.slice(0,-1).forEach((k,i)=>{if(o[k]==null)o[k]=/^\d+$/.test(ks[i+1])?[]:{};o=o[k]});
+  o[ks[ks.length-1]]=val;
+}
+function readInput(el){
+  const t=el.dataset.type;
+  if(t==='bool')return el.checked;
+  if(t==='lines')return el.value.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(t==='csv')return el.value.split(',').map(s=>s.trim()).filter(Boolean);
+  return el.value;
+}
+function writeInput(el){
+  const v=getPath(el.dataset.path),t=el.dataset.type;
+  if(t==='bool')el.checked=!!v;
+  else if(t==='lines')el.value=(v||[]).join('\n');
+  else if(t==='csv')el.value=(v||[]).join(', ');
+  else el.value=v==null?'':v;
+}
+
+/* ---- list rendering ---- */
+function fieldHtml(list,i,f){
+  const path=`${list}.${i}.${f.k}`,cls=f.full?' full':'';
+  if(f.type==='bool')return `<label class="check${cls}" style="align-self:end;padding-bottom:10px"><input type="checkbox" data-path="${path}" data-type="bool">${esc(f.label)}</label>`;
+  let input;
+  if(f.type==='lines')input=`<textarea data-path="${path}" data-type="lines"></textarea>`;
+  else if(f.type==='area')input=`<textarea data-path="${path}" style="min-height:70px"></textarea>`;
+  else if(f.type==='select')input=`<select data-path="${path}">${f.opts.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select>`;
+  else input=`<input type="text" data-path="${path}"${f.type==='csv'?' data-type="csv"':''} placeholder="${esc(f.ph||'')}">`;
+  return `<label class="f${cls}"><span>${esc(f.label)}</span>${input}</label>`;
+}
+function renderList(list){
+  const arr=cfg[list]||(cfg[list]=[]);
+  $('list-'+list).innerHTML=arr.map((it,i)=>`<div class="item">
+<div class="item-head"><span class="t"><i>${String(i+1).padStart(2,'0')} ·</i> <span data-title="${list}.${i}">${esc(it[TITLE_KEY[list]]||'(sem título)')}</span></span>
+<button class="icon-btn" type="button" data-move="${list}" data-i="${i}" data-d="-1" title="Mover para cima" ${i===0?'disabled':''}>↑</button>
+<button class="icon-btn" type="button" data-move="${list}" data-i="${i}" data-d="1" title="Mover para baixo" ${i===arr.length-1?'disabled':''}>↓</button>
+<button class="icon-btn del" type="button" data-del="${list}" data-i="${i}" title="Remover">✕</button></div>
+<div class="item-body"><div class="grid">${ITEM_FIELDS[list].map(f=>fieldHtml(list,i,f)).join('')}</div></div></div>`).join('');
+  $('list-'+list).querySelectorAll('[data-path]').forEach(writeInput);
+}
+function renderAll(){
+  document.querySelectorAll('main > section [data-path]').forEach(el=>{if(!el.closest('[id^="list-"]'))writeInput(el)});
+  Object.keys(ITEM_FIELDS).forEach(renderList);
+}
+
+/* ---- dirty state ---- */
+function setMsg(text,kind){const m=$('saveMsg');m.textContent=text;m.className='msg'+(kind?' '+kind:'')}
+function markDirty(){dirty=true;setMsg('Alterações não publicadas','dirty')}
+window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+
+document.querySelector('main').addEventListener('input',e=>{
+  const el=e.target;if(!el.dataset||!el.dataset.path)return;
+  setPath(el.dataset.path,readInput(el));markDirty();
+  const t=document.querySelector(`[data-title="${el.dataset.path.split('.').slice(0,2).join('.')}"]`);
+  if(t&&/\.(titulo|pergunta)$/.test(el.dataset.path))t.textContent=el.value||'(sem título)';
+});
+document.querySelector('main').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.add){const l=b.dataset.add;(cfg[l]=cfg[l]||[]).push(TEMPLATES[l]());renderList(l);markDirty();
+    const items=$('list-'+l).querySelectorAll('.item');const last=items[items.length-1];last.scrollIntoView({behavior:'smooth',block:'center'});last.querySelector('input,textarea').focus({preventScroll:true})}
+  if(b.dataset.del){const l=b.dataset.del,i=+b.dataset.i;const name=cfg[l][i][TITLE_KEY[l]]||'este item';
+    if(confirm(`Remover "${name}"?`)){cfg[l].splice(i,1);renderList(l);markDirty()}}
+  if(b.dataset.move){const l=b.dataset.move,i=+b.dataset.i,j=i+ +b.dataset.d;const a=cfg[l];[a[i],a[j]]=[a[j],a[i]];renderList(l);markDirty()}
+});
+
+/* ---- file (de)serialization ---- */
+function serialize(){
+  return '/* Configurações do site — editadas pelo painel em admin.html.\n   Pode editar à mão também: é só manter o formato JSON. */\nwindow.SITE_CONFIG = '+JSON.stringify(cfg,null,2)+';\n';
+}
+function parseConfigFile(text){
+  const a=text.indexOf('{'),b=text.lastIndexOf('}');
+  if(a<0||b<a)throw new Error('arquivo de configuração inválido');
+  return JSON.parse(text.slice(a,b+1));
+}
+const b64encode=str=>{const bytes=new TextEncoder().encode(str);let bin='';bytes.forEach(x=>bin+=String.fromCharCode(x));return btoa(bin)};
+const b64decode=b64=>{const bin=atob(b64.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(bin,c=>c.charCodeAt(0)))};
+
+/* ---- GitHub ---- */
+function gh(method,body){
+  const repo=$('repo').value.trim(),branch=$('branch').value.trim()||'main',token=$('token').value.trim();
+  const url=`https://api.github.com/repos/${repo}/contents/${CONFIG_PATH}`+(method==='GET'?`?ref=${encodeURIComponent(branch)}`:'');
+  return fetch(url,{method,cache:'no-store',headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28'},body:body?JSON.stringify(body):undefined})
+    .then(async r=>{const data=await r.json().catch(()=>({}));if(!r.ok){const err=new Error(data.message||('HTTP '+r.status));err.status=r.status;throw err}return data});
+}
+function setConn(text,kind){const c=$('conn');c.className='conn'+(kind?' '+kind:'');c.innerHTML='<i></i>'+esc(text)}
+function explain(err){
+  if(err.status===401)return 'chave inválida ou expirada';
+  if(err.status===403)return 'a chave não tem permissão de escrita (Contents: Read and write)';
+  if(err.status===404)return 'repositório, branch ou arquivo não encontrado (confira se a chave tem acesso a este repositório)';
+  if(err.status===409)return 'o arquivo mudou no GitHub — clique em Conectar para recarregar';
+  return err.message;
+}
+async function connect(){
+  if(!$('token').value.trim()){setConn('cole a chave de acesso','err');$('token').focus();return false}
+  if(dirty&&!confirm('Você tem alterações não publicadas. Conectar vai carregar a versão publicada e descartar essas alterações. Continuar?'))return false;
+  $('btnConnect').disabled=true;setConn('conectando…');
+  try{
+    const data=await gh('GET');
+    cfg=parseConfigFile(b64decode(data.content));remoteSha=data.sha;dirty=false;
+    renderAll();setMsg('Versão publicada carregada');
+    setConn('conectado · '+$('repo').value.trim()+'@'+($('branch').value.trim()||'main'),'ok');
+    store.set('adm_token',$('token').value.trim(),$('remember').checked);
+    store.set('adm_repo',$('repo').value.trim(),true);store.set('adm_branch',$('branch').value.trim(),true);
+    $('tokenHelp').style.display='none';
+    return true;
+  }catch(err){setConn(explain(err),'err');return false}
+  finally{$('btnConnect').disabled=false}
+}
+async function publish(){
+  if(remoteSha===null){if(!await connectKeepingEdits())return}
+  $('btnPublish').disabled=true;setMsg('Publicando…');
+  try{
+    const res=await gh('PUT',{message:'Atualiza configurações do site pelo painel',content:b64encode(serialize()),sha:remoteSha,branch:$('branch').value.trim()||'main'});
+    remoteSha=res.content.sha;dirty=false;
+    setMsg('✓ Publicado! O site atualiza em 1–2 minutos (Ctrl+F5 para ver).','ok');
+  }catch(err){setMsg('Erro: '+explain(err),'err')}
+  finally{$('btnPublish').disabled=false}
+}
+/* first publish without an explicit connect: fetch only the sha, keep the edits */
+async function connectKeepingEdits(){
+  if(!$('token').value.trim()){setMsg('Conecte com a chave do GitHub antes de publicar (seção 00), ou use "Baixar arquivo".','err');$('token').focus();return false}
+  try{const data=await gh('GET');remoteSha=data.sha;setConn('conectado · '+$('repo').value.trim(),'ok');
+    store.set('adm_token',$('token').value.trim(),$('remember').checked);return true}
+  catch(err){setMsg('Erro: '+explain(err),'err');setConn(explain(err),'err');return false}
+}
+
+$('btnConnect').addEventListener('click',connect);
+$('btnPublish').addEventListener('click',publish);
+$('btnForget').addEventListener('click',()=>{store.del('adm_token');$('token').value='';remoteSha=null;setConn('não conectado');$('tokenHelp').style.display=''});
+$('btnDownload').addEventListener('click',()=>{
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([serialize()],{type:'text/javascript'}));
+  a.download=CONFIG_PATH;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  setMsg('Arquivo baixado — envie-o para a raiz do repositório no GitHub.','ok');
+});
+
+/* ---- init ---- */
+renderAll();
+(function(){
+  const t=store.get('adm_token'),r=store.get('adm_repo'),b=store.get('adm_branch');
+  if(r)$('repo').value=r;if(b)$('branch').value=b;
+  if(t){$('token').value=t;connect()}
+})();
+</script>
+</body>
+</html>
