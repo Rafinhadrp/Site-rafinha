@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preenchimento Automático de Recibo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #17202a;
+    }
+    header {
+      background: #111827;
+      color: white;
+      padding: 26px 18px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    header p {
+      margin: 0;
+      opacity: .85;
+    }
+    .container {
+      width: min(1100px, 94%);
+      margin: 28px auto 50px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(15,23,42,.08);
+      border: 1px solid #e5e7eb;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    .dropzone {
+      border: 2px dashed #9ca3af;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      background: #fafafa;
+      transition: background .15s, border-color .15s;
+    }
+    .dropzone.over {
+      background: #eef2ff;
+      border-color: #111827;
+    }
+    .dropzone input { display: none; }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: #111827;
+      color: white;
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .btn-success {
+      background: #166534;
+      color: white;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    #preview {
+      width: 100%;
+      max-height: 430px;
+      object-fit: contain;
+      display: none;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      margin-top: 15px;
+      background: white;
+    }
+    .progress-wrap {
+      margin-top: 16px;
+      display: none;
+    }
+    .progress {
+      width: 100%;
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar {
+      width: 10%;
+      height: 100%;
+      background: #111827;
+    }
+    .bar.running {
+      animation: indeterminate 1.1s infinite ease-in-out;
+    }
+    .bar.done {
+      width: 100%;
+      margin-left: 0;
+      background: #166534;
+    }
+    .bar.error {
+      width: 100%;
+      margin-left: 0;
+      background: #b91c1c;
+    }
+    @keyframes indeterminate {
+      0% { width: 10%; margin-left: 0%; }
+      50% { width: 55%; margin-left: 40%; }
+      100% { width: 10%; margin-left: 90%; }
+    }
+    #status {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #4b5563;
+    }
+    label {
+      display: block;
+      font-weight: 700;
+      margin: 12px 0 6px;
+      font-size: 13px;
+    }
+    input[type=text], input[type=password], textarea, select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 14px;
+      background: white;
+    }
+    .upper { text-transform: uppercase; }
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    #resultado {
+      min-height: 340px;
+      font-family: Consolas, Monaco, monospace;
+      white-space: pre-wrap;
+    }
+    .hint {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .warn {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #7f1d1d;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.45;
+      display: none;
+    }
+    .small {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+    details.config {
+      margin-bottom: 22px;
+    }
+    details.config summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 18px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .badge.ok { background: #dcfce7; color: #166534; }
+    .badge.no { background: #fee2e2; color: #991b1b; }
+    @media (max-width: 820px) {
+      .grid, .config-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 23px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Preenchimento Automático de Recibo</h1>
+    <p>Digitalize o documento no scanner (HP LaserJet M1132 MFP), envie o arquivo aqui, aguarde a leitura e revise os dados.</p>
+  </header>
+
+  <div class="container">
+    <details class="card config" id="configBox">
+      <summary>⚙ Configuração da IA <span class="badge" id="configBadge"></span></summary>
+
+      <div class="config-grid">
+        <div>
+          <label for="cfgMode">COMO CONECTAR NA IA</label>
+          <select id="cfgMode">
+            <option value="worker">Pelo Cloudflare Worker (recomendado — a chave fica escondida no Worker)</option>
+            <option value="direct">Direto com a minha chave da API (só neste computador)</option>
+          </select>
+        </div>
+        <div>
+          <label for="cfgModel">MODELO</label>
+          <select id="cfgModel">
+            <option value="claude-opus-5-5">Claude Opus 5.5 (mais preciso)</option>
+            <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (mais barato)</option>
+          </select>
+        </div>
+        <div id="workerRow">
+          <label for="cfgWorker">URL DO WORKER</label>
+          <input id="cfgWorker" type="text" placeholder="https://seu-worker.workers.dev" />
+        </div>
+        <div id="keyRow">
+          <label for="cfgKey">CHAVE DA API ANTHROPIC (sk-ant-...)</label>
+          <input id="cfgKey" type="password" placeholder="sk-ant-api03-..." autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="saveCfgBtn" class="btn btn-primary" type="button">SALVAR CONFIGURAÇÃO</button>
+        <button id="testCfgBtn" class="btn btn-secondary" type="button">TESTAR CONEXÃO</button>
+      </div>
+
+      <div class="small" id="cfgInfo">
+        A configuração fica salva só neste navegador. No modo "direto", a chave fica guardada neste computador —
+        use apenas em computador de confiança e nunca coloque a chave dentro do código do site.
+      </div>
+    </details>
+
+    <div class="grid">
+      <section class="card">
+        <h2>1. Documento digitalizado</h2>
+
+        <div class="dropzone" id="dropzone">
+          <p><strong>Escaneie no HP LaserJet M1132 MFP e selecione o arquivo salvo no computador</strong></p>
+          <label for="fileInput" class="btn btn-primary" style="display:inline-block; color:white; margin:0; cursor:pointer;">
+            ESCOLHER ARQUIVO DIGITALIZADO
+          </label>
+          <input id="fileInput" type="file" accept="image/*,application/pdf" />
+          <p class="small" style="margin-top:10px;">Aceita PDF (o programa de scan da HP costuma salvar assim) ou imagem (JPG/PNG). Também dá para arrastar o arquivo para cá.</p>
+          <p class="small" id="fileName"></p>
+        </div>
+
+        <img id="preview" alt="Prévia do documento" />
+
+        <div class="buttons">
+          <button id="rotateLeft" class="btn btn-secondary" type="button" disabled>↺ GIRAR ESQUERDA</button>
+          <button id="rotateRight" class="btn btn-secondary" type="button" disabled>↻ GIRAR DIREITA</button>
+          <button id="readBtn" class="btn btn-primary" type="button" disabled>LER DOCUMENTO (IA)</button>
+        </div>
+
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress"><div class="bar" id="bar"></div></div>
+          <div id="status">Aguardando...</div>
+        </div>
+
+        <div class="warn" id="warnBox"></div>
+
+        <div class="hint">
+          A leitura usa IA com visão (não é OCR simples). Ela entende os blocos da tabela do contrato:
+          pega NOME, CPF, ENDEREÇO, CEP, E-MAIL e TELEFONE apenas do bloco marcado como <strong>Cliente</strong>;
+          pega PLACA, VEÍCULO e KM do bloco marcado como <strong>Veículo vendido</strong>; e calcula o
+          <strong>valor de venda</strong> somando os números da coluna <strong>Saída</strong> dentro do
+          bloco <strong>Fechamento</strong> (ex.: 44.900,00 e, abaixo, -2.709,00 = 42.191,00).
+          Para melhorar o resultado, digitalize o documento inteiro, em resolução 200-300 DPI, reto na mesa do scanner.
+          Se o arquivo for um PDF com várias páginas, apenas a primeira página é lida.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Dados identificados</h2>
+
+        <label for="placa">PLACA</label>
+        <input id="placa" class="upper" type="text" placeholder="EX.: FVD4H07" />
+
+        <label for="veiculo">VEÍCULO / MODELO</label>
+        <input id="veiculo" class="upper" type="text" placeholder="EX.: SONIC" />
+
+        <label for="nome">NOME</label>
+        <input id="nome" class="upper" type="text" />
+
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text" inputmode="numeric" />
+
+        <label for="endereco">ENDEREÇO COMPLETO</label>
+        <textarea id="endereco" class="upper"></textarea>
+
+        <label for="cep">CEP</label>
+        <input id="cep" type="text" inputmode="numeric" />
+
+        <label for="emailComprador">E-MAIL COMPRADOR</label>
+        <input id="emailComprador" class="upper" type="text" />
+
+        <label for="telefone">TELEFONE COMPRADOR</label>
+        <input id="telefone" type="text" inputmode="tel" />
+
+        <label for="km">KM</label>
+        <input id="km" type="text" inputmode="numeric" />
+
+        <label for="emailVendedor">E-MAIL VENDEDOR</label>
+        <input id="emailVendedor" class="upper" type="text" value="VENDAS@GRUPOAUTOFORTE.COM.BR" />
+
+        <label for="valor">VALOR DE VENDA</label>
+        <input id="valor" type="text" inputmode="decimal" />
+
+        <div class="buttons">
+          <button id="generateBtn" class="btn btn-success" type="button">GERAR TEXTO</button>
+          <button id="clearBtn" class="btn btn-secondary" type="button">LIMPAR</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:22px;">
+      <h2>3. Texto pronto para copiar</h2>
+      <textarea id="resultado" readonly></textarea>
+      <div class="buttons">
+        <button id="copyBtn" class="btn btn-primary" type="button">COPIAR TEXTO</button>
+      </div>
+      <div class="small">
+        Revise os dados antes de usar. A leitura por IA erra bem menos que o OCR simples, mas confira sempre,
+        especialmente o valor de venda calculado.
+      </div>
+    </section>
+  </div>
+
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    const fileInput = $('fileInput');
+    const dropzone = $('dropzone');
+    const preview = $('preview');
+    const canvas = $('canvas');
+    const readBtn = $('readBtn');
+    const rotateLeft = $('rotateLeft');
+    const rotateRight = $('rotateRight');
+    const progressWrap = $('progressWrap');
+    const bar = $('bar');
+    const statusEl = $('status');
+    const warnBox = $('warnBox');
+
+    const EMAIL_VENDEDOR_PADRAO = 'VENDAS@GRUPOAUTOFORTE.COM.BR';
+    const FIELD_IDS = ['placa','veiculo','nome','cpf','endereco','cep','emailComprador','telefone','km','emailVendedor','valor'];
+
+    // A API aceita imagens de até ~2576 px no lado maior; acima disso ela
+    // reduz sozinha. Reduzir aqui evita mandar arquivos gigantes (scan a
+    // 300 DPI passa fácil de 5 MB, que é o limite por imagem da API).
+    const MAX_IMAGE_SIDE = 2576;
+    const REQUEST_TIMEOUT_MS = 180000;
+
+    let img = new Image();
+    let hasImage = false;
+    let rotation = 0;
+    let currentDataUrl = '';
+
+    if (window['pdfjsLib']) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // ---------------------------------------------------------------------
+    // Configuração (salva só neste navegador)
+    // ---------------------------------------------------------------------
+    const CFG_KEY = 'reciboAutoCfg.v1';
+    const DEFAULT_CFG = {
+      mode: 'worker',
+      model: 'claude-opus-5-5',
+      workerUrl: 'https://super-surf-6c63autorecibo.rafaelastolfi99.workers.dev',
+      apiKey: ''
+    };
+
+    function loadCfg() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+        return { ...DEFAULT_CFG, ...saved };
+      } catch {
+        return { ...DEFAULT_CFG };
+      }
+    }
+
+    function saveCfg(cfg) {
+      try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch {}
+    }
+
+    let cfg = loadCfg();
+
+    function cfgFromForm() {
+      return {
+        mode: $('cfgMode').value,
+        model: $('cfgModel').value,
+        workerUrl: $('cfgWorker').value.trim().replace(/\/+$/, ''),
+        apiKey: $('cfgKey').value.trim()
+      };
+    }
+
+    function cfgIsReady(c) {
+      return c.mode === 'direct' ? /^sk-ant-/.test(c.apiKey) : /^https:\/\//.test(c.workerUrl);
+    }
+
+    function renderCfg() {
+      $('cfgMode').value = cfg.mode;
+      $('cfgModel').value = cfg.model;
+      $('cfgWorker').value = cfg.workerUrl;
+      $('cfgKey').value = cfg.apiKey;
+      updateCfgVisibility();
+    }
+
+    function updateCfgVisibility() {
+      const direct = $('cfgMode').value === 'direct';
+      $('workerRow').style.display = direct ? 'none' : '';
+      $('keyRow').style.display = direct ? '' : 'none';
+      const ready = cfgIsReady(cfg);
+      const badge = $('configBadge');
+      badge.textContent = ready ? 'OK' : 'PENDENTE';
+      badge.className = 'badge ' + (ready ? 'ok' : 'no');
+      if (!ready) $('configBox').open = true;
+    }
+
+    $('cfgMode').addEventListener('change', updateCfgVisibility);
+
+    $('saveCfgBtn').addEventListener('click', () => {
+      cfg = cfgFromForm();
+      saveCfg(cfg);
+      updateCfgVisibility();
+      alert(cfgIsReady(cfg)
+        ? 'CONFIGURAÇÃO SALVA!'
+        : 'CONFIGURAÇÃO SALVA, MAS ESTÁ INCOMPLETA.\n\nInforme a URL do Worker (começando com https://) ou uma chave que comece com sk-ant-.');
+    });
+
+    $('testCfgBtn').addEventListener('click', async () => {
+      cfg = cfgFromForm();
+      saveCfg(cfg);
+      updateCfgVisibility();
+      const btn = $('testCfgBtn');
+      btn.disabled = true;
+      btn.textContent = 'TESTANDO...';
+      try {
+        const data = await callClaude({
+          model: cfg.model,
+          max_tokens: 64,
+          output_config: { effort: 'low' },
+          messages: [{ role: 'user', content: 'Responda apenas: OK' }]
+        });
+        const text = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('').trim();
+        alert('CONEXÃO FUNCIONANDO!\n\nModelo: ' + (data.model || cfg.model) + '\nResposta: ' + (text || '(vazia)'));
+      } catch (err) {
+        console.error(err);
+        alert('A CONEXÃO FALHOU.\n\n' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'TESTAR CONEXÃO';
+      }
+    });
+
+    // ---------------------------------------------------------------------
+    // Formatação dos campos
+    // ---------------------------------------------------------------------
+    function upper(v='') {
+      return String(v).trim().toUpperCase();
+    }
+
+    function cleanCPF(v='') {
+      const digits = String(v).replace(/\D/g,'');
+      if (digits.length !== 11) return String(v).trim();
+      return digits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    function cleanCEP(v='') {
+      const digits = String(v).replace(/\D/g,'');
+      if (digits.length !== 8) return String(v).trim();
+      return digits.replace(/(\d{5})(\d{3})/, '$1-$2');
+    }
+
+    function cleanPhone(v='') {
+      let digits = String(v).replace(/\D/g,'');
+      if (digits.length > 11 && digits.startsWith('55')) digits = digits.slice(2);
+      if (digits.length === 11) return digits.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      if (digits.length === 10) return digits.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      return String(v).trim();
+    }
+
+    function cleanPlate(v='') {
+      return upper(v).replace(/[^A-Z0-9]/g,'').slice(0,7);
+    }
+
+    function cleanKm(v='') {
+      // Pega só a parte inteira ("45.000", "45000 km", "45.000,0" → 45.000)
+      const s = String(v).trim().replace(/,\d+$/, '');
+      const digits = s.replace(/\D/g,'');
+      if (!digits) return String(v).trim();
+      return Number(digits).toLocaleString('pt-BR');
+    }
+
+    // Converte "42.191,00", "42191.00", "R$ 42.191", "42191" etc. para número.
+    function parseMoney(v) {
+      let s = String(v || '').replace(/R\$|\s/gi, '');
+      if (!s) return NaN;
+      const negative = /^-/.test(s);
+      s = s.replace(/[^\d.,]/g, '');
+      const lastComma = s.lastIndexOf(',');
+      const lastDot = s.lastIndexOf('.');
+      if (lastComma > lastDot) {
+        s = s.replace(/\./g, '').replace(',', '.');           // 42.191,00
+      } else if (lastDot > -1 && /\.\d{1,2}$/.test(s) && lastComma > -1) {
+        s = s.replace(/,/g, '');                              // 42,191.00
+      } else if (lastDot > -1 && !/\.\d{1,2}$/.test(s)) {
+        s = s.replace(/\./g, '');                             // 42.191
+      } else {
+        s = s.replace(/,/g, '');                              // 42191.00
+      }
+      const n = Number(s);
+      return negative ? -n : n;
+    }
+
+    function cleanMoney(v='') {
+      const n = parseMoney(v);
+      if (!isFinite(n)) return String(v).trim().replace(/^R\$\s*/i, '');
+      return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // ---------------------------------------------------------------------
+    // Carregamento do arquivo (PDF ou imagem) e rotação
+    // ---------------------------------------------------------------------
+    function renderCanvas() {
+      if (!hasImage) return;
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const scale = Math.min(1, MAX_IMAGE_SIDE / Math.max(w, h));
+      const sw = Math.round(w * scale);
+      const sh = Math.round(h * scale);
+      const swap = Math.abs(rotation % 180) === 90;
+
+      canvas.width = swap ? sh : sw;
+      canvas.height = swap ? sw : sh;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';                 // PNG transparente vira fundo branco no JPEG
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(rotation * Math.PI / 180);
+      ctx.drawImage(img, -sw / 2, -sh / 2, sw, sh);
+      ctx.restore();
+      currentDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      preview.src = currentDataUrl;
+    }
+
+    function isPdfFile(file) {
+      return file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+    }
+
+    async function pdfFirstPageToDataUrl(file) {
+      if (!window['pdfjsLib']) {
+        throw new Error('A biblioteca de leitura de PDF não carregou (verifique sua conexão com a internet e recarregue a página).');
+      }
+      const buffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
+      const page = await pdf.getPage(1);
+      // Renderiza com o lado maior perto de MAX_IMAGE_SIDE (boa leitura sem exagerar no tamanho)
+      const base = page.getViewport({ scale: 1 });
+      const scale = MAX_IMAGE_SIDE / Math.max(base.width, base.height);
+      const viewport = page.getViewport({ scale });
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = Math.floor(viewport.width);
+      tempCanvas.height = Math.floor(viewport.height);
+      const ctx = tempCanvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      return tempCanvas.toDataURL('image/jpeg', 0.9);
+    }
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = ev => resolve(ev.target.result);
+        reader.onerror = () => reject(new Error('Não foi possível ler o arquivo selecionado.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = () => reject(new Error('O arquivo não é uma imagem válida (formatos aceitos: PDF, JPG, PNG).'));
+        i.src = src;
+      });
+    }
+
+    async function handleFile(file) {
+      if (!file) return;
+      $('fileName').textContent = 'Carregando: ' + file.name + '...';
+      try {
+        const dataUrl = isPdfFile(file)
+          ? await pdfFirstPageToDataUrl(file)
+          : await readFileAsDataUrl(file);
+
+        img = await loadImage(dataUrl);
+        hasImage = true;
+        rotation = 0;
+        renderCanvas();
+        preview.style.display = 'block';
+        rotateLeft.disabled = rotateRight.disabled = readBtn.disabled = false;
+        $('fileName').textContent = 'Arquivo: ' + file.name;
+      } catch (err) {
+        console.error(err);
+        $('fileName').textContent = '';
+        alert('NÃO FOI POSSÍVEL ABRIR O ARQUIVO DIGITALIZADO.\n\n' + err.message);
+      } finally {
+        fileInput.value = ''; // permite escolher o mesmo arquivo de novo
+      }
+    }
+
+    fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+    ['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, e => {
+      e.preventDefault();
+      dropzone.classList.add('over');
+    }));
+    ['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, e => {
+      e.preventDefault();
+      dropzone.classList.remove('over');
+    }));
+    dropzone.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
+
+    rotateLeft.addEventListener('click', () => {
+      if (!hasImage) return;
+      rotation = (rotation + 270) % 360;
+      renderCanvas();
+    });
+
+    rotateRight.addEventListener('click', () => {
+      if (!hasImage) return;
+      rotation = (rotation + 90) % 360;
+      renderCanvas();
+    });
+
+    // ---------------------------------------------------------------------
+    // Leitura por IA (visão). O contrato é uma tabela "CAMPO: valor" e três
+    // trechos dessa tabela são marcados à margem como "Cliente", "Vendedor"
+    // e "Veículo vendido". A IA localiza esses blocos e devolve um JSON
+    // (com formato garantido pela API via structured outputs) com os campos
+    // que o recibo precisa, já incluindo a conta do valor de venda.
+    // ---------------------------------------------------------------------
+
+    const SYSTEM_PROMPT = `Você lê contratos de venda de veículos da empresa AUTOFORTE a partir de uma imagem digitalizada em scanner e extrai os dados para preencher um recibo.
+
+O documento é uma tabela de "CAMPO: valor". Ao lado de alguns grupos de linhas existem anotações (às vezes circuladas) indicando a qual bloco aquele grupo pertence: "Cliente" (dados do comprador), "Vendedor" (dados do funcionário que vendeu) e "Veículo vendido" (dados do carro vendido nesta venda, diferente de eventual "veículo da troca").
+
+Mais abaixo existe uma seção chamada "Fechamento", com um pequeno quadro de "Entrada" e "Saída". A coluna "Saída" pode ter mais de um valor empilhado (por exemplo um valor maior e, logo abaixo, um valor negativo menor, tipo -2.709,00). O valor final da venda é a SOMA desses valores da coluna "Saída", respeitando o sinal de cada um.
+
+Regras:
+1. "nome", "cpf", "endereco", "cep", "emailComprador" e "telefone" vêm exclusivamente do bloco "Cliente" (o comprador). Os dados do bloco "Vendedor" e os dados da empresa (razão social, CNPJ da loja etc.) pertencem a outras pessoas, então não servem para esses campos.
+2. "placa", "veiculo" (marca/modelo/versão) e "km" vêm do bloco "Veículo vendido".
+3. "valorVenda" é a soma dos valores da coluna "Saída" da seção "Fechamento", no formato brasileiro "42.191,00" (vírgula decimal, sem "R$"). Use "Valor negociado" somente se a seção "Fechamento"/"Saída" não existir no documento, e nesse caso explique isso em "observacao".
+4. CPF no formato 000.000.000-00 e CEP no formato 00000-000. Se algum dígito estiver ilegível, devolva o que conseguir ler, sem completar números por suposição.
+5. "endereco" junta rua/avenida, número, complemento, bairro, cidade e UF do comprador em uma linha só.
+6. Campo inexistente ou ilegível fica como string vazia "". O recibo tem valor legal, então é melhor deixar vazio do que chutar.
+7. "observacao" é uma frase curta, preenchida só quando algo precisa da atenção do usuário (campo ilegível, dígito duvidoso, uso de "Valor negociado" no lugar da soma da coluna Saída). Caso contrário, deixe vazio.`;
+
+    const OUTPUT_SCHEMA = {
+      type: 'object',
+      properties: {
+        placa:          { type: 'string' },
+        veiculo:        { type: 'string' },
+        nome:           { type: 'string' },
+        cpf:            { type: 'string' },
+        endereco:       { type: 'string' },
+        cep:            { type: 'string' },
+        emailComprador: { type: 'string' },
+        telefone:       { type: 'string' },
+        km:             { type: 'string' },
+        valorVenda:     { type: 'string' },
+        observacao:     { type: 'string' }
+      },
+      required: ['placa','veiculo','nome','cpf','endereco','cep','emailComprador','telefone','km','valorVenda','observacao'],
+      additionalProperties: false
+    };
+
+    function extractJson(text) {
+      let t = (text || '').trim();
+      t = t.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
+      const start = t.indexOf('{');
+      const end = t.lastIndexOf('}');
+      if (start === -1 || end === -1) throw new Error('JSON não encontrado na resposta da IA.');
+      return JSON.parse(t.slice(start, end + 1));
+    }
+
+    // Chama a API de Mensagens da Anthropic, pelo Worker ou direto.
+    async function callClaude(body) {
+      if (!cfgIsReady(cfg)) {
+        $('configBox').open = true;
+        throw new Error('Configure a IA primeiro (quadro "Configuração da IA" no topo da página).');
+      }
+
+      // Fallback no servidor: se o modelo recusar por engano (falso positivo
+      // dos filtros de segurança), a própria API tenta de novo em outro modelo.
+      const payload = { ...body, fallbacks: 'default' };
+      const headers = {
+        'content-type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'server-side-fallback-2026-07-01'
+      };
+
+      let url;
+      if (cfg.mode === 'direct') {
+        url = 'https://api.anthropic.com/v1/messages';
+        headers['x-api-key'] = cfg.apiKey;
+        headers['anthropic-dangerous-direct-browser-access'] = 'true';
+      } else {
+        url = cfg.workerUrl;
+      }
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+      let response;
+      try {
+        response = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+      } catch (err) {
+        if (err.name === 'AbortError') throw new Error('A IA demorou demais para responder. Tente novamente.');
+        throw new Error(cfg.mode === 'worker'
+          ? 'Não foi possível conectar no Worker (' + url + '). Confira a URL e se o Worker está publicado com o código novo (worker-recibo.js).'
+          : 'Não foi possível conectar na API da Anthropic. Verifique sua internet.');
+      } finally {
+        clearTimeout(timer);
+      }
+
+      const raw = await response.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error('Resposta inesperada (HTTP ' + response.status + '): ' + raw.slice(0, 200));
+      }
+
+      if (!response.ok) {
+        const apiMsg = data && data.error && data.error.message ? data.error.message : JSON.stringify(data).slice(0, 300);
+        const hints = {
+          401: '\n\nA chave da API está errada ou foi revogada.',
+          403: '\n\nA chave não tem permissão para este modelo/recurso.',
+          404: '\n\nURL ou modelo não encontrado.',
+          429: '\n\nLimite de uso atingido. Espere um pouco e tente de novo.',
+          529: '\n\nA API está sobrecarregada no momento. Tente de novo em instantes.'
+        };
+        throw new Error('Falha ao chamar a IA (HTTP ' + response.status + '): ' + apiMsg + (hints[response.status] || ''));
+      }
+
+      if (data.stop_reason === 'refusal') {
+        throw new Error('A IA se recusou a processar este documento. Preencha os campos manualmente.');
+      }
+
+      return data;
+    }
+
+    async function readDocumentWithAI(dataUrl) {
+      const base64Data = dataUrl.split(',')[1];
+
+      const data = await callClaude({
+        model: cfg.model,
+        max_tokens: 16000,
+        system: SYSTEM_PROMPT,
+        output_config: {
+          effort: 'medium',
+          format: { type: 'json_schema', schema: OUTPUT_SCHEMA }
+        },
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image',
+                source: { type: 'base64', media_type: 'image/jpeg', data: base64Data }
+              },
+              {
+                type: 'text',
+                text: 'Leia este contrato e devolva os dados do recibo.'
+              }
+            ]
+          }
+        ]
+      });
+
+      if (data.stop_reason === 'max_tokens') {
+        throw new Error('A resposta da IA veio cortada. Tente novamente.');
+      }
+
+      const text = (data.content || []).filter(c => c.type === 'text').map(c => c.text).join('');
+      if (!text) throw new Error('A IA não devolveu texto. Resposta: ' + JSON.stringify(data).slice(0, 300));
+      return extractJson(text);
+    }
+
+    function fillFieldsFromAI(fields) {
+      warnBox.style.display = 'none';
+      warnBox.textContent = '';
+
+      $('placa').value = cleanPlate(fields.placa || '');
+      $('veiculo').value = upper(fields.veiculo || '');
+      $('nome').value = upper(fields.nome || '');
+      $('cpf').value = cleanCPF(fields.cpf || '');
+      $('endereco').value = upper(fields.endereco || '');
+      $('cep').value = cleanCEP(fields.cep || '');
+      $('emailComprador').value = upper(fields.emailComprador || '');
+      $('telefone').value = cleanPhone(fields.telefone || '');
+      $('km').value = cleanKm(fields.km || '');
+      if (!$('emailVendedor').value.trim()) $('emailVendedor').value = EMAIL_VENDEDOR_PADRAO;
+      $('valor').value = cleanMoney(fields.valorVenda || '');
+
+      const avisos = [];
+      if (fields.observacao) avisos.push(fields.observacao);
+      const vazios = ['placa','nome','cpf','valor'].filter(id => !$(id).value);
+      if (vazios.length) avisos.push('Campos importantes não encontrados: ' + vazios.join(', ').toUpperCase() + '.');
+      const valorNum = parseMoney($('valor').value);
+      if (isFinite(valorNum) && valorNum <= 0) avisos.push('O valor de venda calculado é zero ou negativo — confira a coluna Saída.');
+
+      if (avisos.length) {
+        warnBox.textContent = 'Atenção: ' + avisos.join(' ');
+        warnBox.style.display = 'block';
+      }
+
+      generateOutput();
+    }
+
+    function setProgress(state, text) {
+      progressWrap.style.display = 'block';
+      bar.className = 'bar ' + state;
+      statusEl.textContent = text;
+    }
+
+    readBtn.addEventListener('click', async () => {
+      if (!currentDataUrl) {
+        alert('ESCOLHA UM ARQUIVO DIGITALIZADO PRIMEIRO.');
+        return;
+      }
+
+      readBtn.disabled = true;
+      setProgress('running', 'ENVIANDO ARQUIVO PARA A IA E LENDO O CONTRATO... (pode levar até 1 minuto)');
+      warnBox.style.display = 'none';
+
+      try {
+        const fields = await readDocumentWithAI(currentDataUrl);
+        setProgress('done', 'LEITURA CONCLUÍDA. REVISE OS CAMPOS.');
+        fillFieldsFromAI(fields);
+      } catch (err) {
+        console.error(err);
+        setProgress('error', 'ERRO AO LER O DOCUMENTO.');
+        alert('NÃO FOI POSSÍVEL LER O DOCUMENTO COM A IA.\n\n' + err.message);
+      } finally {
+        readBtn.disabled = false;
+      }
+    });
+
+    // ---------------------------------------------------------------------
+    // Texto final
+    // ---------------------------------------------------------------------
+    function generateOutput() {
+      const placa = upper($('placa').value);
+      const veiculo = upper($('veiculo').value);
+      const nome = upper($('nome').value);
+      const cpf = $('cpf').value.trim();
+      const endereco = upper($('endereco').value);
+      const cep = $('cep').value.trim();
+      const emailComprador = upper($('emailComprador').value);
+      const telefone = $('telefone').value.trim();
+      const km = $('km').value.trim();
+      const emailVendedor = upper($('emailVendedor').value);
+      const valor = $('valor').value.trim();
+
+      const out =
+`DADOS PARA PREENCHER RECIBO:
+
+PLACA: ${placa}${veiculo ? ' - ' + veiculo : ''}
+
+NOME: ${nome}
+
+CPF: ${cpf}
+
+${endereco}
+
+CEP: ${cep}
+
+E-mail COMPRADOR: ${emailComprador}
+${telefone ? `
+TELEFONE: ${telefone}
+` : ''}
+KM ${km}
+
+EMAIL VENDEDOR: ${emailVendedor}
+
+VALOR DE VENDA: ${valor}`;
+
+      $('resultado').value = out;
+    }
+
+    $('generateBtn').addEventListener('click', generateOutput);
+
+    $('copyBtn').addEventListener('click', async () => {
+      generateOutput();
+      const area = $('resultado');
+      try {
+        await navigator.clipboard.writeText(area.value);
+        alert('TEXTO COPIADO!');
+      } catch {
+        area.select();
+        const ok = document.execCommand('copy');
+        alert(ok ? 'TEXTO COPIADO!' : 'NÃO FOI POSSÍVEL COPIAR AUTOMATICAMENTE. SELECIONE O TEXTO E USE CTRL+C.');
+      }
+    });
+
+    $('clearBtn').addEventListener('click', () => {
+      FIELD_IDS.forEach(id => $(id).value = '');
+      $('emailVendedor').value = EMAIL_VENDEDOR_PADRAO;
+      $('resultado').value = '';
+      warnBox.style.display = 'none';
+      progressWrap.style.display = 'none';
+      preview.style.display = 'none';
+      preview.removeAttribute('src');
+      $('fileName').textContent = '';
+      hasImage = false;
+      currentDataUrl = '';
+      rotateLeft.disabled = rotateRight.disabled = readBtn.disabled = true;
+    });
+
+    // Atualiza a saída ao editar qualquer campo
+    FIELD_IDS.forEach(id => $(id).addEventListener('input', generateOutput));
+
+    renderCfg();
+  </script>
+</body>
+</html>
