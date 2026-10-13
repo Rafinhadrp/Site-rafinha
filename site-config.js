@@ -1,4 +1,4 @@
-/* Configurações do site — editadas pelo painel em admin.html.
+/* Configurações do site, editadas pelo painel em admin.html.
    Pode editar à mão também: é só manter o formato JSON. */
 window.SITE_CONFIG = {
   "geral": {
@@ -34,7 +34,7 @@ window.SITE_CONFIG = {
     {
       "rotulo": "profissional",
       "titulo": "Bot Completo",
-      "descricao": "Toda a gestão da staff em um só bot.",
+      "descricao": "Um bot só para gerenciar a staff inteira.",
       "preco": "Sob consulta",
       "precoNota": "pagamento único",
       "destaque": true,
