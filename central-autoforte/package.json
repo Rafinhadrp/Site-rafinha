@@ -1,0 +1,6 @@
+{
+  "name": "central-autoforte",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" }
+}
