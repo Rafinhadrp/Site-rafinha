@@ -215,6 +215,13 @@ h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
 .form input:focus,.form textarea:focus,.form select:focus{border-color:var(--accent)}
 .form textarea{min-height:120px;resize:vertical}
 .form .btn{justify-content:center}
+.form .btn:disabled{opacity:.6;cursor:default}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.form-status{font:13px var(--mono);color:var(--muted);min-height:1em}
+.form-status:empty{display:none}
+.form-status.ok{color:var(--accent)}
+.form-status.err{color:#f87171}
+.form-status a{text-decoration:underline}
 .channels{display:flex;flex-direction:column;gap:10px}
 .channel{display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
 .channel small{display:block;font:12px var(--mono);color:var(--faint)}
@@ -433,7 +440,9 @@ footer{border-top:1px solid var(--line);padding:26px 0}
 <option value="">Selecione…</option>
 </select></div>
 <div class="full"><label for="mensagem">mensagem</label><textarea id="mensagem" required placeholder="Conte sobre o seu servidor ou projeto…"></textarea></div>
-<button class="btn primary full" type="submit">enviar_mensagem() →</button>
+<input type="text" name="_gotcha" id="gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
+<button class="btn primary full" type="submit" id="formBtn">enviar_mensagem() →</button>
+<p class="form-status full" id="formStatus" role="status" aria-live="polite"></p>
 </form>
 <div class="channels" id="channels"></div>
 </div>
@@ -514,14 +523,36 @@ document.getElementById('faqList').innerHTML=(CFG.faq||[]).filter(f=>f.pergunta)
   box.querySelectorAll('.channel').forEach(a=>{const c=list[a.dataset.i];if(c.copy)a.addEventListener('click',e=>{e.preventDefault();navigator.clipboard&&navigator.clipboard.writeText(c.copy).then(()=>toast('Discord copiado: '+c.copy),()=>toast(c.copy))})});
 })();
 
-/* contact form: email if configured, otherwise WhatsApp */
-document.getElementById('contactForm').addEventListener('submit',e=>{
+/* contact form: Formspree if configured (stays on the page), else email app, else WhatsApp */
+function formspreeUrl(v){
+  v=String(v||'').trim();
+  if(/^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(v))return v;
+  if(/^[A-Za-z0-9]{6,12}$/.test(v))return 'https://formspree.io/f/'+v;
+  return '';
+}
+function formStatus(text,kind,html){const el=document.getElementById('formStatus');el.className='form-status full'+(kind?' '+kind:'');if(html)el.innerHTML=text;else el.textContent=text}
+document.getElementById('contactForm').addEventListener('submit',async e=>{
   e.preventDefault();
+  const form=e.target;
   const nome=document.getElementById('nome').value.trim();
   const email=document.getElementById('email').value.trim();
   const interesse=assunto.value.trim();
   const msg=document.getElementById('mensagem').value.trim();
   if(!nome||!email||!interesse||!msg)return;
+  const fsUrl=formspreeUrl(contato.formspree);
+  if(fsUrl){
+    const btn=document.getElementById('formBtn');btn.disabled=true;formStatus('// enviando…');
+    try{
+      const r=await fetch(fsUrl,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify({nome,email,interesse,mensagem:msg,_replyto:email,_subject:interesse+' — contato de '+nome,_gotcha:document.getElementById('gotcha').value})});
+      if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error((j.errors&&j.errors.map(x=>x.message).join(' '))||('erro '+r.status))}
+      form.reset();formStatus('✓ Mensagem enviada! Eu respondo no seu email em breve.','ok');
+    }catch(err){
+      const alt=digits(contato.whatsapp)?` Se preferir, <a href="${esc(waLink())}" target="_blank" rel="noopener">fale comigo no WhatsApp</a>.`:'';
+      formStatus('Não consegui enviar agora ('+esc(err.message)+').'+alt,'err',true);
+    }finally{btn.disabled=false}
+    return;
+  }
   if(contato.email){
     const subject=encodeURIComponent(interesse+' — contato de '+nome);
     const body=encodeURIComponent(msg+'\n\nEmail: '+email);

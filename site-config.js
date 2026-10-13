@@ -7,6 +7,7 @@ window.SITE_CONFIG = {
   },
   "contato": {
     "email": "",
+    "formspree": "",
     "whatsapp": "",
     "mensagemWhatsapp": "Olá! Vim pelo site e quero fazer um orçamento.",
     "discord": "",
