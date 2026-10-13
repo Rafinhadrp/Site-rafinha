@@ -6,11 +6,11 @@ window.SITE_CONFIG = {
     "textoStatus": "disponível para novos projetos"
   },
   "contato": {
-    "email": "",
+    "email": "rafaelastolfi99@gmail.com",
     "formspree": "https://formspree.io/f/xyekndkp",
     "whatsapp": "",
     "mensagemWhatsapp": "Olá! Vim pelo site e quero fazer um orçamento.",
-    "discord": "",
+    "discord": "rafinhadr",
     "discordLink": "",
     "instagram": "rafinhadr_",
     "github": "rafinhadr"
