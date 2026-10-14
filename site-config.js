@@ -2,7 +2,7 @@
    Pode editar à mão também: é só manter o formato JSON. */
 window.SITE_CONFIG = {
   "geral": {
-    "disponivel": true,
+    "disponivel": false,
     "textoStatus": "disponível para novos projetos"
   },
   "contato": {
